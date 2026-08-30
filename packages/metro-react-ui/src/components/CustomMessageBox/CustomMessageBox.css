@@ -1,0 +1,71 @@
+.metro-messagebox__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  animation: metro-fade-in var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-messagebox {
+  width: 100%;
+  max-width: 480px;
+  margin: 24px;
+  background: var(--wp-chrome);
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  animation: metro-rise var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-messagebox__title {
+  padding: 16px 24px 0;
+  font-size: var(--wp-font-size-normal);
+  font-family: var(--wp-font-family);
+  font-weight: var(--wp-font-weight-semibold);
+}
+
+.metro-messagebox__message {
+  padding: 11px 24px 0;
+  font-size: var(--wp-font-size-medium);
+  font-family: var(--wp-font-family);
+  font-weight: var(--wp-font-weight-semilight);
+  color: var(--wp-foreground);
+}
+
+.metro-messagebox__content {
+  padding: 0 12px;
+}
+
+.metro-messagebox__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px;
+}
+
+.metro-messagebox__button {
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  cursor: pointer;
+  transition: color var(--wp-duration-fast) var(--wp-easing);
+}
+
+.metro-messagebox__button:hover {
+  color: var(--wp-accent);
+}
+
+@keyframes metro-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes metro-rise {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

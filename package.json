@@ -1,0 +1,21 @@
+{
+  "name": "metro-ui-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Web port of the Windows Phone Toolkit (Metro/Modern UI) — React component library + showcase app",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @metro-react-ui/showcase",
+    "build": "npm run build --workspace @metro-react-ui/core && npm run build --workspace @metro-react-ui/showcase",
+    "build:lib": "npm run build --workspace @metro-react-ui/core",
+    "build:showcase": "npm run build --workspace @metro-react-ui/showcase",
+    "preview": "npm run preview --workspace @metro-react-ui/showcase",
+    "pack": "npm run pack --workspace @metro-react-ui/core"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

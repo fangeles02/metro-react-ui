@@ -1,0 +1,106 @@
+/* ---- AppBarButton: WP8 circular app bar button ----
+   Ports the shape of the WP8 shell:ApplicationBarIconButton:
+   a circular icon button with a small centered label beneath it. */
+
+.metro-appbarbutton {
+  --appbar-btn-circle: 45px;
+  --appbar-btn-icon: 25px;
+
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-small);
+  font-weight: var(--wp-font-weight-normal);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --- Circle --- */
+.metro-appbarbutton__circle {
+  display: grid;
+  place-items: center;
+  width: var(--appbar-btn-circle);
+  height: var(--appbar-btn-circle);
+  border-radius: 50%;
+  box-sizing: border-box;
+  transition: background var(--wp-duration-fast) var(--wp-easing),
+    color var(--wp-duration-fast) var(--wp-easing),
+    border-color var(--wp-duration-fast) var(--wp-easing);
+}
+
+.metro-appbarbutton__circle > * {
+  /* Icons should size to the circle and inherit the current text color */
+  width: var(--appbar-btn-icon);
+  height: var(--appbar-btn-icon);
+  display: block;
+}
+
+.metro-appbarbutton__circle svg {
+  fill: currentColor;
+}
+
+/* --- Variants --- */
+
+/* default: neutral — transparent circle, foreground border, accent icon/label */
+.metro-appbarbutton--default .metro-appbarbutton__circle {
+  border: 2px solid var(--wp-foreground);
+  color: var(--wp-foreground);
+}
+.metro-appbarbutton--default:hover .metro-appbarbutton__circle {
+  background: color-mix(in srgb, var(--wp-foreground) 20%, transparent);
+}
+.metro-appbarbutton--default:active .metro-appbarbutton__circle {
+  background: var(--wp-foreground);
+  color: var(--wp-background);
+}
+
+/* filled: gray-inverted circle (uses mode foreground at 20%, adapts to
+   light/dark) with a foreground icon. */
+.metro-appbarbutton--filled .metro-appbarbutton__circle {
+  background: color-mix(in srgb, var(--wp-foreground) 20%, transparent);
+  border: 2px solid color-mix(in srgb, var(--wp-foreground) 20%, transparent);
+  color: var(--wp-foreground);
+}
+.metro-appbarbutton--filled:hover .metro-appbarbutton__circle {
+  background: var(--wp-chrome-low);
+}
+.metro-appbarbutton--filled:active .metro-appbarbutton__circle {
+  background: var(--wp-foreground);
+  color: var(--wp-background);
+}
+
+/* accent: accent-colored circle + accent-foreground icon */
+.metro-appbarbutton--accent .metro-appbarbutton__circle {
+  background: var(--wp-accent);
+  border: 2px solid var(--wp-accent-foreground);
+  color: var(--wp-accent-foreground);
+}
+.metro-appbarbutton--accent:hover .metro-appbarbutton__circle {
+  background: var(--wp-accent-light);
+}
+.metro-appbarbutton--accent:active .metro-appbarbutton__circle {
+  background: var(--wp-accent-dark);
+}
+
+/* --- Label --- */
+.metro-appbarbutton__label {
+  max-width: calc(var(--appbar-btn-circle) + 14px);
+  line-height: 1;
+  text-align: center;
+  text-transform: lowercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Disabled --- */
+.metro-appbarbutton:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

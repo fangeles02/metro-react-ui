@@ -1,0 +1,83 @@
+.metro-hubtile {
+  position: relative;
+  width: 173px;
+  height: 173px;
+  padding: 0;
+  border: none;
+  background: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+  font-family: var(--wp-font-family);
+  cursor: pointer;
+  overflow: hidden;
+  perspective: 600px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.metro-hubtile__inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform var(--wp-duration-slow) var(--wp-easing);
+}
+
+.metro-hubtile[data-flipped='true'] .metro-hubtile__inner {
+  transform: rotateX(180deg);
+}
+
+.metro-hubtile__face {
+  position: absolute;
+  inset: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 8px;
+}
+
+.metro-hubtile__back {
+  transform: rotateX(180deg);
+  background: var(--wp-accent-dark);
+}
+
+.metro-hubtile__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.metro-hubtile__title {
+  position: relative;
+  font-size: 41px;
+  line-height: 39px;
+  font-family: var(--wp-font-family);
+  text-align: left;
+  margin: 0 0 6px 10px;
+}
+
+.metro-hubtile__back-title {
+  font-size: var(--wp-font-size-normal);
+  font-family: var(--wp-font-family);
+  font-weight: var(--wp-font-weight-semibold);
+  text-align: left;
+  margin: 0 0 6px 10px;
+}
+
+.metro-hubtile__message {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px;
+  background: var(--wp-accent-dark);
+  font-size: var(--wp-font-size-small);
+  text-align: left;
+  animation: metro-drop var(--wp-duration-slow) var(--wp-easing);
+}
+
+@keyframes metro-drop {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

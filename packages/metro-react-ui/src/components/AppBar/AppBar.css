@@ -1,0 +1,141 @@
+/* ---- AppBar: WP8 app bar container ----
+   A horizontal bar pinned to the bottom of the screen that hosts
+   AppBarButton(s). Ports the placement of the WP8 shell:ApplicationBar.
+   Default is `position: sticky; bottom: 0` so the bar stays in view while
+   content scrolls behind it (no overlay). */
+
+.metro-appbar {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  padding: 10px 30px;
+  box-sizing: border-box;
+  width: 100%;
+
+}
+
+/* --- Alignment --- */
+.metro-appbar--align-left {
+  justify-content: flex-start;
+}
+.metro-appbar--align-center {
+  justify-content: center;
+}
+.metro-appbar--align-right {
+  justify-content: flex-end;
+}
+/* Default keeps the original spaced-out look. */
+.metro-appbar--align-space-around {
+  justify-content: space-around;
+}
+.metro-appbar--align-space-between {
+  justify-content: space-between;
+}
+
+/* --- Backgrounds --- */
+.metro-appbar--chrome {
+  background: var(--wp-chrome);
+}
+.metro-appbar--transparent {
+  background: transparent;
+}
+.metro-appbar--accent {
+  background: var(--wp-accent);
+}
+.metro-appbar--accent {
+  border-top-color: var(--wp-accent-foreground);
+}
+
+/* --- Positioning --- */
+.metro-appbar--pos-sticky {
+  position: sticky;
+  bottom: 0;
+}
+.metro-appbar--pos-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 30;
+}
+.metro-appbar--pos-static {
+  position: static;
+}
+
+/* --- "Accented" mode: force every child button into the accent style --- */
+.metro-appbar--accented .metro-appbarbutton .metro-appbarbutton__circle {
+  background: var(--wp-accent);
+  border: 2px solid var(--wp-accent-foreground);
+  color: var(--wp-accent-foreground);
+}
+.metro-appbar--accented .metro-appbarbutton:active .metro-appbarbutton__circle {
+  background: var(--wp-accent-dark);
+}
+.metro-appbar--accented .metro-appbarbutton__label {
+  color: var(--wp-foreground);
+}
+
+/* --- Responsive: wide vs mobile ---
+   Wide (tablet/desktop): labels always visible, alignment respected.
+   Mobile (narrow/phone): alignment forced to center, narrower gap, labels
+   shown only while open, and a toggle button appears on the right. */
+
+/* Wide: labels always visible */
+.metro-appbar--wide .metro-appbarbutton__label {
+  display: block;
+}
+
+/* Mobile: force center alignment + narrower gap.
+   The bar is a positioned element (sticky/fixed/static) so the absolutely
+   positioned toggle anchors to it without affecting button centering. */
+.metro-appbar--mobile {
+  justify-content: center;
+  gap: 16px;
+}
+
+/* Mobile labels: animate expansion/collapse with an easing function.
+   Collapsed = hidden (max-height 0, transparent, shifted down);
+   Open = visible (expanded height, opaque, in place). */
+.metro-appbar--mobile .metro-appbarbutton__label {
+  display: block;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(6px);
+  overflow: hidden;
+  transition: max-height var(--wp-duration-normal) var(--wp-easing),
+    opacity var(--wp-duration-normal) var(--wp-easing),
+    transform var(--wp-duration-normal) var(--wp-easing);
+}
+
+/* Mobile open: labels expand into view */
+.metro-appbar--mobile:not(.metro-appbar--collapsed) .metro-appbarbutton__label {
+  max-height: 24px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Toggle button (mobile only) — absolutely positioned on the right so the
+   buttons stay truly centered in the bar. */
+.metro-appbar__toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--wp-foreground);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.metro-appbar__toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+.metro-appbar__toggle:active {
+  opacity: 0.6;
+}

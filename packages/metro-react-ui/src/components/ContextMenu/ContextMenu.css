@@ -1,0 +1,44 @@
+.metro-contextmenu__host {
+  display: inline-block;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.metro-contextmenu {
+  position: fixed;
+  z-index: 400;
+  min-width: 200px;
+  box-sizing: border-box;
+  padding: 4px 0;
+  background: white;
+  border: 2px solid var(--wp-accent);
+  font-family: var(--wp-font-family);
+  animation: metro-fade-in var(--wp-duration-fast) var(--wp-easing);
+}
+
+.metro-contextmenu__item {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  color: black;
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  text-align: left;
+  cursor: pointer;
+}
+
+.metro-contextmenu__item:hover {
+  background: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+}
+
+.metro-contextmenu__item:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@keyframes metro-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

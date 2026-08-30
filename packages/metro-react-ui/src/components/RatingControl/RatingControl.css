@@ -1,0 +1,49 @@
+.metro-rating {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.metro-rating[data-readonly='true'] {
+  cursor: default;
+}
+
+.metro-rating__stars {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.metro-rating__star {
+  display: inline-flex;
+  width: 35px;
+  height: 43px;
+  color: var(--wp-subtle);
+  transition: color var(--wp-duration-fast) var(--wp-easing);
+}
+
+.metro-rating__star-shape {
+  width: 100%;
+  height: 100%;
+}
+
+.metro-rating__star[data-filled='true'] {
+  color: var(--wp-foreground);
+}
+
+.metro-rating__helper {
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 10px;
+  background: var(--wp-chrome);
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  pointer-events: none;
+}

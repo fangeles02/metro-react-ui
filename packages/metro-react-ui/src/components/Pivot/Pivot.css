@@ -1,0 +1,39 @@
+.metro-pivot {
+  font-family: var(--wp-font-family);
+  color: var(--wp-foreground);
+  touch-action: pan-y;
+}
+
+.metro-pivot__headers {
+  display: flex;
+  gap: 24px;
+  /* border-bottom: 2px solid var(--wp-chrome-low); */
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  /* Hide the scrollbar while keeping the strip scrollable (carousel). */
+  -ms-overflow-style: none;
+}
+
+.metro-pivot__headers::-webkit-scrollbar {
+  display: none;
+}
+
+.metro-pivot__header {
+  padding: 12px 4px;
+  border: none;
+  background: transparent;
+  color: var(--wp-subtle);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-large);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-pivot__header[data-active='true'] {
+  color: var(--wp-foreground);
+}
+
+.metro-pivot__content {
+  padding: 16px 0;
+}

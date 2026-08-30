@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Vite
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.DS_Store
+.vscode/*
+!.vscode/extensions.json

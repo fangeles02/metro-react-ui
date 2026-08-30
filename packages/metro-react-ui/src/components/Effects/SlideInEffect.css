@@ -1,0 +1,27 @@
+.metro-slidein {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-timing-function: var(--wp-easing);
+  will-change: opacity, transform;
+}
+
+.metro-slidein--up {
+  transform: translateY(40px);
+}
+
+.metro-slidein--down {
+  transform: translateY(-40px);
+}
+
+.metro-slidein--left {
+  transform: translateX(40px);
+}
+
+.metro-slidein--right {
+  transform: translateX(-40px);
+}
+
+.metro-slidein--visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}

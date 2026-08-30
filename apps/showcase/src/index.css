@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--wp-background);
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  -webkit-font-smoothing: antialiased;
+}

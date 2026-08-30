@@ -1,0 +1,112 @@
+.metro-datetime {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--wp-font-family);
+  color: var(--wp-foreground);
+}
+
+.metro-datetime__header {
+  font-size: var(--wp-font-size-large);
+  font-family: var(--wp-font-family);
+  font-weight: var(--wp-font-weight-light);
+}
+
+.metro-datetime__trigger {
+  min-width: 200px;
+  padding: 10px 12px;
+  border: 2px solid var(--wp-subtle);
+  background: transparent;
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  cursor: pointer;
+  transition: border-color var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-datetime__trigger:hover,
+.metro-datetime__trigger:focus-visible {
+  border-color: var(--wp-accent);
+  outline: none;
+}
+
+.metro-datetime__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--wp-background);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.metro-datetime__sheet {
+  width: 100%;
+  max-width: 480px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--wp-background);
+}
+
+.metro-datetime__sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  font-size: var(--wp-font-size-large);
+  font-family: var(--wp-font-family);
+  font-weight: var(--wp-font-weight-light);
+  border-bottom: 1px solid var(--wp-chrome-low);
+}
+
+.metro-datetime__close {
+  border: none;
+  background: transparent;
+  color: var(--wp-foreground);
+  font-size: var(--wp-font-size-large);
+  cursor: pointer;
+}
+
+.metro-datetime__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.metro-datetime__day {
+  aspect-ratio: 1;
+  border: none;
+  background: transparent;
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  cursor: pointer;
+}
+
+.metro-datetime__day:hover {
+  background: var(--wp-chrome);
+}
+
+.metro-datetime__day[data-selected='true'] {
+  background: var(--wp-accent);
+  color: var(--wp-background);
+}
+
+.metro-datetime__timecols {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.metro-datetime__col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 60vh;
+  overflow-y: auto;
+}

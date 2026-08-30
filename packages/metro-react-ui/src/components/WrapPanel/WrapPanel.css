@@ -1,0 +1,14 @@
+.metro-wrappanel {
+  display: flex;
+}
+
+.metro-wrappanel--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.metro-wrappanel--vertical {
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 100%;
+}

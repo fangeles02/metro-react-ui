@@ -1,0 +1,61 @@
+.metro-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--wp-touch-target);
+  padding: 5px 30px;
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-medium);
+  font-weight: var(--wp-font-weight-semibold);
+  cursor: pointer;
+  transition: background var(--wp-duration-fast) var(--wp-easing),
+    color var(--wp-duration-fast) var(--wp-easing),
+    border-color var(--wp-duration-fast) var(--wp-easing);
+}
+
+/* default: outline — transparent bg, foreground border */
+.metro-button--default {
+  background: transparent;
+  border: 2px solid var(--wp-foreground);
+  color: var(--wp-foreground);
+}
+.metro-button--default:hover {
+  background: color-mix(in srgb, var(--wp-foreground) 20%, transparent);
+}
+.metro-button--default:active {
+  background: var(--wp-foreground);
+  color: var(--wp-background);
+}
+
+/* filled: slightly lighter (gray), no border.
+   Background uses the mode foreground color at 20% — adapts to light/dark. */
+.metro-button--filled {
+  background: color-mix(in srgb, var(--wp-foreground) 20%, transparent);
+  border: none;
+  color: var(--wp-foreground);
+}
+.metro-button--filled:hover {
+  background: var(--wp-chrome-low);
+}
+.metro-button--filled:active {
+  background: var(--wp-subtle);
+  color: var(--wp-background);
+}
+
+/* accent: accent color */
+.metro-button--accent {
+  background: var(--wp-accent);
+  border: 2px solid var(--wp-accent-foreground);
+  color: var(--wp-accent-foreground);
+}
+.metro-button--accent:hover {
+  background: var(--wp-accent-light);
+}
+.metro-button--accent:active {
+  background: var(--wp-accent-dark);
+}
+
+.metro-button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

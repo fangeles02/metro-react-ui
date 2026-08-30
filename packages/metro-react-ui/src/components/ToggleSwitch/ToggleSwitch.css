@@ -1,0 +1,140 @@
+.metro-toggle {
+  font-family: var(--wp-font-family);
+  color: var(--wp-foreground);
+}
+
+/* Layout: text on the left, switch on the right (matches WP8 template) */
+.metro-toggle__layout {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 12px 5px 42px;
+}
+
+.metro-toggle__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.metro-toggle__header {
+  font-size: var(--wp-font-size-normal);
+  font-family: var(--wp-font-family);
+  color: var(--wp-subtle);
+  margin-left: -1px;
+}
+
+.metro-toggle__content {
+  margin-left: -1px;
+}
+
+.metro-toggle__label {
+  display: inline-flex;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  margin: -29px -24px -28px 0;
+}
+
+.metro-toggle__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The switch root: 136x95, transparent */
+.metro-toggle__track {
+  position: relative;
+  display: inline-block;
+  width: 136px;
+  height: 95px;
+  background: transparent;
+}
+
+/* SwitchTrack: 89 wide, centered */
+.metro-toggle__track-inner {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 86px;
+  height: 34px;
+  /* Clip the sliding thumb + background pill so neither spills out of the rail. */
+  overflow: hidden;
+}
+
+/* SwitchBottom: accent background 34 high */
+.metro-toggle__track-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  border: 2px solid var(--wp-foreground);
+  /* Keep the border on top of the sliding ::after pill. */
+  z-index: 1;
+}
+
+/* SwitchBackground: 77x20 centered, background color, slides with thumb */
+.metro-toggle__track-inner::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(-50% + 15px);
+  width: 55px;
+  height: 24px;
+  background: var(--wp-accent);
+  transform: translate(-50%, -50%);
+  transition: transform var(--wp-duration-normal) var(--wp-easing);
+}
+
+/* The thumb: 28x38 vertical bar, slides horizontally */
+.metro-toggle__thumb {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 25px;
+  height: 40px;
+  background: var(--wp-foreground);
+  border: 4px solid var(--wp-foreground);
+  border-left: none;
+  border-right: none;
+  transform: translate(0, -50%);
+  transition: transform var(--wp-duration-normal) var(--wp-easing);
+}
+
+/* ThumbCenter: white inner bar with 2px foreground border */
+.metro-toggle__thumb-center {
+  position: absolute;
+  inset: 0;
+  background: var(--wp-foreground);
+  border: 0px;
+}
+
+/* Checked: slide thumb + background to the right side of the rail.
+   Rail is 89w, thumb is 28w -> travel = 89 - 28 = 61 so nothing overflows. */
+.metro-toggle[data-checked='true'] .metro-toggle__track .metro-toggle__track-inner::after {
+  transform: translate(calc(-50% + 61px), -50%);
+}
+
+.metro-toggle[data-checked='true'] .metro-toggle__track .metro-toggle__thumb {
+  transform: translate(61px, -50%);
+}
+
+/* Disabled: thumb + track turn foreground color, 30% opacity */
+.metro-toggle[data-disabled='true'] .metro-toggle__track-inner::before {
+  background: var(--wp-foreground);
+}
+
+.metro-toggle[data-disabled='true'] .metro-toggle__thumb-center {
+  background: var(--wp-foreground);
+}
+
+.metro-toggle[data-disabled='true'] .metro-toggle__track {
+  opacity: 0.3;
+}
+
+.metro-toggle[data-disabled='true'] .metro-toggle__label {
+  cursor: default;
+}

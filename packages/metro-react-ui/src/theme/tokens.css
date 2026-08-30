@@ -1,0 +1,72 @@
+/**
+ * Metro UI design tokens — ported from the Windows Phone Toolkit
+ * XAML `StaticResource` values (PhoneAccentBrush, PhoneForegroundBrush,
+ * PhoneBackgroundBrush, PhoneFontFamily*, PhoneFontSize*).
+ *
+ * All tokens are CSS custom properties so they can be overridden at
+ * runtime (see ThemeProvider) without a rebuild.
+ */
+
+:root,
+.metro-ui {
+  /* ---- Color palette (dark theme = WP8 default) ----
+     Authentic WP8 brushes use alpha over pure black/white, not gray. */
+  --wp-accent: #1ba1e2;
+  --wp-accent-light: #6ec8f0;
+  --wp-accent-dark: #0e6e9c;
+  /* High-contrast text/icon color for accent surfaces. Flips to #000 for
+     light accents at runtime (see ThemeProvider/accentForeground). */
+  --wp-accent-foreground: #ffffff;
+
+  --wp-foreground: #ffffff;
+  --wp-background: #000000;
+  --wp-subtle: rgba(255, 255, 255, 0.6);      /* PhoneSubtleBrush */
+  --wp-chrome: #1f1f1f;                        /* PhoneChromeBrush */
+  --wp-chrome-low: #2b2b2b;                    /* slightly lighter chrome */
+  --wp-disabled: rgba(255, 255, 255, 0.3);     /* PhoneDisabledBrush */
+
+  /* ---- Typography ----
+     Segoe UI is the desktop family; weights carry the "Light/Semibold"
+     distinctions even when Segoe is absent (falls back gracefully). */
+  --wp-font-family: 'Segoe UI', 'Segoe WP', 'Helvetica Neue', Arial, sans-serif;
+  --wp-font-weight-light: 300;
+  --wp-font-weight-semilight: 350;
+  --wp-font-weight-normal: 400;
+  --wp-font-weight-semibold: 600;
+
+  /* WP8 type scale (px) */
+  --wp-font-size-small: 14px;
+  --wp-font-size-normal: 16px;
+  --wp-font-size-medium: 17px;
+  --wp-font-size-medium-large: 20px;
+  --wp-font-size-large: 24px;
+  --wp-font-size-extra-large: 32px;
+  --wp-font-size-extra-extra-large: 54px;
+  --wp-font-size-huge: 72px;
+  --wp-font-size-title-small: 28px;
+  --wp-font-size-title-large: 42px;
+
+  /* ---- Spacing / layout ---- */
+  --wp-page-margin: 12px;
+  --wp-content-margin: 24px;
+  --wp-touch-target: 43px;
+
+  /* ---- Motion ---- */
+  --wp-duration-fast: 100ms;
+  --wp-duration-normal: 200ms;
+  --wp-duration-slow: 350ms;
+  --wp-easing: cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+/* Light theme overrides (ThemeProvider sets [data-theme] on :root) */
+:root[data-theme='light'],
+.metro-ui[data-theme='light'] {
+  --wp-foreground: #000000;
+  --wp-background: #ffffff;
+  --wp-subtle: rgba(0, 0, 0, 0.6);
+  --wp-chrome: #e6e6e6;
+  --wp-chrome-low: #d4d4d4;
+  --wp-disabled: rgba(0, 0, 0, 0.3);
+  /* Default accent surfaces use dark text on light accents in light mode. */
+  --wp-accent-foreground: #000000;
+}

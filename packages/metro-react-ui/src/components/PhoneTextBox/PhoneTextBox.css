@@ -1,0 +1,61 @@
+.metro-textbox {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--wp-font-family);
+  color: var(--wp-foreground);
+}
+
+.metro-textbox__header {
+  font-size: var(--wp-font-size-normal);
+  font-family: var(--wp-font-family);
+  color: var(--wp-subtle);
+}
+
+.metro-textbox__field {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  border: 2px solid var(--wp-subtle);
+  background: none;
+  transition: border-color var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-textbox__field:focus-within {
+  border-color: var(--wp-accent);
+  /* Fixed white/black (not theme vars): on focus the field fills white with
+     dark text regardless of light/dark mode, so the gray border turns into an
+     accent border on a white surface. Using the vars here would invert to a
+     black fill in light mode. */
+  background: #ffffff;
+  color: #000000;
+}
+
+.metro-textbox__input {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: var(--wp-background);
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  outline: none;
+}
+
+.metro-textbox__input:focus-within {
+  color: black;
+  background: white;
+}
+
+.metro-textbox__input:disabled {
+  opacity: 0.3;
+}
+
+.metro-textbox__hint {
+  position: absolute;
+  left: 12px;
+  color: var(--wp-subtle);
+  font-size: var(--wp-font-size-normal);
+  pointer-events: none;
+}

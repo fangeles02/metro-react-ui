@@ -1,0 +1,7 @@
+.metro-tilt {
+  display: inline-block;
+  transform-style: preserve-3d;
+  transition: transform var(--wp-duration-fast) var(--wp-easing);
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}

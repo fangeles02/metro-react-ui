@@ -1,0 +1,277 @@
+.showcase {
+  min-height: 100vh;
+  width: 100%;
+  font-family: var(--wp-font-family);
+  color: var(--wp-foreground);
+}
+
+/* Outgoing page overlay during the flip exit animation */
+.showcase__outgoing {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: var(--wp-background);
+  overflow: hidden;
+}
+
+/* Outgoing page fills the same full width as the incoming page */
+.showcase__outgoing > * {
+  width: 100%;
+}
+
+.showcase__page {
+  padding: 0 24px 24px;
+}
+
+/* Hero — introduces the toolkit on the home page */
+.showcase__hero {
+  margin: 0 0 48px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--wp-chrome-low);
+}
+
+.showcase__hero-title {
+  font-size: var(--wp-font-size-extra-extra-large);
+  font-weight: var(--wp-font-weight-light);
+  line-height: 1.05;
+}
+
+.showcase__hero-subtitle {
+  margin-top: 4px;
+  font-size: var(--wp-font-size-medium-large);
+  font-weight: var(--wp-font-weight-normal);
+  color: var(--wp-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.showcase__hero-desc {
+  margin: 16px 0 0;
+  font-size: var(--wp-font-size-normal);
+  color: var(--wp-subtle);
+  max-width: 60ch;
+}
+
+.showcase__hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.showcase__hero-badge {
+  padding: 4px 12px;
+  border: 1px solid var(--wp-chrome-low);
+  background: var(--wp-chrome);
+  color: var(--wp-subtle);
+  font-size: var(--wp-font-size-small);
+}
+
+/* Title panel — matches WP8 page header:
+   small all-caps app title above a huge light-weight page title */
+.showcase__titlepanel {
+  margin: 17px 0 28px;
+}
+
+.showcase__apptitle {
+  font-size: var(--wp-font-size-normal);
+  font-weight: var(--wp-font-weight-normal);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.showcase__pagetitle {
+  margin-top: -7px;
+  font-size: var(--wp-font-size-extra-extra-large);
+  font-weight: var(--wp-font-weight-light);
+  line-height: 1.05;
+  text-transform: lowercase;
+}
+
+/* Plain Metro list (matches MainPage.xaml hyperlink list) */
+.showcase__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.showcase__listitem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 0 0 24px;
+  border: none;
+  background: transparent;
+  color: var(--wp-foreground);
+  text-align: left;
+  cursor: pointer;
+}
+
+.showcase__listitem-header {
+  font-size: var(--wp-font-size-large);
+  font-weight: var(--wp-font-weight-normal);
+  text-transform: lowercase;
+}
+
+.showcase__listitem-desc {
+  font-size: var(--wp-font-size-normal);
+  color: var(--wp-subtle);
+  opacity: 0.6;
+}
+
+.showcase__page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Footer / navigation */
+.showcase__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-top: 16px;
+}
+
+.showcase__back {
+  border: 2px solid var(--wp-foreground);
+  background: transparent;
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-medium-large);
+  font-weight: var(--wp-font-weight-semibold);
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.showcase__back:active {
+  background: var(--wp-foreground);
+  color: var(--wp-background);
+}
+
+.showcase__themetoggle {
+  border: none;
+  background: transparent;
+  color: var(--wp-subtle);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  cursor: pointer;
+  text-transform: lowercase;
+}
+
+/* Demo blocks inside each sample page */
+.showcase__demo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.showcase__demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* A bordered frame used to show an AppBar anchored to the bottom of content */
+.showcase__demo-frame {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--wp-chrome-low);
+  max-height: 220px;
+  overflow: auto;
+}
+
+/* Auto-height variant used when a demo frame is laid out inline in a row */
+.showcase__demo-frame--auto {
+  max-height: none;
+  overflow: visible;
+  flex: 1;
+  min-width: 140px;
+}
+
+.appbar-demo-content {
+  padding: 24px;
+  color: var(--wp-subtle);
+  font-size: var(--wp-font-size-normal);
+}
+
+.showcase__demo-label {
+  font-size: var(--wp-font-size-small);
+  color: var(--wp-subtle);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.showcase__demo-hint {
+  font-size: var(--wp-font-size-small);
+  color: var(--wp-subtle);
+  font-style: italic;
+}
+
+/* Accent color picker (Windows 8 palette) */
+.showcase__settings-row {
+  /* The ToggleSwitch uses negative margins internally; give it room so it
+     doesn't overlap the accent swatches below. */
+  margin-bottom: 24px;
+}
+
+.showcase__accent-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.showcase__accent-swatch {
+  width: 43px;
+  height: 43px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.showcase__accent-swatch--selected {
+  outline: 2px solid var(--wp-foreground);
+  outline-offset: 2px;
+}
+
+.showcase__demo-btn {
+  align-self: flex-start;
+  padding: 10px 20px;
+  border: 2px solid var(--wp-foreground);
+  background: transparent;
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  cursor: pointer;
+}
+
+.showcase__demo-btn:active {
+  background: var(--wp-foreground);
+  color: var(--wp-background);
+}
+
+.showcase__context-target {
+  padding: 20px;
+  border: 2px solid var(--wp-subtle);
+  color: var(--wp-subtle);
+  font-family: var(--wp-font-family);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Sample usage syntax shown under each demo */
+.showcase__code {
+  margin: 0;
+  padding: 16px;
+  background: var(--wp-chrome);
+  border: 1px solid var(--wp-chrome-low);
+  color: var(--wp-foreground);
+  font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: var(--wp-font-size-small);
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre;
+}

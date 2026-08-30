@@ -1,0 +1,194 @@
+.metro-listpicker {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--wp-font-family);
+  color: var(--wp-foreground);
+}
+
+.metro-listpicker__header {
+  font-size: var(--wp-font-size-normal);
+  font-family: var(--wp-font-family);
+  color: var(--wp-subtle);
+  margin-bottom: 8px;
+}
+
+.metro-listpicker__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 200px;
+  min-height: 46px;
+  padding: 8px 12px;
+  border: 2px solid var(--wp-subtle);
+  background: transparent;
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-medium-normal);
+  cursor: pointer;
+  transition: border-color var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-listpicker__trigger:hover,
+.metro-listpicker__trigger:focus-visible {
+  border-color: var(--wp-accent);
+  outline: none;
+}
+.metro-listpicker__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metro-listpicker__chevron {
+  color: var(--wp-subtle);
+}
+
+/* The normal inline container anchors the overlay menu, is kept in flow (the
+   trigger reserves its height while hidden), and shrinks to the trigger's
+   width so the overlay list matches it. */
+.metro-listpicker__normal {
+  position: relative;
+  width: fit-content;
+}
+
+.metro-listpicker__menu-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  overflow: hidden;
+  height: 0;
+}
+
+.metro-listpicker__menu-wrap[data-state='open'] {
+  transition: height var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-listpicker__menu-wrap[data-state='closing'] {
+  transition: height var(--wp-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+}
+/*Menu background for the default*/
+/* The list matches the trigger's width: fill the anchored container and use
+   border-box so borders/padding don't enlarge it beyond the trigger. */
+.metro-listpicker__menu {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  min-width: 200px;
+  background: white;
+  border: 2px solid var(--wp-accent);
+  opacity: 1;
+  transition: opacity var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-listpicker__menu-wrap[data-state='closing'] .metro-listpicker__menu {
+  opacity: 0;
+}
+
+.metro-listpicker__option {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  color: black;
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  text-align: left;
+  cursor: pointer;
+}
+
+.metro-listpicker__option:hover,
+.metro-listpicker__option[data-highlighted='true'] {
+  background: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+}
+
+.metro-listpicker__option[data-selected='true'] {
+  color: var(--wp-accent);
+}
+
+/* When a selected item is hovered/highlighted, the accent background is shown,
+   so the text must use the accent-foreground (readable) instead of the accent
+   color. This rule must come after the selected rule to win the tie. */
+.metro-listpicker__option[data-selected='true']:hover,
+.metro-listpicker__option[data-selected='true'][data-highlighted='true'] {
+  color: var(--wp-accent-foreground);
+}
+
+/* In-flow expanded mode (WP8 style). inline-flex + fit-content keep it shrunk
+   around the trigger; an explicit width is locked in from the trigger via JS
+   (in openExpanded / the layout effect) since the trigger is hidden while
+   open. */
+.metro-listpicker__expanded {
+  display: inline-flex;
+  flex-direction: column;
+  width: fit-content;
+}
+
+.metro-listpicker__expander {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: auto;
+}
+
+/* While open, only the list is visible (the trigger is hidden); it reappears
+   once an item is selected and the picker collapses. */
+/* Normal overlay: the trigger stays in flow (keeping its height as the menu's
+   anchor) but is made non-visible. */
+.metro-listpicker__normal .metro-listpicker__trigger[data-hidden='true'] {
+  visibility: hidden;
+}
+/* Expanded in-flow: remove the trigger from flow; the wrapper height is driven
+   by JS so it only fits the list. */
+.metro-listpicker__expander .metro-listpicker__trigger[data-hidden='true'] {
+  display: none;
+}
+
+/* Match WP8's ExponentialEase (EaseInOut, exponent 4) height/translate motion. */
+.metro-listpicker__expander[data-state='open'],
+.metro-listpicker__expander[data-state='closing'] {
+  transition: height 0.2s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.metro-listpicker__expander-list {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 0px;
+  padding: 2px;
+  list-style: none;
+  background: white;
+  border: 2px solid var(--wp-accent);
+  /* Prevent flex shrink so the list keeps its full capped max-height. */
+  flex-shrink: 0;
+}
+
+.metro-listpicker__expander-list .metro-listpicker__option {
+  border-bottom: none;
+}
+
+/* When collapsed, the wrapper is clipped to the trigger's height, so the list's
+   top border would peek out at the trigger's bottom edge. Hide it until the
+   list is expanded. */
+.metro-listpicker__expander[data-state='closing'] .metro-listpicker__expander-list {
+  border-top-width: 0;
+}
+
+.metro-listpicker[data-disabled='true'] .metro-listpicker__trigger {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metro-listpicker__menu-wrap,
+  .metro-listpicker__menu,
+  .metro-listpicker__expander {
+    transition: none !important;
+  }
+}

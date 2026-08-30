@@ -1,0 +1,109 @@
+.metro-autocomplete {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--wp-font-family);
+  color: var(--wp-foreground);
+}
+
+.metro-autocomplete__header {
+  font-size: var(--wp-font-size-large);
+  font-family: var(--wp-font-family);
+  font-weight: var(--wp-font-weight-light);
+}
+
+.metro-autocomplete__field {
+  position: relative;
+  display: inline-flex;
+}
+
+.metro-autocomplete__input {
+  width: 100%;
+  min-width: 220px;
+  min-height: 46px;
+  padding: 8px 12px;
+  border: 2px solid var(--wp-subtle);
+  background: transparent;
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  outline: none;
+  transition: border-color var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-autocomplete__input:focus {
+  border-color: var(--wp-accent);
+  background: white;
+  color: black;
+}
+
+.metro-autocomplete__input::placeholder {
+  color: var(--wp-subtle);
+}
+
+.metro-autocomplete__menu-wrap {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  overflow: hidden;
+  height: 0;
+}
+
+.metro-autocomplete__menu-wrap[data-state='open'] {
+  transition: height var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-autocomplete__menu-wrap[data-state='closing'] {
+  transition: height var(--wp-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.metro-autocomplete__menu {
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background: white;
+  border: 2px solid var(--wp-accent);
+  border-top: 1px;
+  max-height: 240px;
+  overflow-y: auto;
+  opacity: 1;
+  transition: opacity var(--wp-duration-normal) var(--wp-easing);
+}
+
+.metro-autocomplete__menu-wrap[data-state='closing'] .metro-autocomplete__menu {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metro-autocomplete__menu-wrap {
+    transition: none !important;
+  }
+  .metro-autocomplete__menu {
+    transition: none !important;
+  }
+}
+
+.metro-autocomplete__option {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  color: black;
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  text-align: left;
+  cursor: pointer;
+}
+
+.metro-autocomplete__option[data-highlighted='true'],
+.metro-autocomplete__option:hover {
+  background: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+}
+
+.metro-autocomplete[data-disabled='true'] .metro-autocomplete__input {
+  opacity: 0.3;
+}
