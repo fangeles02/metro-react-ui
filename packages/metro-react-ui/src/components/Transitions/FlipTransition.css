@@ -103,6 +103,95 @@
 }
 
 /* =====================================================================
+   Turnstile mode — turnstile flip + slide/scale entrance.
+   The page flips on the left vertical axis while sliding in from the
+   side with a slight scale-down → scale-up, giving a snappy
+   "door/page swing in" feel.
+   ===================================================================== */
+
+/* ---- "in" phase: incoming page (EaseOut, ~400ms) ---- */
+.metro-flip--turnstile.metro-flip--in {
+  animation-duration: 0.4s; /* 400ms */
+  animation-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1.0); /* snappy deceleration */
+}
+
+.metro-flip--turnstile.metro-flip--forward.metro-flip--in {
+  animation-name: metro-turnstile-forward-in;
+}
+
+.metro-flip--turnstile.metro-flip--backward.metro-flip--in {
+  animation-name: metro-turnstile-backward-in;
+}
+
+/* ---- "out" phase: outgoing page (EaseIn, 250ms) ---- */
+.metro-flip--turnstile.metro-flip--out {
+  animation-duration: var(--wp-duration-fast); /* 250ms */
+  animation-timing-function: cubic-bezier(1, 0, 1, 1); /* EaseIn */
+}
+
+.metro-flip--turnstile.metro-flip--forward.metro-flip--out {
+  animation-name: metro-turnstile-forward-out;
+}
+
+.metro-flip--turnstile.metro-flip--backward.metro-flip--out {
+  animation-name: metro-turnstile-backward-out;
+}
+
+/* Forward in: rotateY 45° -> 0°, translateX 60px -> 0, scale 0.92 -> 1 */
+@keyframes metro-turnstile-forward-in {
+  0% {
+    transform: perspective(1000px) translateX(60px) rotateY(45deg) scale(0.92);
+    opacity: 0;
+  }
+  100% {
+    transform: perspective(1000px) translateX(0) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Backward in: rotateY -45° -> 0°, translateX -60px -> 0, scale 0.92 -> 1 */
+@keyframes metro-turnstile-backward-in {
+  0% {
+    transform: perspective(1000px) translateX(-60px) rotateY(-45deg) scale(0.92);
+    opacity: 0;
+  }
+  100% {
+    transform: perspective(1000px) translateX(0) rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Forward out: page flips 0° -> -50° while flying out to depth */
+@keyframes metro-turnstile-forward-out {
+  0% {
+    transform: perspective(1000px) translateZ(0) rotateY(0deg);
+    opacity: 1;
+  }
+  96% {
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1000px) translateZ(-120px) rotateY(-50deg);
+    opacity: 0;
+  }
+}
+
+/* Backward out: page flips 0° -> +80° while flying out to depth */
+@keyframes metro-turnstile-backward-out {
+  0% {
+    transform: perspective(1000px) translateZ(0) rotateY(0deg);
+    opacity: 1;
+  }
+  96% {
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1000px) translateZ(-120px) rotateY(80deg);
+    opacity: 0;
+  }
+}
+
+/* =====================================================================
    Swivel mode — a vertical-axis swing (RotationY), like a door or a
    spinning sign. Rotates around the vertical axis and respects the
    `origin` prop (`left` = swing from the left edge, `center` = spin

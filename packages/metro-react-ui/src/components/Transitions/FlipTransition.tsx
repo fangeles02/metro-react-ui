@@ -27,12 +27,15 @@ export interface FlipTransitionProps {
    * The transition family.
    * `flip` (default) = book-page flip around the vertical axis (RotationY),
    * matching the WP Toolkit `TurnstileTransition`.
+   * `turnstile` = turnstile flip + slide/scale entrance (the page flips on the
+   * left vertical axis while sliding in from the side with a slight
+   * scale-down → scale-up).
    * `swivel` = vertical-axis swing around the vertical axis (RotationY),
    * like a door or spinning sign. Respects the `origin` prop.
    * `cube` = true 3D cube rotation around the vertical axis (RotationY),
    * like the PowerPoint "Cube" slide transition or Instagram stories.
    */
-  mode?: 'flip' | 'swivel' | 'cube';
+  mode?: 'flip' | 'turnstile' | 'swivel' | 'cube';
 }
 
 /**

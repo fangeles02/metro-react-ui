@@ -4,7 +4,7 @@ import { CodeBlock } from './CodeBlock';
 
 type Direction = 'forward' | 'backward';
 type Origin = 'left' | 'center';
-type Mode = 'flip' | 'swivel' | 'cube';
+type Mode = 'flip' | 'turnstile' | 'swivel' | 'cube';
 
 /**
  * Demo for the Metro-style page transition.
@@ -29,6 +29,13 @@ export function FlipTransitionDemo() {
             onClick={() => setMode('flip')}
           >
             flip
+          </button>
+          <button
+            type="button"
+            className="showcase__demo-btn"
+            onClick={() => setMode('turnstile')}
+          >
+            turnstile
           </button>
           <button
             type="button"
@@ -163,7 +170,7 @@ export function FlipTransitionDemo() {
 </FlipTransition>
 
 // Options
-// mode:      'flip' (book flip) | 'swivel' (WP 8.1) | 'cube' (3D cube)
+// mode:      'flip' (book flip) | 'turnstile' (slide/scale) | 'swivel' (WP 8.1) | 'cube' (3D cube)
 // direction: 'forward' | 'backward'
 // origin:    'left' (book flip) | 'center' (circular spin)
 // phase:     'in' | 'out'`}
