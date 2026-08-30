@@ -4,7 +4,8 @@ import { CodeBlock } from './CodeBlock';
 
 type Direction = 'forward' | 'backward';
 type Origin = 'left' | 'center';
-type Mode = 'flip' | 'turnstile' | 'swivel' | 'cube';
+type Axis = 'horizontal' | 'vertical';
+type Mode = 'flip' | 'turnstile' | 'swivel';
 
 /**
  * Demo for the Metro-style page transition.
@@ -14,6 +15,7 @@ export function FlipTransitionDemo() {
   const [mode, setMode] = useState<Mode>('flip');
   const [direction, setDirection] = useState<Direction>('forward');
   const [origin, setOrigin] = useState<Origin>('left');
+  const [axis, setAxis] = useState<Axis>('horizontal');
   const [run, setRun] = useState(0);
 
   const replay = () => setRun((n) => n + 1);
@@ -42,14 +44,7 @@ export function FlipTransitionDemo() {
             className="showcase__demo-btn"
             onClick={() => setMode('swivel')}
           >
-            swivel (WP 8.1)
-          </button>
-          <button
-            type="button"
-            className="showcase__demo-btn"
-            onClick={() => setMode('cube')}
-          >
-            cube (3D)
+            swivel
           </button>
           <button
             type="button"
@@ -79,12 +74,19 @@ export function FlipTransitionDemo() {
           >
             origin: center
           </button>
+          <button
+            type="button"
+            className="showcase__demo-btn"
+            onClick={() => setAxis(axis === 'horizontal' ? 'vertical' : 'horizontal')}
+          >
+            axis: {axis}
+          </button>
           <button type="button" className="showcase__demo-btn" onClick={replay}>
             replay
           </button>
         </div>
         <div className="showcase__demo-hint">
-          mode: {mode} · direction: {direction} · origin: {origin} — press replay to run
+          mode: {mode} · direction: {direction} · origin: {origin} · axis: {axis} — press replay to run
           the animation
         </div>
       </div>
@@ -95,6 +97,7 @@ export function FlipTransitionDemo() {
           mode={mode}
           direction={direction}
           origin={origin}
+          axis={axis}
           phase="in"
           animationKey={run}
         >
@@ -170,9 +173,10 @@ export function FlipTransitionDemo() {
 </FlipTransition>
 
 // Options
-// mode:      'flip' (book flip) | 'turnstile' (slide/scale) | 'swivel' (WP 8.1) | 'cube' (3D cube)
+// mode:      'flip' (book flip) | 'turnstile' (slide/scale) | 'swivel' (3D cube)
 // direction: 'forward' | 'backward'
 // origin:    'left' (book flip) | 'center' (circular spin)
+// axis:      'horizontal' (rotateY) | 'vertical' (rotateX, swivel only)
 // phase:     'in' | 'out'`}
       />
     </>

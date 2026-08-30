@@ -24,18 +24,24 @@ export interface FlipTransitionProps {
    */
   origin?: 'left' | 'center';
   /**
+   * Rotation axis for the `swivel` mode.
+   * `horizontal` (default) = rotate around the vertical axis (RotationY),
+   * like a spinning sign.
+   * `vertical` = rotate around the horizontal axis (RotationX), like a
+   * top/bottom cube flip.
+   */
+  axis?: 'horizontal' | 'vertical';
+  /**
    * The transition family.
    * `flip` (default) = book-page flip around the vertical axis (RotationY),
    * matching the WP Toolkit `TurnstileTransition`.
    * `turnstile` = turnstile flip + slide/scale entrance (the page flips on the
    * left vertical axis while sliding in from the side with a slight
    * scale-down → scale-up).
-   * `swivel` = vertical-axis swing around the vertical axis (RotationY),
-   * like a door or spinning sign. Respects the `origin` prop.
-   * `cube` = true 3D cube rotation around the vertical axis (RotationY),
+   * `swivel` = true 3D cube rotation around the vertical axis (RotationY),
    * like the PowerPoint "Cube" slide transition or Instagram stories.
    */
-  mode?: 'flip' | 'turnstile' | 'swivel' | 'cube';
+  mode?: 'flip' | 'turnstile' | 'swivel';
 }
 
 /**
@@ -65,12 +71,13 @@ export function FlipTransition({
   phase = 'in',
   animationKey,
   origin = 'left',
+  axis = 'horizontal',
   mode = 'flip',
 }: FlipTransitionProps) {
   return (
     <div
       key={animationKey}
-      className={`metro-flip metro-flip--${mode} metro-flip--${direction} metro-flip--${phase} metro-flip--origin-${origin}`}
+      className={`metro-flip metro-flip--${mode} metro-flip--${direction} metro-flip--${phase} metro-flip--origin-${origin} metro-flip--axis-${axis}`}
     >
       {children}
     </div>
