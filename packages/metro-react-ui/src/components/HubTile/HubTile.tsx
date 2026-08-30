@@ -34,18 +34,22 @@ export function HubTile({
   canDrop = true,
   onClick,
 }: HubTileProps) {
-  const [flipped, setFlipped] = useState(false);
-  const [dropped, setDropped] = useState(false);
+  // 0 = normal (front), 1 = flipped (back), 2 = dropped (message).
+  const [state, setState] = useState(0);
+  const flipped = state === 1;
+  const dropped = state === 2;
 
   // Cycle through flip/drop states on an interval, like the WP hub tile.
+  // When both canFlip and canDrop are enabled, cycle normal → flipped → dropped → normal.
   useEffect(() => {
     if (!canFlip && !canDrop) return;
     const interval = setInterval(() => {
-      if (canFlip) {
-        setFlipped((f) => !f);
-      } else if (canDrop) {
-        setDropped((d) => !d);
-      }
+      setState((s) => {
+        if (canFlip && canDrop) return (s + 1) % 3; // 0 → 1 → 2 → 0
+        if (canFlip) return s === 0 ? 1 : 0;        // 0 ↔ 1
+        if (canDrop) return s === 0 ? 2 : 0;        // 0 ↔ 2
+        return s;
+      });
     }, 4000);
     return () => clearInterval(interval);
   }, [canFlip, canDrop]);

@@ -1,5 +1,6 @@
 .metro-tilt {
-  display: inline-block;
+  display: inline-flex;
+  width: fit-content;
   transform-style: preserve-3d;
   transition: transform var(--wp-duration-fast) var(--wp-easing);
   will-change: transform;

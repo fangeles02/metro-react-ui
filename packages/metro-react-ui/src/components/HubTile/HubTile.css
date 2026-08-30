@@ -8,7 +8,6 @@
   color: var(--wp-accent-foreground);
   font-family: var(--wp-font-family);
   cursor: pointer;
-  overflow: hidden;
   perspective: 600px;
   -webkit-tap-highlight-color: transparent;
 }
@@ -35,6 +34,10 @@
   padding: 8px;
 }
 
+.metro-hubtile__front {
+  background: var(--wp-accent);
+}
+
 .metro-hubtile__back {
   transform: rotateX(180deg);
   background: var(--wp-accent-dark);
@@ -50,8 +53,8 @@
 
 .metro-hubtile__title {
   position: relative;
-  font-size: 41px;
-  line-height: 39px;
+  font-size: var(--wp-font-size-large);
+  line-height: 1.1;
   font-family: var(--wp-font-family);
   text-align: left;
   margin: 0 0 6px 10px;
@@ -70,6 +73,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1;
   padding: 8px;
   background: var(--wp-accent-dark);
   font-size: var(--wp-font-size-small);
