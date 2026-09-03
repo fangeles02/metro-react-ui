@@ -62,6 +62,12 @@ export type { LongListMultiSelectorProps, LongListGroup } from './components/Lon
 export { HubTile } from './components/HubTile/HubTile';
 export type { HubTileProps } from './components/HubTile/HubTile';
 
+// WP 8.1 start-screen tiles
+export { Tile } from './components/Tile/Tile';
+export type { TileProps, TileSize, TileMode } from './components/Tile/Tile';
+export { TileContainer } from './components/TileContainer/TileContainer';
+export type { TileContainerProps } from './components/TileContainer/TileContainer';
+
 export { Pivot, PivotItem } from './components/Pivot/Pivot';
 export type { PivotProps, PivotItemProps } from './components/Pivot/Pivot';
 

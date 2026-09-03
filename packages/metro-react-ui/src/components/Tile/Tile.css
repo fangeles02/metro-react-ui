@@ -1,0 +1,113 @@
+.metro-tile {
+  position: relative;
+  padding: 0;
+  border: none;
+  background: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+  font-family: var(--wp-font-family);
+  cursor: pointer;
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- Sizing ----
+   Base cell is 87px (the 1x1 size). Larger tiles span multiple grid cells
+   (used inside a TileContainer) and also have a matching standalone size.
+   Grid span: cols x rows. */
+.metro-tile--1x1 { width: 87px; height: 87px; grid-column: span 1; grid-row: span 1; }
+.metro-tile--2x2 { width: 182px; height: 182px; grid-column: span 2; grid-row: span 2; }
+.metro-tile--4x2 { width: 372px; height: 182px; grid-column: span 4; grid-row: span 2; }
+.metro-tile--4x4 { width: 372px; height: 372px; grid-column: span 4; grid-row: span 4; }
+
+/* Inside a TileContainer, tiles fill their grid cell (spanning cols/rows). */
+.metro-tilecontainer .metro-tile {
+  width: 100%;
+  height: 100%;
+}
+
+/* Whole-tile flip (origin center, axis vertical = rotateX), matching the
+   PageTransition "flip" style — perspective + fade. The tile is re-mounted
+   (via key) on every flip, so this animation re-runs each time — both to
+   the back and back to the title. */
+.metro-tile {
+  animation: metro-tile-flip var(--wp-tile-swivel-duration, 1000ms) cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+@keyframes metro-tile-flip {
+  0% {
+    transform: perspective(1000px) rotateX(80deg);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1000px) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+.metro-tile__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 8px;
+}
+
+.metro-tile__content--back {
+  justify-content: flex-start;
+  background: var(--wp-accent-dark);
+}
+
+.metro-tile__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.metro-tile__title {
+  position: relative;
+  font-size: var(--wp-font-size-small);
+  font-weight: var(--wp-font-weight-normal);
+  line-height: 1.1;
+  font-family: var(--wp-font-family);
+  text-align: left;
+  margin: 0 0 6px 10px;
+}
+
+.metro-tile__message {
+  position: relative;
+  font-size: var(--wp-font-size-small);
+  font-weight: var(--wp-font-weight-normal);
+  font-family: var(--wp-font-family);
+  text-align: left;
+  margin: 0 0 6px 10px;
+}
+
+/* ---- Count badge ---- */
+.metro-tile__count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 0 8px;
+  background: var(--wp-accent-dark);
+  color: var(--wp-accent-foreground);
+}
+
+.metro-tile__count-inner {
+  font-size: var(--wp-font-size-normal);
+  font-weight: var(--wp-font-weight-semibold);
+  line-height: 1;
+}
