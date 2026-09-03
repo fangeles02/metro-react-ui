@@ -17,6 +17,7 @@ import { TileDemo } from './TileDemo';
 import { PivotDemo } from './PivotDemo';
 import { EffectsDemo } from './EffectsDemo';
 import { AppBarDemo } from './AppBarDemo';
+import { IconDemo } from './IconDemo';
 import { FlipTransitionDemo } from './FlipTransitionDemo';
 import { SettingsPage } from './SettingsPage';
 
@@ -47,6 +48,7 @@ export const showcasePages: ShowcasePage[] = [
   { id: 'pivot', name: 'Pivot', description: 'Swipeable tabs', icon: '⇋', render: () => <PivotDemo /> },
   { id: 'effects', name: 'Effects (todo)', description: 'Tilt & slide-in', icon: '✦', render: () => <EffectsDemo /> },
   { id: 'appbar', name: 'AppBar', description: 'Circular app bar buttons', icon: '◯', render: () => <AppBarDemo /> },
+  { id: 'icons', name: 'Icons', description: 'Fluent UI System Icons gallery', icon: '✦', render: () => <IconDemo /> },
   { id: 'transition', name: 'PageTransition', description: 'Flip page transition', icon: '⇄', render: () => <FlipTransitionDemo /> },
   { id: 'settings', name: 'Settings', description: 'Theme: light/dark + accent color', icon: '⚙', render: () => <SettingsPage /> },
 ];

@@ -253,6 +253,37 @@
   color: var(--wp-background);
 }
 
+.showcase__demo-btn--active {
+  background: var(--wp-accent);
+  border-color: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+}
+
+/* Icon gallery grid */
+.icon-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 12px;
+}
+
+.icon-gallery__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 8px;
+  border: 1px solid var(--wp-chrome-low);
+  color: var(--wp-foreground);
+}
+
+.icon-gallery__name {
+  font-size: var(--wp-font-size-small);
+  color: var(--wp-subtle);
+  text-align: center;
+  word-break: break-all;
+}
+
 .showcase__context-target {
   padding: 20px;
   border: 2px solid var(--wp-subtle);
