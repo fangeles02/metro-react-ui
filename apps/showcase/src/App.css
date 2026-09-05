@@ -259,29 +259,127 @@
   color: var(--wp-accent-foreground);
 }
 
-/* Icon gallery grid */
+/* ===== Icon browser ===== */
+.icon-browser {
+  position: relative;
+}
+
+.icon-browser__search {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 12px;
+  border: 2px solid var(--wp-chrome-low);
+  background: var(--wp-chrome);
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+}
+.icon-browser__search:focus {
+  outline: none;
+  border-color: var(--wp-accent);
+}
+
+.icon-browser__empty {
+  padding: 32px 16px;
+  border: 1px dashed var(--wp-chrome-low);
+  color: var(--wp-subtle);
+  font-size: var(--wp-font-size-normal);
+  text-align: center;
+}
+
+/* Gallery grid */
 .icon-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 12px;
 }
 
-.icon-gallery__item {
+.icon-browser__card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 8px;
   padding: 16px 8px;
   border: 1px solid var(--wp-chrome-low);
   color: var(--wp-foreground);
+  text-align: center;
+  transition: border-color 0.12s ease;
+}
+.icon-browser__card:hover {
+  border-color: var(--wp-accent);
 }
 
-.icon-gallery__name {
+/* The two style variants sit side by side in one row */
+.icon-browser__variants {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.icon-browser__variant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  font-family: var(--wp-font-family);
+  font-size: 10px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.icon-browser__variant:hover {
+  border-color: var(--wp-accent);
+  background: var(--wp-chrome);
+}
+.icon-browser__variant:active {
+  background: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+}
+
+.icon-browser__copy-state {
+  word-break: break-all;
+  line-height: 1.2;
+}
+
+.icon-browser__name {
   font-size: var(--wp-font-size-small);
   color: var(--wp-subtle);
-  text-align: center;
   word-break: break-all;
+}
+
+.icon-browser__error {
+  font-size: 10px;
+  color: var(--wp-red, var(--wp-accent));
+}
+
+/* Transient "Copied X" toast in the corner */
+.icon-browser__toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  padding: 12px 18px;
+  background: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  animation: icon-browser__toast-in 0.18s ease-out;
+  pointer-events: none;
+  z-index: 50;
+}
+@keyframes icon-browser__toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .showcase__context-target {

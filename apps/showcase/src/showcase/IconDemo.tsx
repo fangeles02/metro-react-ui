@@ -1,202 +1,157 @@
-import { useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { CodeBlock } from './CodeBlock';
+import { iconRegistry, type IconRegistration } from './icons/iconRegistry';
 
-/* Fluent UI System Icons — Microsoft's open-source successor to Segoe MDL2
-   Assets. Used as the icon library for the showcase. @fluentui/react-icons is
-   a devDependency of the showcase app only. */
-import {
-  AddRegular,
-  AddFilled,
-  CheckmarkRegular,
-  CheckmarkFilled,
-  DismissRegular,
-  DismissFilled,
-  SettingsRegular,
-  SettingsFilled,
-  SearchRegular,
-  SearchFilled,
-  ArrowLeftRegular,
-  ArrowLeftFilled,
-  HomeRegular,
-  HomeFilled,
-  SaveRegular,
-  SaveFilled,
-  DeleteRegular,
-  DeleteFilled,
-  EditRegular,
-  EditFilled,
-  StarRegular,
-  StarFilled,
-  HeartRegular,
-  HeartFilled,
-  MailRegular,
-  MailFilled,
-  PersonRegular,
-  PersonFilled,
-  LockClosedRegular,
-  LockClosedFilled,
-  CalendarRegular,
-  CalendarFilled,
-  CameraRegular,
-  CameraFilled,
-  PlayRegular,
-  PlayFilled,
-  Wifi1Regular,
-  Wifi1Filled,
-  Battery0Regular,
-  Battery0Filled,
-  ClockRegular,
-  ClockFilled,
-  InfoRegular,
-  InfoFilled,
-  WarningRegular,
-  WarningFilled,
-  ErrorCircleRegular,
-  ErrorCircleFilled,
-  QuestionCircleRegular,
-  QuestionCircleFilled,
-  ChevronRightRegular,
-  ChevronRightFilled,
-  ArrowDownloadRegular,
-  ArrowDownloadFilled,
-  ShareRegular,
-  ShareFilled,
-  LinkRegular,
-  LinkFilled,
-  CopyRegular,
-  CopyFilled,
-  PrintRegular,
-  PrintFilled,
-  FilterRegular,
-  FilterFilled,
-  FolderRegular,
-  FolderFilled,
-  DocumentRegular,
-  DocumentFilled,
-  TagRegular,
-  TagFilled,
-  CartRegular,
-  CartFilled,
-  LocationRegular,
-  LocationFilled,
-  GlobeRegular,
-  GlobeFilled,
-  WeatherSunnyRegular,
-  WeatherSunnyFilled,
-  WeatherMoonRegular,
-  WeatherMoonFilled,
-  EyeRegular,
-  EyeFilled,
-  ChatRegular,
-  ChatFilled,
-  SendRegular,
-  SendFilled,
-  FlagRegular,
-  FlagFilled,
-  BookmarkRegular,
-  BookmarkFilled,
-  ArrowUndoRegular,
-  ArrowUndoFilled,
-  ArrowRedoRegular,
-  ArrowRedoFilled,
-  ZoomInRegular,
-  ZoomInFilled,
-  FullScreenMaximizeRegular,
-  FullScreenMaximizeFilled,
-  PowerRegular,
-  PowerFilled,
-} from '@fluentui/react-icons';
+/* Full Fluent UI System Icons browser.
+   Every icon family from @fluentui/react-icons is available (generated in
+   icons/iconRegistry.ts). Each card shows the Regular and Filled variants
+   side by side; click one to copy its React component name (e.g. EditFilled). */
 
-import type { FluentIcon } from '@fluentui/react-icons';
+const SIZES = [16, 24, 32, 48, 64];
 
-type IconStyle = 'regular' | 'filled';
+/** Copy text to the clipboard, falling back to the legacy execCommand path. */
+async function copyText(text: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    /* fall through to legacy path */
+  }
+  try {
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.style.position = 'fixed';
+    el.style.opacity = '0';
+    document.body.appendChild(el);
+    el.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(el);
+    return ok;
+  } catch {
+    return false;
+  }
+}
 
-const iconList: { name: string; regular: FluentIcon; filled: FluentIcon }[] = [
-  { name: 'add', regular: AddRegular, filled: AddFilled },
-  { name: 'check', regular: CheckmarkRegular, filled: CheckmarkFilled },
-  { name: 'cancel', regular: DismissRegular, filled: DismissFilled },
-  { name: 'settings', regular: SettingsRegular, filled: SettingsFilled },
-  { name: 'search', regular: SearchRegular, filled: SearchFilled },
-  { name: 'back', regular: ArrowLeftRegular, filled: ArrowLeftFilled },
-  { name: 'home', regular: HomeRegular, filled: HomeFilled },
-  { name: 'save', regular: SaveRegular, filled: SaveFilled },
-  { name: 'delete', regular: DeleteRegular, filled: DeleteFilled },
-  { name: 'edit', regular: EditRegular, filled: EditFilled },
-  { name: 'star', regular: StarRegular, filled: StarFilled },
-  { name: 'heart', regular: HeartRegular, filled: HeartFilled },
-  { name: 'mail', regular: MailRegular, filled: MailFilled },
-  { name: 'user', regular: PersonRegular, filled: PersonFilled },
-  { name: 'lock', regular: LockClosedRegular, filled: LockClosedFilled },
-  { name: 'calendar', regular: CalendarRegular, filled: CalendarFilled },
-  { name: 'camera', regular: CameraRegular, filled: CameraFilled },
-  { name: 'play', regular: PlayRegular, filled: PlayFilled },
-  { name: 'wifi', regular: Wifi1Regular, filled: Wifi1Filled },
-  { name: 'battery', regular: Battery0Regular, filled: Battery0Filled },
-  { name: 'clock', regular: ClockRegular, filled: ClockFilled },
-  { name: 'info', regular: InfoRegular, filled: InfoFilled },
-  { name: 'warning', regular: WarningRegular, filled: WarningFilled },
-  { name: 'error', regular: ErrorCircleRegular, filled: ErrorCircleFilled },
-  { name: 'question', regular: QuestionCircleRegular, filled: QuestionCircleFilled },
-  { name: 'chevronRight', regular: ChevronRightRegular, filled: ChevronRightFilled },
-  { name: 'download', regular: ArrowDownloadRegular, filled: ArrowDownloadFilled },
-  { name: 'share', regular: ShareRegular, filled: ShareFilled },
-  { name: 'link', regular: LinkRegular, filled: LinkFilled },
-  { name: 'copy', regular: CopyRegular, filled: CopyFilled },
-  { name: 'print', regular: PrintRegular, filled: PrintFilled },
-  { name: 'filter', regular: FilterRegular, filled: FilterFilled },
-  { name: 'folder', regular: FolderRegular, filled: FolderFilled },
-  { name: 'file', regular: DocumentRegular, filled: DocumentFilled },
-  { name: 'tag', regular: TagRegular, filled: TagFilled },
-  { name: 'cart', regular: CartRegular, filled: CartFilled },
-  { name: 'location', regular: LocationRegular, filled: LocationFilled },
-  { name: 'globe', regular: GlobeRegular, filled: GlobeFilled },
-  { name: 'sun', regular: WeatherSunnyRegular, filled: WeatherSunnyFilled },
-  { name: 'moon', regular: WeatherMoonRegular, filled: WeatherMoonFilled },
-  { name: 'eye', regular: EyeRegular, filled: EyeFilled },
-  { name: 'chat', regular: ChatRegular, filled: ChatFilled },
-  { name: 'send', regular: SendRegular, filled: SendFilled },
-  { name: 'flag', regular: FlagRegular, filled: FlagFilled },
-  { name: 'bookmark', regular: BookmarkRegular, filled: BookmarkFilled },
-  { name: 'undo', regular: ArrowUndoRegular, filled: ArrowUndoFilled },
-  { name: 'redo', regular: ArrowRedoRegular, filled: ArrowRedoFilled },
-  { name: 'zoomIn', regular: ZoomInRegular, filled: ZoomInFilled },
-  { name: 'fullscreen', regular: FullScreenMaximizeRegular, filled: FullScreenMaximizeFilled },
-  { name: 'power', regular: PowerRegular, filled: PowerFilled },
-];
+/** Build the React component name for a variant (e.g. Edit + Filled -> EditFilled). */
+function componentName(icon: IconRegistration, variant: 'regular' | 'filled'): string {
+  const suffix = variant === 'filled' ? 'Filled' : 'Regular';
+  return `${icon.name}${suffix}`;
+}
 
-export function IconDemo() {
-  const [style, setStyle] = useState<IconStyle>('regular');
-  const [size, setSize] = useState<number>(32);
+function IconCard({
+  icon,
+  onCopy,
+}: {
+  icon: IconRegistration;
+  onCopy: (name: string) => void;
+}) {
+  const [copied, setCopied] = useState<'regular' | 'filled' | null>(null);
+  const [copyFailed, setCopyFailed] = useState(false);
+
+  const handleCopy = (variant: 'regular' | 'filled', name: string | undefined) => {
+    if (!name) return;
+    copyText(name).then((ok) => {
+      if (ok) {
+        onCopy(name);
+        setCopied(variant);
+        setCopyFailed(false);
+      } else {
+        setCopyFailed(true);
+        setCopied(null);
+      }
+    });
+  };
+
+  const renderVariant = (variant: 'regular' | 'filled', name: string | undefined) => {
+    const Icon = variant === 'filled' ? icon.filled : icon.regular;
+    if (!name || !Icon) return null;
+    return (
+      <button
+        type="button"
+        className="icon-browser__variant"
+        onClick={() => handleCopy(variant, name)}
+        title={`Copy ${name}`}
+        aria-label={`Copy ${name}`}
+      >
+        <Icon fontSize={24} />
+        <span className="icon-browser__copy-state">
+          {copied === variant ? 'Copied!' : name}
+        </span>
+      </button>
+    );
+  };
 
   return (
-    <>
+    <div className="icon-browser__card" title={icon.name}>
+      <div className="icon-browser__variants">
+        {renderVariant('regular', icon.regular ? componentName(icon, 'regular') : undefined)}
+        {renderVariant('filled', icon.filled ? componentName(icon, 'filled') : undefined)}
+      </div>
+      <div className="icon-browser__name">{icon.name}</div>
+      {copyFailed && <div className="icon-browser__error">Copy unavailable</div>}
+    </div>
+  );
+}
+
+export function IconDemo() {
+  const [query, setQuery] = useState('');
+  const [size, setSize] = useState(24);
+  const [toast, setToast] = useState<string | null>(null);
+  const toastTimer = useRef<number | null>(null);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return iconRegistry;
+    return iconRegistry.filter(
+      (icon) =>
+        icon.name.toLowerCase().includes(q) ||
+        // also match raw variant names (e.g. "EditFilled")
+        (icon.regular ? componentName(icon, 'regular').toLowerCase().includes(q) : false) ||
+        (icon.filled ? componentName(icon, 'filled').toLowerCase().includes(q) : false),
+    );
+  }, [query]);
+
+  const handleCopy = (name: string) => {
+    setToast(`Copied ${name}`);
+    if (toastTimer.current) window.clearTimeout(toastTimer.current);
+    toastTimer.current = window.setTimeout(() => setToast(null), 1600);
+  };
+
+  return (
+    <div className="icon-browser">
+      {/* Controls */}
       <div className="showcase__demo">
-        <span className="showcase__demo-label">Style</span>
+        <span className="showcase__demo-label">Search</span>
         <div className="showcase__demo-row">
-          <button
-            type="button"
-            className={`showcase__demo-btn${style === 'regular' ? ' showcase__demo-btn--active' : ''}`}
-            onClick={() => setStyle('regular')}
-          >
-            Regular (outline)
-          </button>
-          <button
-            type="button"
-            className={`showcase__demo-btn${style === 'filled' ? ' showcase__demo-btn--active' : ''}`}
-            onClick={() => setStyle('filled')}
-          >
-            Filled
-          </button>
+          <input
+            type="search"
+            className="icon-browser__search"
+            placeholder="Search icons… e.g. edit, arrow, wifi"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search icons"
+          />
+          {query && (
+            <button
+              type="button"
+              className="showcase__demo-btn"
+              onClick={() => setQuery('')}
+            >
+              Clear
+            </button>
+          )}
         </div>
         <span className="showcase__demo-hint">
-          Icons inherit <code>currentColor</code> — switch light/dark or accent in Settings to re-theme them.
+          Click an icon to copy its React component name (e.g. <code>EditFilled</code>).
         </span>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">Size</span>
         <div className="showcase__demo-row">
-          {[16, 24, 32, 48, 64].map((s) => (
+          {SIZES.map((s) => (
             <button
               key={s}
               type="button"
@@ -210,35 +165,38 @@ export function IconDemo() {
       </div>
 
       <div className="showcase__demo">
-        <span className="showcase__demo-label">Gallery ({iconList.length} icons)</span>
-        <div className="icon-gallery">
-          {iconList.map(({ name, regular, filled }) => {
-            const Icon = style === 'filled' ? filled : regular;
-            return (
-              <div key={name} className="icon-gallery__item" title={name}>
-                <span style={{ fontSize: size, display: 'inline-flex' }}>
-                  <Icon />
-                </span>
-                <span className="icon-gallery__name">{name}</span>
-              </div>
-            );
-          })}
-        </div>
+        <span className="showcase__demo-label">
+          Gallery ({filtered.length} / {iconRegistry.length} icons)
+        </span>
+        {filtered.length === 0 ? (
+          <div className="icon-browser__empty">
+            No icons match “{query}”. Try a different keyword.
+          </div>
+        ) : (
+          <div className="icon-gallery" style={{ fontSize: size }}>
+            {filtered.map((icon) => (
+              <IconCard key={icon.name} icon={icon} onCopy={handleCopy} />
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Copy feedback toast */}
+      {toast && <div className="icon-browser__toast">{toast}</div>}
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">Usage</span>
         <CodeBlock
-          code={`import { AddRegular, AddFilled } from '@fluentui/react-icons';
+          code={`import { EditRegular, EditFilled } from '@fluentui/react-icons';
 
-<AddRegular />                    {/* outline, 1em */}
-<AddFilled />                     {/* filled, 1em */}
-<AddRegular fontSize={32} />      {/* fixed size */}
+<EditRegular />                     {/* outline, 1em */}
+<EditFilled />                      {/* filled, 1em */}
+<EditRegular fontSize={32} />       {/* fixed size */}
 
 {/* In an AppBarButton (any ReactNode works) */}
-<AppBarButton label="add" icon={<AddRegular />} />`}
+<AppBarButton label="edit" icon={<EditFilled />} />`}
         />
       </div>
-    </>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { lazy, Suspense, type ReactNode } from 'react';
 import { ButtonDemo } from './ButtonDemo';
 import { ToggleSwitchDemo } from './ToggleSwitchDemo';
 import { RatingControlDemo } from './RatingControlDemo';
@@ -17,9 +17,14 @@ import { TileDemo } from './TileDemo';
 import { PivotDemo } from './PivotDemo';
 import { EffectsDemo } from './EffectsDemo';
 import { AppBarDemo } from './AppBarDemo';
-import { IconDemo } from './IconDemo';
 import { FlipTransitionDemo } from './FlipTransitionDemo';
 import { SettingsPage } from './SettingsPage';
+
+// The icon browser imports every Fluent icon (thousands). Lazy-load it so it
+// is code-split into its own chunk and only fetched when the Icons page opens.
+const IconDemo = lazy(() =>
+  import('./IconDemo').then((m) => ({ default: m.IconDemo })),
+);
 
 export interface ShowcasePage {
   id: string;
@@ -48,7 +53,12 @@ export const showcasePages: ShowcasePage[] = [
   { id: 'pivot', name: 'Pivot', description: 'Swipeable tabs', icon: '⇋', render: () => <PivotDemo /> },
   { id: 'effects', name: 'Effects (todo)', description: 'Tilt & slide-in', icon: '✦', render: () => <EffectsDemo /> },
   { id: 'appbar', name: 'AppBar', description: 'Circular app bar buttons', icon: '◯', render: () => <AppBarDemo /> },
-  { id: 'icons', name: 'Icons', description: 'Fluent UI System Icons gallery', icon: '✦', render: () => <IconDemo /> },
+  { id: 'icons', name: 'Icons', description: 'Fluent UI System Icons gallery', icon: '✦', render: () => <Suspense fallback={<IconDemoFallback />}><IconDemo /></Suspense> },
   { id: 'transition', name: 'PageTransition', description: 'Flip page transition', icon: '⇄', render: () => <FlipTransitionDemo /> },
   { id: 'settings', name: 'Settings', description: 'Theme: light/dark + accent color', icon: '⚙', render: () => <SettingsPage /> },
 ];
+
+/** Shown briefly while the lazy icon browser chunk loads. */
+function IconDemoFallback() {
+  return <div className="showcase__demo-hint">Loading icons…</div>;
+}
