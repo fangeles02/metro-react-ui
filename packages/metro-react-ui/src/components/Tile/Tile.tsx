@@ -242,6 +242,9 @@ export function Tile({
   // Hide the centered icon only while a message is actively shown; once it starts
   // leaving, reveal the icon so it slides in immediately (no blank gap).
   const iconHidden = showingSlide && slidePhase === 'active';
+  // Only animate the icon when it re-enters after a slide-up cycle (leaving),
+  // NOT on flips or initial front-face display.
+  const iconReturning = shouldSlide && slidePhase === 'leaving';
 
   return (
     <button
@@ -269,13 +272,21 @@ export function Tile({
       {image && <img className="metro-tile__image" src={image} alt="" />}
       {/* Center icon — hidden only while a message is active (slides in on leave). */}
       {!iconHidden && icon != null && count != null && count > 0 && (isSmall || !flipped) && (
-        <div key={`icon-${iconSeq}-c`} className="metro-tile__icon metro-tile__icon--counted">
+        <div
+          key={`icon-${iconSeq}-c`}
+          className={`metro-tile__icon metro-tile__icon--counted ${iconReturning ? 'metro-tile__icon--return' : ''}`}
+        >
           {icon}
           <span className="metro-tile__count">{count}</span>
         </div>
       )}
       {!iconHidden && icon != null && (count == null || count <= 0) && (
-        <div key={`icon-${iconSeq}`} className="metro-tile__icon">{icon}</div>
+        <div
+          key={`icon-${iconSeq}`}
+          className={`metro-tile__icon ${iconReturning ? 'metro-tile__icon--return' : ''}`}
+        >
+          {icon}
+        </div>
       )}
       {/* Center count (no icon) — hidden while a subject message is active. */}
       {!iconHidden && icon == null && count != null && count > 0 && !isSmall && (
@@ -289,10 +300,11 @@ export function Tile({
           <div className="metro-tile__title">{title}</div>
         </div>
       )}
-      {/* Flip mode: body-only message on the back face. */}
+      {/* Flip mode: body-only message on the back face, title pinned lower. */}
       {!isSmall && flipped && flipItems[flipIndex] != null && (
         <div className="metro-tile__content metro-tile__content--back">
           <div className="metro-tile__message">{flipItems[flipIndex].body}</div>
+          {title != null && <div className="metro-tile__title">{title}</div>}
         </div>
       )}
       {/* Slide-up mode: subject + body card, plus mini icon + count lower-right.

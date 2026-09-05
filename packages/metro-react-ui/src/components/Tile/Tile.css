@@ -132,6 +132,11 @@
   margin: 0 0 1px 1px;
 }
 
+/* On the back face (flip mode), pin the title to the bottom. */
+.metro-tile__content--back .metro-tile__title {
+  margin-top: auto;
+}
+
 .metro-tile__message {
   position: relative;
   font-size: var(--wp-font-size-small);
@@ -228,10 +233,11 @@
   }
 }
 
-/* When returning to the front face, the centered icon slides in from top.
-   The tile re-keys the icon (via iconSeq) so this animation replays. */
-.metro-tile__icon,
-.metro-tile__icon--counted {
+/* Only when returning from a slide-up cycle the centered icon slides in from
+   top. Applied via `.metro-tile__icon--return`, so the plain front-face icon
+   does NOT animate on display or during flips. */
+.metro-tile__icon--return,
+.metro-tile__icon--counted.metro-tile__icon--return {
   animation: metro-tile-icon-in var(--wp-duration-slow, 350ms) var(--wp-easing) forwards;
 }
 
