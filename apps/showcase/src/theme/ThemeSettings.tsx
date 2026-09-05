@@ -6,7 +6,7 @@ import type { ThemeMode } from '@metro-react-ui/core';
  * These are the 8 stock accent colors users could pick in the OS settings.
  */
 export const ACCENT_COLORS: { name: string; value: string }[] = [
-  { name: 'Blue', value: '#1ba1e2' },
+  { name: 'Blue', value: '#00a6fa' },
   { name: 'Red', value: '#e51400' },
   { name: 'Lime', value: '#a4c400' },
   { name: 'Green', value: '#60a917' },

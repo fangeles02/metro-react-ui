@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent, type ReactNode } from 'react';
+import { accentForeground } from '../../theme/ThemeProvider';
 import './Tile.css';
 
 /** WP 8.1 start-screen tile sizes (grid notation: cols x rows). */
@@ -14,6 +15,8 @@ export interface TileProps {
   title?: ReactNode;
   /** Image source for the front face. */
   image?: string;
+  /** Icon shown on the tile (e.g. a Fluent icon, image, or any element). */
+  icon?: ReactNode;
   /** Single message shown on the back face when flipped. */
   message?: ReactNode;
   /** Multiple messages cycled on the back face. Takes precedence over `message`. */
@@ -37,6 +40,12 @@ export interface TileProps {
   initialDelay?: number;
   /** Click handler. */
   onClick?: () => void;
+  /** Enable the Metro tilt effect on pointer-down. Defaults to true. */
+  tilt?: boolean;
+  /** Max tilt angle in degrees (only when `tilt`). Defaults to 17. */
+  tiltMaxAngle?: number;
+  /** Max depression (translateZ) in px (only when `tilt`). Defaults to 25. */
+  tiltMaxDepression?: number;
 }
 
 /**
@@ -48,6 +57,7 @@ export function Tile({
   size = '2x2',
   title,
   image,
+  icon,
   message,
   messages,
   mode = 'continuous',
@@ -58,8 +68,34 @@ export function Tile({
   swivelAnimationDuration = 800,
   initialDelay,
   onClick,
+  tilt = true,
+  tiltMaxAngle = 17,
+  tiltMaxDepression = 25,
 }: TileProps) {
   const is1x1 = size === '1x1';
+  const tiltRef = useRef<HTMLButtonElement>(null);
+
+  const handlePointerDown = (e: PointerEvent<HTMLButtonElement>) => {
+    if (!tilt) return;
+    const el = tiltRef.current;
+    if (!el) return;
+    el.setPointerCapture(e.pointerId);
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    el.style.transform = `perspective(600px) rotateX(${(-py * tiltMaxAngle).toFixed(2)}deg) rotateY(${(px * tiltMaxAngle).toFixed(2)}deg) translateZ(${tiltMaxDepression}px)`;
+  };
+
+  const handlePointerUp = (e: PointerEvent<HTMLButtonElement>) => {
+    const el = tiltRef.current;
+    if (!el) return;
+    try {
+      el.releasePointerCapture(e.pointerId);
+    } catch {
+      /* pointer capture may already be released */
+    }
+    el.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+  };
 
   // Normalize messages to an array (messages prop takes precedence).
   const list = useMemo<string[]>(
@@ -109,18 +145,36 @@ export function Tile({
   return (
     <button
       key={flipCount}
+      ref={tiltRef}
       type="button"
       className={`metro-tile metro-tile--${size}`}
       data-flipped={flipped}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerLeave={handlePointerUp}
       onClick={onClick}
       style={
         {
-          ...(accent ? { '--wp-accent': accent } : {}),
+          ...(accent
+            ? {
+                '--wp-accent': accent,
+                '--wp-accent-foreground': accentForeground(accent),
+              }
+            : {}),
           '--wp-tile-swivel-duration': `${swivelAnimationDuration}ms`,
         } as CSSProperties
       }
     >
       {image && <img className="metro-tile__image" src={image} alt="" />}
+      {icon != null && count != null && count > 0 && !is1x1 && !flipped && (
+        <div className="metro-tile__icon metro-tile__icon--counted">
+          {icon}
+          <span className="metro-tile__count">{count}</span>
+        </div>
+      )}
+      {icon != null && (count == null || count <= 0) && (
+        <div className="metro-tile__icon">{icon}</div>
+      )}
       {!is1x1 && !flipped && title != null && (
         <div className="metro-tile__content">
           <div className="metro-tile__title">{title}</div>
@@ -131,7 +185,7 @@ export function Tile({
           <div className="metro-tile__message">{list[msgIndex]}</div>
         </div>
       )}
-      {count != null && count > 0 && (
+      {icon == null && count != null && count > 0 && !is1x1 && (
         <div className="metro-tile__count">
           <span className="metro-tile__count-inner">{count}</span>
         </div>
