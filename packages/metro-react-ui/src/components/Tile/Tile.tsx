@@ -2,14 +2,25 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerE
 import { accentForeground } from '../../theme/ThemeProvider';
 import './Tile.css';
 
-/** WP 8.1 start-screen tile sizes (grid notation: cols x rows). */
-export type TileSize = '1x1' | '2x2' | '4x2' | '4x4';
+/** WP 8.1 start-screen tile sizes. small=1x1, medium=2x2, wide=4x2, large=4x4. */
+export type TileSize = 'small' | 'medium' | 'wide' | 'large';
 
 /** How the tile cycles through its messages. */
 export type TileMode = 'continuous' | 'random' | 'alternate';
 
+/**
+ * A tile message. If `subject` is present the tile slides the message up over
+ * the title (no flip). If `subject` is omitted the tile flips to show `body`.
+ */
+export interface TileMessage {
+  /** Optional message subject — shown large. Presence switches to slide-up mode. */
+  subject?: ReactNode;
+  /** Message body — shown smaller below the subject (or alone when flipped). */
+  body: ReactNode;
+}
+
 export interface TileProps {
-  /** Tile size in grid notation. Defaults to '2x2' (the classic HubTile size). */
+  /** Tile size. 'small'=1x1, 'medium'=2x2 (default), 'wide'=4x2, 'large'=4x4. */
   size?: TileSize;
   /** Title shown on the front face (hidden on 1x1 tiles). */
   title?: ReactNode;
@@ -17,10 +28,10 @@ export interface TileProps {
   image?: string;
   /** Icon shown on the tile (e.g. a Fluent icon, image, or any element). */
   icon?: ReactNode;
-  /** Single message shown on the back face when flipped. */
-  message?: ReactNode;
-  /** Multiple messages cycled on the back face. Takes precedence over `message`. */
-  messages?: string[];
+  /** A single message. Body-only flips; with a subject slides up. */
+  message?: TileMessage | TileMessage[];
+  /** Multiple messages cycled on the tile. Takes precedence over `message`. */
+  messages?: TileMessage[];
   /** How messages are cycled. Defaults to 'continuous'. */
   mode?: TileMode;
   /** Notification count shown as a badge in the top-right corner. */
@@ -54,7 +65,7 @@ export interface TileProps {
  * HubTile size (173x173) as the default 2x2 tile.
  */
 export function Tile({
-  size = '2x2',
+  size = 'medium',
   title,
   image,
   icon,
@@ -72,7 +83,7 @@ export function Tile({
   tiltMaxAngle = 17,
   tiltMaxDepression = 25,
 }: TileProps) {
-  const is1x1 = size === '1x1';
+  const isSmall = size === 'small';
   const tiltRef = useRef<HTMLButtonElement>(null);
 
   const handlePointerDown = (e: PointerEvent<HTMLButtonElement>) => {
@@ -98,20 +109,59 @@ export function Tile({
   };
 
   // Normalize messages to an array (messages prop takes precedence).
-  const list = useMemo<string[]>(
-    () => (messages && messages.length > 0 ? messages : message != null ? [String(message)] : []),
+  const list = useMemo<TileMessage[]>(
+    () =>
+      messages && messages.length > 0
+        ? messages
+        : message != null
+          ? Array.isArray(message)
+            ? message
+            : [message]
+          : [],
     [messages, message],
   );
 
-  // Flip only for non-1x1 tiles that have at least one message.
-  const shouldFlip = canFlip && !is1x1 && list.length > 0;
+  // Split items by mode: subject-bearing items slide up (non-small only),
+  // body-only items flip the tile.
+  const slideItems = useMemo(
+    () => (!isSmall ? list.filter((m) => m.subject != null) : []),
+    [list, isSmall],
+  );
+  const flipItems = useMemo(
+    () => list.filter((m) => m.subject == null),
+    [list],
+  );
 
-  // Initial delay before flipping starts — random 1000–5000ms unless overridden.
+  // Flip only for non-small tiles that have at least one body-only message.
+  const shouldFlip = canFlip && !isSmall && flipItems.length > 0;
+  // Slide only for non-small tiles that have at least one subject-bearing message.
+  const shouldSlide = canFlip && !isSmall && slideItems.length > 0;
+
+  // Initial delay before cycling starts — random 1000–5000ms unless overridden.
   const delay = initialDelay ?? Math.floor(Math.random() * 4000) + 1000;
 
-  // Flip state + current message index (flipped=false shows the title/front).
-  // flipCount increments on every flip so the swivel animation re-triggers.
-  const [state, setState] = useState({ flipped: false, msgIndex: 0, flipCount: 0 });
+  // Delivery state:
+  //  - flipped:   back face shown (body-only message). Toggles each interval.
+  //  - flipIndex: which flipItems to show on the back face.
+  //  - flipCount: increments every flip so the swivel animation re-triggers.
+  //  - slidePhase: 'idle' front face | 'active' message shown | 'leaving' slide-out.
+  //  - slideIndex: index into slideItems currently displayed (-1 = none).
+  //  - slideCount: increments each slide so the slide-up animation re-triggers.
+  //  - iconSeq: bumps when returning to the front so the center icon
+  //    re-mounts and animates in from the top.
+  const [state, setState] = useState({
+    flipped: false,
+    flipIndex: 0,
+    flipCount: 0,
+    slidePhase: 'idle' as 'idle' | 'active' | 'leaving',
+    slideIndex: -1,
+    slideCount: 0,
+    iconSeq: 0,
+  });
+
+  const intervalMs = faceDisplayDuration;
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
   useEffect(() => {
     if (!shouldFlip) return;
@@ -120,27 +170,78 @@ export function Tile({
       interval = setInterval(() => {
         setState((s) => {
           const flipped = !s.flipped;
-          let msgIndex = s.msgIndex;
-          // When flipping to the back, advance to the next message.
+          let flipIndex = s.flipIndex;
           if (flipped) {
             if (mode === 'random') {
-              msgIndex = Math.floor(Math.random() * list.length);
+              flipIndex = Math.floor(Math.random() * flipItems.length);
             } else {
-              // continuous & alternate: advance in order
-              msgIndex = (s.msgIndex + 1) % list.length;
+              flipIndex = (s.flipIndex + 1) % flipItems.length;
             }
           }
-          return { flipped, msgIndex, flipCount: s.flipCount + 1 };
+          return { ...s, flipped, flipIndex, flipCount: s.flipCount + 1 };
         });
-      }, faceDisplayDuration);
+      }, intervalMs);
     }, delay);
     return () => {
       clearTimeout(timeout);
       if (interval) clearInterval(interval);
     };
-  }, [shouldFlip, mode, list.length, faceDisplayDuration, delay]);
+  }, [shouldFlip, mode, flipItems.length, intervalMs, delay]);
 
-  const { flipped, msgIndex, flipCount } = state;
+  // Slide scheduler — phase-driven state machine:
+  //   idle → active (show message) → ... → active(last) → leaving (slide out)
+  //   → idle (front face, re-key center icon) → repeat.
+  useEffect(() => {
+    if (!shouldSlide) return;
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout>;
+    const play = intervalMs;
+    const anim = 360;
+
+    const schedule = () => {
+      const s = stateRef.current;
+      const wait = s.slidePhase === 'leaving' ? anim : play;
+      timer = setTimeout(() => {
+        if (cancelled) return;
+        setState((prev) => {
+          const n = { ...prev };
+          const len = slideItems.length;
+          if (prev.slidePhase === 'idle') {
+            n.slidePhase = 'active';
+            n.slideIndex = 0;
+            n.slideCount = prev.slideCount + 1;
+          } else if (prev.slidePhase === 'active') {
+            if (prev.slideIndex < len - 1) {
+              n.slideIndex = prev.slideIndex + 1;
+              n.slideCount = prev.slideCount + 1;
+            } else {
+              n.slidePhase = 'leaving';
+              // Reveal the centered icon once, at the start of leaving, so it
+              // slides in a single time (stable key through the return to idle).
+              n.iconSeq = prev.iconSeq + 1;
+            }
+          } else {
+            n.slidePhase = 'idle';
+            n.slideIndex = -1;
+          }
+          return n;
+        });
+        schedule();
+      }, wait);
+    };
+
+    timer = setTimeout(schedule, delay);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [shouldSlide, slideItems.length, intervalMs, delay]);
+
+  const { flipped, flipIndex, flipCount, slidePhase, slideIndex, slideCount, iconSeq } = state;
+
+  // Is a slide-up message currently covering the title region (shown or leaving)?
+  const showingSlide = shouldSlide && slidePhase !== 'idle';
+  const slideMsg = showingSlide && slideIndex >= 0 ? slideItems[slideIndex] : null;
+  // Hide the centered icon only while a message is actively shown; once it starts
+  // leaving, reveal the icon so it slides in immediately (no blank gap).
+  const iconHidden = showingSlide && slidePhase === 'active';
 
   return (
     <button
@@ -166,29 +267,52 @@ export function Tile({
       }
     >
       {image && <img className="metro-tile__image" src={image} alt="" />}
-      {icon != null && count != null && count > 0 && !is1x1 && !flipped && (
-        <div className="metro-tile__icon metro-tile__icon--counted">
+      {/* Center icon — hidden only while a message is active (slides in on leave). */}
+      {!iconHidden && icon != null && count != null && count > 0 && (isSmall || !flipped) && (
+        <div key={`icon-${iconSeq}-c`} className="metro-tile__icon metro-tile__icon--counted">
           {icon}
           <span className="metro-tile__count">{count}</span>
         </div>
       )}
-      {icon != null && (count == null || count <= 0) && (
-        <div className="metro-tile__icon">{icon}</div>
+      {!iconHidden && icon != null && (count == null || count <= 0) && (
+        <div key={`icon-${iconSeq}`} className="metro-tile__icon">{icon}</div>
       )}
-      {!is1x1 && !flipped && title != null && (
+      {/* Center count (no icon) — hidden while a subject message is active. */}
+      {!iconHidden && icon == null && count != null && count > 0 && !isSmall && (
+        <div className="metro-tile__count">
+          <span className="metro-tile__count-inner">{count}</span>
+        </div>
+      )}
+      {/* Front face title — always visible, even behind a slide-up message. */}
+      {!isSmall && !flipped && title != null && (
         <div className="metro-tile__content">
           <div className="metro-tile__title">{title}</div>
         </div>
       )}
-      {!is1x1 && flipped && list[msgIndex] != null && (
+      {/* Flip mode: body-only message on the back face. */}
+      {!isSmall && flipped && flipItems[flipIndex] != null && (
         <div className="metro-tile__content metro-tile__content--back">
-          <div className="metro-tile__message">{list[msgIndex]}</div>
+          <div className="metro-tile__message">{flipItems[flipIndex].body}</div>
         </div>
       )}
-      {icon == null && count != null && count > 0 && !is1x1 && (
-        <div className="metro-tile__count">
-          <span className="metro-tile__count-inner">{count}</span>
-        </div>
+      {/* Slide-up mode: subject + body card, plus mini icon + count lower-right.
+          Card and mini slide out to the top when `leaving`. */}
+      {slideMsg != null && (
+        <>
+          <div
+            key={slideCount}
+            className={`metro-tile__slide metro-tile__slide--${slidePhase}`}
+          >
+            <div className="metro-tile__subject">{slideMsg.subject}</div>
+            <div className="metro-tile__body">{slideMsg.body}</div>
+          </div>
+          {(icon != null || count != null) && (
+            <div key={`mini-${iconSeq}`} className={`metro-tile__mini metro-tile__mini--${slidePhase}`}>
+              {icon != null && <span className="metro-tile__mini-icon">{icon}</span>}
+              {count != null && count > 0 && <span className="metro-tile__mini-count">{count}</span>}
+            </div>
+          )}
+        </>
       )}
     </button>
   );

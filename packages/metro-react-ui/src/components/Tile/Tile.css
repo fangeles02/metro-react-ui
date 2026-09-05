@@ -6,6 +6,7 @@
   color: var(--wp-accent-foreground);
   font-family: var(--wp-font-family);
   cursor: pointer;
+  overflow: hidden;
   transform-origin: 50% 50%;
   transform-style: preserve-3d;
   transition: transform var(--wp-duration-fast) var(--wp-easing);
@@ -17,10 +18,10 @@
    Base cell is 87px (the 1x1 size). Larger tiles span multiple grid cells
    (used inside a TileContainer) and also have a matching standalone size.
    Grid span: cols x rows. */
-.metro-tile--1x1 { width: 87px; height: 87px; grid-column: span 1; grid-row: span 1; }
-.metro-tile--2x2 { width: 182px; height: 182px; grid-column: span 2; grid-row: span 2; }
-.metro-tile--4x2 { width: 372px; height: 182px; grid-column: span 4; grid-row: span 2; }
-.metro-tile--4x4 { width: 372px; height: 372px; grid-column: span 4; grid-row: span 4; }
+.metro-tile--small { width: 87px; height: 87px; grid-column: span 1; grid-row: span 1; }
+.metro-tile--medium { width: 182px; height: 182px; grid-column: span 2; grid-row: span 2; }
+.metro-tile--wide { width: 372px; height: 182px; grid-column: span 4; grid-row: span 2; }
+.metro-tile--large { width: 372px; height: 372px; grid-column: span 4; grid-row: span 4; }
 
 /* Inside a TileContainer, tiles fill their grid cell (spanning cols/rows). */
 .metro-tilecontainer .metro-tile {
@@ -99,26 +100,26 @@
   display: block;
 }
 
-/* 1x1: small icon (24px base + 20%) */
-.metro-tile--1x1 .metro-tile__icon {
-  font-size: 29px;
+/* small: small icon (29px base + 10% = 32px) */
+.metro-tile--small .metro-tile__icon {
+  font-size: 32px;
 }
-.metro-tile--1x1 .metro-tile__icon > *:not(.metro-tile__count) {
-  width: 29px;
-  height: 29px;
+.metro-tile--small .metro-tile__icon > *:not(.metro-tile__count) {
+  width: 32px;
+  height: 32px;
 }
 
-/* 2x2, 4x2, 4x4: same larger icon (48px base + 20%) */
-.metro-tile--2x2 .metro-tile__icon,
-.metro-tile--4x2 .metro-tile__icon,
-.metro-tile--4x4 .metro-tile__icon {
-  font-size: 58px;
+/* medium, wide, large: same larger icon (58px base + 10% = 64px) */
+.metro-tile--medium .metro-tile__icon,
+.metro-tile--wide .metro-tile__icon,
+.metro-tile--large .metro-tile__icon {
+  font-size: 64px;
 }
-.metro-tile--2x2 .metro-tile__icon > *:not(.metro-tile__count),
-.metro-tile--4x2 .metro-tile__icon > *:not(.metro-tile__count),
-.metro-tile--4x4 .metro-tile__icon > *:not(.metro-tile__count) {
-  width: 58px;
-  height: 58px;
+.metro-tile--medium .metro-tile__icon > *:not(.metro-tile__count),
+.metro-tile--wide .metro-tile__icon > *:not(.metro-tile__count),
+.metro-tile--large .metro-tile__icon > *:not(.metro-tile__count) {
+  width: 64px;
+  height: 64px;
 }
 
 .metro-tile__title {
@@ -128,7 +129,7 @@
   line-height: 1.1;
   font-family: var(--wp-font-family);
   text-align: left;
-  margin: 0 0 6px 10px;
+  margin: 0 0 1px 1px;
 }
 
 .metro-tile__message {
@@ -137,7 +138,112 @@
   font-weight: var(--wp-font-weight-normal);
   font-family: var(--wp-font-family);
   text-align: left;
-  margin: 0 0 6px 10px;
+  margin: 0 0 1px 1px;
+}
+
+/* ---- Slide-up message (tile has a subject) ---- */
+/* Card slides up over the top/middle of the tile. The title stays visible
+   in the lower-left and the mini icon+count move to the lower-right. */
+.metro-tile__slide {
+  position: absolute;
+  inset: 0 0 auto 0;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 10px;
+  animation: metro-tile-slide-up var(--wp-duration-slow, 350ms) var(--wp-easing) forwards;
+}
+
+.metro-tile__subject {
+  font-size: var(--wp-font-size-medium);
+  line-height: 1.1;
+  font-family: var(--wp-font-family);
+  text-align: left;
+}
+
+.metro-tile__body {
+  font-size: var(--wp-font-size-small);
+  font-weight: var(--wp-font-weight-normal);
+  font-family: var(--wp-font-family);
+  text-align: left;
+  white-space: pre-line;
+  margin-top: 2px;
+}
+
+/* Lower-right mini icon + count — sits in the bottom-right corner,
+   beside the title (which stays lower-left). */
+.metro-tile__mini {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  display: flex;
+  align-items: end;
+  gap: 5px;
+  padding: 6px 10px;
+  font-size: var(--wp-font-size-small);
+  color: var(--wp-accent-foreground);
+  animation: metro-tile-slide-up var(--wp-duration-slow, 350ms) var(--wp-easing) forwards;
+}
+
+.metro-tile__mini-icon {
+  display: inline-flex;
+  font-size: var(--wp-font-size-medium-large);
+}
+.metro-tile__mini-icon > * {
+  display: block;
+  width: var(--wp-font-size-medium-large);
+  height: var(--wp-font-size-medium-large);
+}
+
+.metro-tile__mini-count {
+  font-size: var(--wp-font-size-extra-large);
+  font-weight: var(--wp-font-weight-normal);
+  line-height: 1;
+}
+
+@keyframes metro-tile-slide-up {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* After the last subject message, the card + mini slide OUT to the top. */
+.metro-tile__slide--leaving,
+.metro-tile__mini--leaving {
+  animation: metro-tile-slide-out var(--wp-duration-slow, 350ms) var(--wp-easing) forwards;
+}
+
+@keyframes metro-tile-slide-out {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+/* When returning to the front face, the centered icon slides in from top.
+   The tile re-keys the icon (via iconSeq) so this animation replays. */
+.metro-tile__icon,
+.metro-tile__icon--counted {
+  animation: metro-tile-icon-in var(--wp-duration-slow, 350ms) var(--wp-easing) forwards;
+}
+
+@keyframes metro-tile-icon-in {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* ---- Count badge ---- */
