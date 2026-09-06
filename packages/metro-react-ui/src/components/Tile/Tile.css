@@ -57,7 +57,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 8px;
+  /* padding: 8px; */
   /* Keep the title above a full-bleed step-slide overlay (which covers the
      whole tile and contains an image at z-index 0 and text at 1). */
   z-index: 2;
@@ -132,7 +132,7 @@
   line-height: 1.1;
   font-family: var(--wp-font-family);
   text-align: left;
-  margin: 0 0 1px 1px;
+  margin: 8px;
 }
 
 /* On the back face (flip mode), pin the title to the bottom and lift it
@@ -305,7 +305,6 @@
 .metro-tile__step-text {
   position: relative;
   z-index: 1;
-  margin-top: 10px;
   padding: 8px 10px;
 }
 
