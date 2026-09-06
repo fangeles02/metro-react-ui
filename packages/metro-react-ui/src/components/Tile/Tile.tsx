@@ -438,6 +438,9 @@ export function Tile({
               }
             : {}),
           '--wp-tile-swivel-duration': `${swivelAnimationDuration}ms`,
+          // Message image "Ken Burns" scroll: 70% of the message display
+          // duration (used by the CSS object-position scroll animation).
+          '--wp-tile-imagedur': `${Duration}ms`,
         } as CSSProperties
       }
     >

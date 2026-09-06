@@ -390,6 +390,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Metro "Ken Burns" pan: when the image is taller than the tile, scroll it
+     from top to bottom over the full message display duration, with an
+     ease-in-out motion. */
+  object-position: center top;
+  animation: metro-tile-image-scroll
+    var(--wp-tile-imagedur, 5000ms) cubic-bezier(0.42, 0, 0.58, 1) forwards;
 }
 .metro-tile__step-bg {
   z-index: 0;
@@ -417,6 +423,17 @@
    the tile; text is placed above it, title pinned lower. */
 .metro-tile__content--back .metro-tile__step-image {
   inset: 0;
+}
+
+/* Metro top→bottom pan for message images (lands on `object-fit: cover`
+   images that are taller than the tile). */
+@keyframes metro-tile-image-scroll {
+  from {
+    object-position: center top;
+  }
+  to {
+    object-position: center bottom;
+  }
 }
 .metro-tile__content--back .metro-tile__step-subject,
 .metro-tile__content--back .metro-tile__step-body {
