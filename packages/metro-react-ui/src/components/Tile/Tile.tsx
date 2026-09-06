@@ -532,26 +532,24 @@ export function Tile({
               : ''
           }`}
         >
-          {/* Static background image for a text (labels) step — rendered as a
-              sibling OUTSIDE the sliding inner so it stays STATIC while the
-              labels + bleed move in over it. */}
+          {/* Alternate-slide only: static background image + fading bleed for the
+              text (labels) step — rendered OUTSIDE the sliding inner so they
+              stay STATIC while the labels slide in over them. For inline-slide
+              the image+labels slide up TOGETHER (single message face), so it
+              uses the inner path below instead. */}
           {curStep.kind === 'text' &&
-            (messageDisplayMode === 'inline-slide' || messageDisplayMode === 'alternate-slide') &&
+            messageDisplayMode === 'alternate-slide' &&
             stepHasBleed(curStep.item) && (
               <img className="metro-tile__step-bg" src={curStep.item.image} alt="" />
             )}
-          {/* Bleed overlay — fades in over the static image (its own div, NOT
-              inside the sliding labels inner, so it does NOT slide up). */}
           {curStep.kind === 'text' &&
-            (messageDisplayMode === 'inline-slide' || messageDisplayMode === 'alternate-slide') &&
+            messageDisplayMode === 'alternate-slide' &&
             stepHasBleed(curStep.item) && (
               <div className="metro-tile__step-bleed" />
             )}
           {/* Inner content keyed by the current step so each message replays
               its slide-in animation WITHOUT remounting the outer overlay
-              (which would flash the front face between messages). The image
-              step slides in; the text (labels) step slides the labels over
-              the static image + fading bleed. */}
+              (which would flash the front face between messages). */}
           <div
             key={stepIndex}
             className={`metro-tile__step-inner ${
@@ -564,10 +562,17 @@ export function Tile({
               <img className="metro-tile__step-image" src={curImage} alt="" />
             )}
             {curStep.kind === 'text' && (
-              <div className="metro-tile__step-text">
-                <div className="metro-tile__step-subject">{curText?.subject}</div>
-                <div className="metro-tile__step-body">{curText?.body}</div>
-              </div>
+              <>
+                {/* inline-slide: the message image is a full-bleed background
+                    INSIDE the sliding inner so it slides up WITH the labels. */}
+                {messageDisplayMode === 'inline-slide' && stepHasBleed(curStep.item) && (
+                  <img className="metro-tile__step-bg" src={curStep.item.image} alt="" />
+                )}
+                <div className={`metro-tile__step-text ${messageDisplayMode === 'inline-slide' && stepHasBleed(curStep.item) ? 'metro-tile__step-text--image' : ''}`}>
+                  <div className="metro-tile__step-subject">{curText?.subject}</div>
+                  <div className="metro-tile__step-body">{curText?.body}</div>
+                </div>
+              </>
             )}
           </div>
         </div>
