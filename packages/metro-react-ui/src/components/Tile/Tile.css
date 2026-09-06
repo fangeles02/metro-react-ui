@@ -58,6 +58,9 @@
   flex-direction: column;
   justify-content: flex-end;
   padding: 8px;
+  /* Keep the title above a full-bleed step-slide overlay (which covers the
+     whole tile and contains an image at z-index 0 and text at 1). */
+  z-index: 2;
 }
 
 .metro-tile__content--back {
@@ -132,9 +135,11 @@
   margin: 0 0 1px 1px;
 }
 
-/* On the back face (flip mode), pin the title to the bottom. */
+/* On the back face (flip mode), pin the title to the bottom and lift it
+   above the full-bleed step image/text (z-index 0/1) so it's always on top. */
 .metro-tile__content--back .metro-tile__title {
   margin-top: auto;
+  z-index: 3;
 }
 
 .metro-tile__message {
@@ -155,7 +160,16 @@
   display: flex;
   flex-direction: column;
   padding: 12px 10px;
-  animation: metro-tile-slide-up var(--wp-duration-slow, 350ms) var(--wp-easing) forwards;
+  animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
+}
+
+.metro-tile__slide-image {
+  display: block;
+  width: min(100%, 100%);
+  max-height: 120px;
+  object-fit: cover;
+  object-position: center;
+  margin-bottom: 8px;
 }
 
 .metro-tile__subject {
@@ -186,7 +200,7 @@
   padding: 6px 10px;
   font-size: var(--wp-font-size-small);
   color: var(--wp-accent-foreground);
-  animation: metro-tile-slide-up var(--wp-duration-slow, 350ms) var(--wp-easing) forwards;
+  animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
 }
 
 .metro-tile__mini-icon {
@@ -197,6 +211,12 @@
   display: block;
   width: var(--wp-font-size-medium-large);
   height: var(--wp-font-size-medium-large);
+}
+
+/* Step-slide mini — same bottom-right placement as the base mini; slides in
+   on the first message of a cycle and out on the front face reset. */
+.metro-tile__mini--step.metro-tile__mini--leaving {
+  animation: metro-tile-slide-out 800ms var(--wp-easing) forwards;
 }
 
 .metro-tile__mini-count {
@@ -219,7 +239,7 @@
 /* After the last subject message, the card + mini slide OUT to the top. */
 .metro-tile__slide--leaving,
 .metro-tile__mini--leaving {
-  animation: metro-tile-slide-out var(--wp-duration-slow, 350ms) var(--wp-easing) forwards;
+  animation: metro-tile-slide-out 800ms var(--wp-easing) forwards;
 }
 
 @keyframes metro-tile-slide-out {
@@ -250,6 +270,158 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* ---- messageDisplayMode step presentation ---- */
+/* Step-slide overlay for image or text (slide modes). Covers the TOP of the
+   tile so the tile title stays visible at the bottom; animated in/out. */
+.metro-tile__step {
+  position: absolute;
+  inset: 0 0 auto 0;
+  overflow: hidden;
+  color: var(--wp-accent-foreground);
+  animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
+}
+.metro-tile__step--leaving {
+  animation: metro-tile-slide-out 800ms var(--wp-easing) forwards;
+}
+/* Overlay content uses a translucent backing so it reads over the accent. */
+.metro-tile__step {
+  margin-top: 0px;
+  margin-left: 0px;
+  /* background: color-mix(in srgb, var(--wp-accent-dark) 85%, transparent); */
+}
+
+/* Inline-slide step with a message image: fill the WHOLE tile (drop the
+   top-only strip + margins) so the background image spans the entire tile. */
+.metro-tile__step--fullbleed {
+  inset: 0;
+  margin: 0;
+}
+
+/* Text backing over a full-bleed image (inline-slide step, inline-flip back
+   face). Pinned to the top with a translucent scrim for readability; the
+   title stays lower-left and the mini lower-right, both over the image. */
+.metro-tile__step-text {
+  position: relative;
+  z-index: 1;
+  margin-top: 10px;
+  padding: 8px 10px;
+}
+
+/* Inner content wrapper keyed per step: replays a slide-in per message so
+   succeeding messages animate in, while the outer overlay stays mounted
+   (no front-face flash between messages). Fills the overlay. */
+.metro-tile__step-inner {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
+}
+/* The image step slides in on its own step. The background image on a text
+   step is a STATIC sibling (rendered outside the sliding inner), so it does
+   not re-animate while the labels slide in over it. */
+.metro-tile__step-inner--image {
+  animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
+}
+.metro-tile__step-inner--text {
+  animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
+}
+/* Static full-tile background image behind a text (labels) step — no
+   re-animation; it persists while the labels + bleed move in. */
+.metro-tile__step > .metro-tile__step-bg {
+  animation: none;
+}
+
+/* Bleed overlay the fades in over the static image — its own div, so it
+   fades (does NOT slide up) while the labels slide in separately above it. */
+.metro-tile__step-bleed {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: color-mix(in srgb, var(--wp-accent-dark) 45%, transparent);
+  animation: metro-tile-step-text-fade-in 800ms var(--wp-easing) forwards;
+}
+
+/* When the message HAS an image (inline-slide / inline-flip), the backing
+   fills the WHOLE tile — matching the full-bleed image. Text is still
+   overlaid on top (pinned to top-left), while the title and mini remain
+   visible over the scrim. Without an image, no whole-tile backing is shown. */
+.metro-tile__step-text--image {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 10px;
+  background: color-mix(in srgb, var(--wp-accent-dark) 45%, transparent);
+  /* The bleed fades in alongside the labels slide-in (the inner step replays
+     per message via key, so this re-runs each message). */
+  animation: metro-tile-step-text-fade-in 800ms var(--wp-easing) forwards;
+}
+@keyframes metro-tile-step-text-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Flip modes (inline-flip / alternate-flip): transition steps with a flip. */
+.metro-tile__step--flip {
+  animation: metro-tile-flip var(--wp-duration-slow, 350ms) var(--wp-easing) forwards;
+}
+.metro-tile__step--flip.metro-tile__step--leaving {
+  animation: metro-tile-step-flip-out var(--wp-duration-slow, 350ms) var(--wp-easing) forwards;
+}
+@keyframes metro-tile-step-flip-out {
+  from {
+    transform: perspective(1000px) rotateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: perspective(1000px) rotateX(90deg);
+    opacity: 0;
+  }
+}
+
+.metro-tile__step-image,
+.metro-tile__step-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.metro-tile__step-bg {
+  z-index: 0;
+}
+.metro-tile__step-subject,
+.metro-tile__step-body {
+  position: relative;
+  z-index: 1;
+  padding: 0 0px;
+  font-family: var(--wp-font-family);
+  text-align: left;
+}
+.metro-tile__step-subject {
+  font-size: var(--wp-font-size-medium);
+  line-height: 1.1;
+  margin-top: 0px;
+}
+.metro-tile__step-body {
+  font-size: var(--wp-font-size-small);
+  margin-top: 2px;
+  white-space: pre-line;
+}
+
+/* Whole-tile flip back face (inline-flip / alternate-flip): step image fills
+   the tile; text is placed above it, title pinned lower. */
+.metro-tile__content--back .metro-tile__step-image {
+  inset: 0;
+}
+.metro-tile__content--back .metro-tile__step-subject,
+.metro-tile__content--back .metro-tile__step-body {
+  z-index: 1;
 }
 
 /* ---- Count badge ---- */
