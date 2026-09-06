@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@metro-react-ui/core';
 import '@metro-react-ui/core/styles.css';
@@ -17,9 +16,7 @@ function ThemedApp() {
 }
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ThemeSettingsProvider>
-      <ThemedApp />
-    </ThemeSettingsProvider>
-  </StrictMode>,
+  <ThemeSettingsProvider>
+    <ThemedApp />
+  </ThemeSettingsProvider>,
 );

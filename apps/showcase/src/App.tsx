@@ -4,8 +4,6 @@ import { Button } from '@metro-react-ui/core';
 import { showcasePages } from './showcase';
 import './App.css';
 
-const OUT_DURATION = 250; // ms — matches ForwardOut/BackwardOut storyboards
-
 interface NavState {
   pageId: string;
   direction: 'forward' | 'backward';
@@ -14,11 +12,8 @@ interface NavState {
 export default function App() {
   // The currently *shown* page.
   const [current, setCurrent] = useState<NavState>({ pageId: 'home', direction: 'forward' });
-  // The outgoing page during a transition, if any.
-  const [outgoing, setOutgoing] = useState<NavState | null>(null);
 
   const active = showcasePages.find((p) => p.id === current.pageId);
-  const outgoingPage = outgoing ? showcasePages.find((p) => p.id === outgoing.pageId) : null;
   const timeoutRef = useRef<number | null>(null);
 
   // Clean up any pending timeout on unmount.
@@ -30,22 +25,15 @@ export default function App() {
 
   const navigate = (id: string) => {
     if (id === current.pageId) return;
-    // Stage 1: animate the current page out.
-    setOutgoing({ pageId: current.pageId, direction: 'forward' });
-    // Stage 2: swap in the new page after the out animation completes.
-    timeoutRef.current = window.setTimeout(() => {
-      setCurrent({ pageId: id, direction: 'forward' });
-      setOutgoing(null);
-    }, OUT_DURATION);
+    // Always start the transition from the top, regardless of current scroll.
+    window.scrollTo(0, 0);
+    setCurrent({ pageId: id, direction: 'forward' });
   };
 
   const goBack = () => {
     if (current.pageId === 'home') return;
-    setOutgoing({ pageId: current.pageId, direction: 'backward' });
-    timeoutRef.current = window.setTimeout(() => {
-      setCurrent({ pageId: 'home', direction: 'backward' });
-      setOutgoing(null);
-    }, OUT_DURATION);
+    window.scrollTo(0, 0);
+    setCurrent({ pageId: 'home', direction: 'backward' });
   };
 
   return (
@@ -55,7 +43,7 @@ export default function App() {
         direction={current.direction}
         phase="in"
         animationKey={current.pageId}
-        mode='flip'
+        mode='turnstile'
       >
         {current.pageId === 'home' ? (
           <Home onNavigate={navigate} />
@@ -63,24 +51,6 @@ export default function App() {
           <PageView page={active!} onBack={goBack} />
         )}
       </FlipTransition>
-
-      {/* Outgoing page (overlaid during the exit animation) */}
-      {outgoing && (
-        <div className="showcase__outgoing">
-          <FlipTransition
-            direction={outgoing.direction}
-            phase="out"
-            animationKey={`out-${outgoing.pageId}`}
-            mode='flip'
-          >
-            {outgoing.pageId === 'home' ? (
-              <Home onNavigate={navigate} />
-            ) : (
-              <PageView page={outgoingPage!} onBack={goBack} />
-            )}
-          </FlipTransition>
-        </div>
-      )}
     </div>
   );
 }
