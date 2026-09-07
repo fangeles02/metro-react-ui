@@ -404,3 +404,28 @@
   overflow-x: auto;
   white-space: pre;
 }
+
+/* Component spec tables (properties / enum values) */
+.showcase__specs {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--wp-font-size-small);
+  color: var(--wp-foreground);
+}
+.showcase__specs th,
+.showcase__specs td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--wp-chrome-low);
+  vertical-align: top;
+}
+.showcase__specs th {
+  color: var(--wp-subtle);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: var(--wp-font-size-small);
+}
+.showcase__specs code {
+  font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: var(--wp-font-size-small);
+}
