@@ -278,6 +278,7 @@
 .metro-tile__step {
   position: absolute;
   inset: 0 0 auto 0;
+  height: 64px;
   overflow: hidden;
   color: var(--wp-accent-foreground);
   animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
@@ -296,6 +297,7 @@
    top-only strip + margins) so the background image spans the entire tile. */
 .metro-tile__step--fullbleed {
   inset: 0;
+  height: auto;
   margin: 0;
 }
 
@@ -327,9 +329,12 @@
   animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
 }
 /* Static full-tile background image behind a text (labels) step — no
-   re-animation; it persists while the labels + bleed move in. */
+   re-animation; it persists while the labels + bleed move in. Pinned to the
+   BOTTOM projection so it matches where the image step's top→bottom scroll
+   ended (no reset to the top). */
 .metro-tile__step > .metro-tile__step-bg {
   animation: none;
+  object-position: center bottom;
 }
 
 /* Bleed overlay the fades in over the static image — its own div, so it

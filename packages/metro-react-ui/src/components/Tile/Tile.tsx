@@ -161,8 +161,9 @@ export function Tile({
     return out;
   }, [messageDisplayMode, list]);
 
-  // Active step-based presentation (all modes; non-small tiles).
-  const stepPresentationEnabled = steps.length > 0 && !isSmall;
+  // Active step-based presentation (all modes; non-small tiles). Gated by
+  // `canFlip` so `canFlip={false}` freezes the tile (no message cycling).
+  const stepPresentationEnabled = canFlip && steps.length > 0 && !isSmall;
 
   // Legacy flip/slide are only used when step presentation is NOT active
   // (i.e. no messages / small tiles). The step machine owns all message
