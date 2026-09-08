@@ -9,6 +9,10 @@
   font-family: var(--wp-font-family);
   cursor: pointer;
   perspective: 600px;
+  transform-style: preserve-3d;
+  /* Clip the slide-mode back face (translated down 100%) so it doesn't show
+     below the tile when not flipped. */
+  overflow: hidden;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -16,11 +20,79 @@
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
+}
+
+/* ---- Flip mode ---- */
+/* Whole-tile flip (origin center, axis vertical = rotateX), matching the
+   Tile flip style — perspective + fade. The tile is re-mounted (via key) on
+   every flip, so this animation re-runs each time — both to the back and
+   back to the title. Gated on `data-flipping` so the tile is STATIC on
+   initial mount (no animation until the first actual flip). */
+.metro-hubtile[data-animation='flip'][data-flipping='true'] {
+  animation: metro-hubtile-flip var(--wp-duration-slow) cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+@keyframes metro-hubtile-flip {
+  0% {
+    transform: perspective(1000px) rotateX(80deg);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1000px) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+/* WP8-style bounce flip: the tile flips in from the top with a single springy
+   overshoot past the resting angle before settling. Applied when
+   `bounceFlip` is set; the tile is re-mounted (via key) on every flip, so
+   this animation re-runs each time. Gated on `data-flipping` so the tile is
+   STATIC on initial mount. */
+.metro-hubtile[data-animation='flip'][data-bounce-flip='true'][data-flipping='true'] {
+  animation: metro-hubtile-flip-bounce var(--wp-duration-slow) cubic-bezier(0.1, 0.2, 0.1, 1.5);
+}
+
+@keyframes metro-hubtile-flip-bounce {
+  0% {
+    transform: perspective(1000px) rotateX(80deg);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  55% {
+    transform: perspective(1000px) rotateX(-8deg);
+  }
+  78% {
+    transform: perspective(1000px) rotateX(4deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+/* Flipped state: rotate the inner 3D container so the back face shows. The
+   whole-tile flip animation (above) provides the motion; the swap itself is
+   instant. */
+.metro-hubtile[data-animation='flip'][data-flipped='true'] .metro-hubtile__inner {
+  transform: rotateX(180deg);
+}
+
+/* ---- Slide mode ---- */
+/* The back face slides up over the front when flipped, and slides back down
+   when returning to the title face. The inner container stays put; only the
+   back face translates. */
+.metro-hubtile[data-animation='slide'] .metro-hubtile__back {
+  transform: translateY(100%);
   transition: transform var(--wp-duration-slow) var(--wp-easing);
 }
 
-.metro-hubtile[data-flipped='true'] .metro-hubtile__inner {
-  transform: rotateX(180deg);
+.metro-hubtile[data-animation='slide'][data-flipped='true'] .metro-hubtile__back {
+  transform: translateY(0);
 }
 
 .metro-hubtile__face {
@@ -30,7 +102,7 @@
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
   padding: 8px;
 }
 
@@ -38,17 +110,13 @@
   background: var(--wp-accent);
 }
 
+/* Back face uses the same accent as the front. */
 .metro-hubtile__back {
-  transform: rotateX(180deg);
-  background: var(--wp-accent-dark);
+  background: var(--wp-accent);
 }
 
-.metro-hubtile__image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.metro-hubtile[data-animation='flip'] .metro-hubtile__back {
+  transform: rotateX(180deg);
 }
 
 .metro-hubtile__title {
@@ -66,22 +134,4 @@
   font-weight: var(--wp-font-weight-semibold);
   text-align: left;
   margin: 0 0 6px 10px;
-}
-
-.metro-hubtile__message {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-  padding: 8px;
-  background: var(--wp-accent-dark);
-  font-size: var(--wp-font-size-small);
-  text-align: left;
-  animation: metro-drop var(--wp-duration-slow) var(--wp-easing);
-}
-
-@keyframes metro-drop {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
 }
