@@ -52,7 +52,7 @@ export interface TileProps {
   swivelAnimationDuration?: number;
   /**
    * Initial delay before the tile starts flipping, in ms. Defaults to a
-   * random value between 1000 and 5000 so tiles don't flip in sync.
+   * random value between 5000 and 10000 so tiles don't flip in sync.
    */
   initialDelay?: number;
   /** Click handler. */
@@ -65,6 +65,13 @@ export interface TileProps {
   tiltMaxDepression?: number;
   /** How message image/text are presented. Defaults to 'inline-flip'. */
   messageDisplayMode?: MessageDisplayMode;
+  /**
+   * When true, tile flips use a springy WP8-style bounce (a single overshoot
+   * past the resting angle before settling). Applies to every flip — step
+   * flip modes (inline-flip / alternate-flip) and the legacy body-only flip.
+   * Defaults to false.
+   */
+  bounceFlip?: boolean;
 }
 
 /**
@@ -90,6 +97,7 @@ export function Tile({
   tiltMaxAngle = 17,
   tiltMaxDepression = 25,
   messageDisplayMode = 'inline-flip',
+  bounceFlip = false,
 }: TileProps) {
   const isSmall = size === 'small';
   const tiltRef = useRef<HTMLButtonElement>(null);
@@ -171,13 +179,13 @@ export function Tile({
   const shouldFlip = canFlip && !isSmall && !stepPresentationEnabled && flipItems.length > 0;
   const shouldSlide = canFlip && !isSmall && !stepPresentationEnabled && slideItems.length > 0;
 
-  // Initial delay before cycling starts — random 1000–5000ms unless overridden.
+  // Initial delay before cycling starts — random 5000–10000ms unless overridden.
   // MEMOIZED so it's stable across renders (otherwise including it in the
   // scheduler effect deps causes the effect to teardown/restart on EVERY
   // flip, resetting each step's wait to a new random delay → inconsistent
   // display durations).
   const delay = useMemo(
-    () => initialDelay ?? Math.floor(Math.random() * 4000) + 1000,
+    () => initialDelay ?? Math.floor(Math.random() * 5000) + 5000,
     [initialDelay],
   );
 
@@ -426,6 +434,8 @@ export function Tile({
       type="button"
       className={`metro-tile metro-tile--${size}`}
       data-flipped={flipped}
+      data-bounce-flip={bounceFlip}
+      data-flipping={flipCount > 0}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}

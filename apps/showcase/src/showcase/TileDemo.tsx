@@ -40,9 +40,9 @@ export function TileDemo() {
                     <Tile size="small" title="Agents" icon={<AgentsFilled />} />
 
                     <Tile size="medium" title="Contacts" icon={<PeopleFilled />} />
-                    <Tile size="medium" title="Messages" count={messagingMessages.length} icon={<ChatFilled />} message={messagingMessages} />
+                    <Tile size="medium" title="Messages" count={messagingMessages.length} icon={<ChatFilled />} message={messagingMessages} bounceFlip/>
 
-                    <Tile size="wide" title="Photos" message={photos} />
+                    <Tile size="wide" title="Photos" icon={<ImageFilled/>} message={photos} bounceFlip />
 
                     <Tile size="small" title="Music" icon={<MusicNote2Filled />} accent='#d86100'/>
                     <Tile size="small" title="Mail" icon={<MailFilled />} count={2} />
@@ -50,9 +50,9 @@ export function TileDemo() {
                     <Tile size="small" title="Calculator" icon={<CalculatorFilled />} accent='#0fb600'/>
 
 
-                    <Tile size="wide" title="Maps" message={{ body: '20 minutes to work' }} icon={<MapFilled />} />
+                    <Tile size="wide" title="Maps" message={{ body: '20 minutes to work' }} icon={<MapFilled />} bounceFlip/>
 
-                    <Tile size="large" title="Wallpapers" message={wallpapers} icon={<ImageFilled />} messageDisplayMode='inline-flip'/>
+                    <Tile size="large" title="Wallpapers" message={wallpapers} icon={<ImageFilled />} messageDisplayMode='inline-flip' bounceFlip/>
 
                 </TileContainer>
             </div>
@@ -64,7 +64,6 @@ export function TileDemo() {
                     <Tile size="wide" title="inline-flip" messages={inboxMessages2} icon={<CubeFilled />} messageDisplayMode="inline-flip" count={inboxMessages2.length} />
                     <Tile size="wide" title="alternate-slide" messages={inboxMessages2} icon={<CubeFilled />} messageDisplayMode="alternate-slide" count={inboxMessages2.length} />
                     <Tile size="wide" title="alternate-flip" messages={inboxMessages2} icon={<CubeFilled />} messageDisplayMode="alternate-flip" count={inboxMessages2.length} />
-
                 </TileContainer>
             </div>
       
@@ -87,12 +86,13 @@ export function TileDemo() {
                         <tr><td><code>canFlip</code></td><td><code>boolean</code></td><td><code>true</code></td><td>No</td></tr>
                         <tr><td><code>Duration</code></td><td><code>number</code></td><td><code>5000</code> ms</td><td>No</td></tr>
                         <tr><td><code>swivelAnimationDuration</code></td><td><code>number</code></td><td><code>800</code> ms</td><td>No</td></tr>
-                        <tr><td><code>initialDelay</code></td><td><code>number</code></td><td>random 1000–5000 ms</td><td>No</td></tr>
+                        <tr><td><code>initialDelay</code></td><td><code>number</code></td><td>random 5000–10000 ms</td><td>No</td></tr>
                         <tr><td><code>onClick</code></td><td><code>{'() => void'}</code></td><td>—</td><td>No</td></tr>
                         <tr><td><code>tilt</code></td><td><code>boolean</code></td><td><code>true</code></td><td>No</td></tr>
                         <tr><td><code>tiltMaxAngle</code></td><td><code>number</code></td><td><code>17</code></td><td>No</td></tr>
                         <tr><td><code>tiltMaxDepression</code></td><td><code>number</code></td><td><code>25</code></td><td>No</td></tr>
                         <tr><td><code>messageDisplayMode</code></td><td><code>MessageDisplayMode</code></td><td><code>'inline-flip'</code></td><td>No</td></tr>
+                        <tr><td><code>bounceFlip</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -108,6 +108,7 @@ export function TileDemo() {
                         <tr><td><code>inline-flip</code></td><td>Same layout as inline-slide, but the tile flips between messages.</td></tr>
                         <tr><td><code>alternate-slide</code></td><td>Image slides in first, then labels slide in over the static image with a fading bleed.</td></tr>
                         <tr><td><code>alternate-flip</code></td><td>Tile flips image face, then text face per message.</td></tr>
+                        <tr><td><code>bounceFlip</code></td><td>When <code>true</code>, flips use a springy WP8-style bounce (single overshoot) instead of a plain flip. Applies to all flip modes.</td></tr>
                     </tbody>
                 </table>
             </div>

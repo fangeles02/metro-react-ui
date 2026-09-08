@@ -32,8 +32,9 @@
 /* Whole-tile flip (origin center, axis vertical = rotateX), matching the
    PageTransition "flip" style — perspective + fade. The tile is re-mounted
    (via key) on every flip, so this animation re-runs each time — both to
-   the back and back to the title. */
-.metro-tile {
+   the back and back to the title. Gated on `data-flipping` so the tile is
+   STATIC on initial mount (no animation until the first actual flip). */
+.metro-tile[data-flipping='true'] {
   animation: metro-tile-flip var(--wp-tile-swivel-duration, 1000ms) cubic-bezier(0.1, 0.9, 0.2, 1);
 }
 
@@ -44,6 +45,35 @@
   }
   1% {
     opacity: 1;
+  }
+  100% {
+    transform: perspective(1000px) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+/* WP8-style bounce flip: the tile flips in from the top with a single springy
+   overshoot past the resting angle before settling. Applied when
+   `bounceFlip` is set; the tile is re-mounted (via key) on every flip, so
+   this animation re-runs each time — both to the back and back to the title.
+   Gated on `data-flipping` so the tile is STATIC on initial mount. */
+.metro-tile[data-bounce-flip='true'][data-flipping='true'] {
+  animation: metro-tile-flip-bounce var(--wp-tile-swivel-duration, 100ms) cubic-bezier(0.1, 0.2, 0.1, 1.5);
+}
+
+@keyframes metro-tile-flip-bounce {
+  0% {
+    transform: perspective(1000px) rotateX(80deg);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  55% {
+    transform: perspective(1000px) rotateX(-8deg);
+  }
+  78% {
+    transform: perspective(1000px) rotateX(4deg);
   }
   100% {
     transform: perspective(1000px) rotateX(0deg);
