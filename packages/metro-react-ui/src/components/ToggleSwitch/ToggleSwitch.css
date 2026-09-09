@@ -76,17 +76,15 @@
   z-index: 1;
 }
 
-/* SwitchBackground: 77x20 centered, background color, slides with thumb */
+/* SwitchBackground: fills the whole track, fades in when checked.
+   Stays behind the white border (::before has z-index 1). */
 .metro-toggle__track-inner::after {
   content: '';
   position: absolute;
-  top: 50%;
-  left: calc(-50% + 15px);
-  width: 55px;
-  height: 24px;
+  inset: 0;
   background: var(--wp-accent);
-  transform: translate(-50%, -50%);
-  transition: transform var(--wp-duration-normal) var(--wp-easing);
+  opacity: 0;
+  transition: opacity var(--wp-duration-normal) var(--wp-easing);
 }
 
 /* The thumb: 28x38 vertical bar, slides horizontally */
@@ -112,10 +110,10 @@
   border: 0px;
 }
 
-/* Checked: slide thumb + background to the right side of the rail.
-   Rail is 89w, thumb is 28w -> travel = 89 - 28 = 61 so nothing overflows. */
+/* Checked: accent fills the whole track; only the thumb slides right.
+   Rail is 86w, thumb is 25w -> travel = 86 - 25 = 61 so nothing overflows. */
 .metro-toggle[data-checked='true'] .metro-toggle__track .metro-toggle__track-inner::after {
-  transform: translate(calc(-50% + 61px), -50%);
+  opacity: 1;
 }
 
 .metro-toggle[data-checked='true'] .metro-toggle__track .metro-toggle__thumb {
