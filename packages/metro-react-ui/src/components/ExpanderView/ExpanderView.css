@@ -28,12 +28,11 @@
   justify-content: center;
   width: 41px;
   color: var(--wp-subtle);
-  font-size: var(--wp-font-size-medium);
-  transition: transform var(--wp-duration-normal) var(--wp-easing);
 }
 
-.metro-expander[data-expanded='true'] .metro-expander__chevron {
-  transform: rotate(90deg);
+.metro-expander__chevron-icon {
+  width: 1em;
+  height: 1em;
 }
 
 .metro-expander__title {
@@ -41,8 +40,26 @@
   font-weight: var(--wp-font-weight-light);
 }
 
+/* Animated wrapper: clips the content and drives its height (0 → full) on
+   expand/collapse, mirroring the ListPicker expanded-inflow technique. */
+.metro-expander__content-wrap {
+  overflow: hidden;
+  height: 0;
+}
+
+.metro-expander__content-wrap[data-state='open'],
+.metro-expander__content-wrap[data-state='closing'] {
+  transition: height 0.2s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
 .metro-expander__content {
   margin-left: 41px;
   padding: 8px 8px 16px 12px;
   border-left: 3px solid var(--wp-subtle);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metro-expander__content-wrap {
+    transition: none !important;
+  }
 }

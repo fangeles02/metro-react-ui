@@ -42,7 +42,14 @@
 }
 
 .metro-listpicker__chevron {
+  display: inline-flex;
+  align-items: center;
   color: var(--wp-subtle);
+}
+
+.metro-listpicker__chevron-icon {
+  width: 1em;
+  height: 1em;
 }
 
 /* The normal inline container anchors the overlay menu, is kept in flow (the

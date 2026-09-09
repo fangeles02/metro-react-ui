@@ -1,6 +1,22 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import './ListPicker.css';
 
+/** Inline copy of the Fluent `ChevronDownFilled` glyph (20x20 viewBox), so the
+ * picker isn't dependent on `@fluentui/react-icons`. */
+function ChevronDownIcon() {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+      focusable="false"
+      className="metro-listpicker__chevron-icon"
+    >
+      <path d="M15.8 7.73c.28.3.27.78-.03 1.06l-5.25 5a.75.75 0 0 1-1.04 0l-5.25-5a.75.75 0 0 1 1.04-1.08L10 12.2l4.73-4.5a.75.75 0 0 1 1.06.02" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+    </svg>
+  );
+}
+
 export type ListPickerMode = 'normal' | 'expanded';
 
 export interface ListPickerItem<T> {
@@ -293,7 +309,9 @@ export function ListPicker<T>({
             <span className="metro-listpicker__value">
               {selected ? selected.label : placeholder}
             </span>
-            <span className="metro-listpicker__chevron">▾</span>
+            <span className="metro-listpicker__chevron">
+              <ChevronDownIcon />
+            </span>
           </button>
           {showMenu && (
             <div
@@ -347,7 +365,9 @@ export function ListPicker<T>({
               <span className="metro-listpicker__value">
                 {selected ? selected.label : placeholder}
               </span>
-              <span className="metro-listpicker__chevron">▾</span>
+              <span className="metro-listpicker__chevron">
+                <ChevronDownIcon />
+              </span>
             </button>
             <ul ref={menuRef} className="metro-listpicker__expander-list" role="listbox">
               {items.map((item, i) => (

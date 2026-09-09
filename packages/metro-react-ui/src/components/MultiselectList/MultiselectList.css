@@ -54,6 +54,11 @@
 }
 
 .metro-multiselect__check {
-  font-size: 14px;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.metro-multiselect__check-icon {
+  width: 1em;
+  height: 1em;
 }
