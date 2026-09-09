@@ -119,6 +119,14 @@
   opacity: 0.6;
 }
 
+/* Build info — small label under the samples list */
+.showcase__buildinfo {
+  margin-top: 24px;
+  font-size: var(--wp-font-size-small);
+  color: var(--wp-subtle);
+  opacity: 0.6;
+}
+
 .showcase__page-content {
   display: flex;
   flex-direction: column;

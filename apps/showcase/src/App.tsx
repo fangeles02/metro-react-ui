@@ -60,6 +60,9 @@ function Home({
 }: {
   onNavigate: (id: string) => void;
 }) {
+  // Build timestamp injected by Vite's `define` at build/dev-server start.
+  const built = new Date(__BUILD_TIME__).toLocaleString();
+
   return (
     <div className="showcase__page">
       {/* Hero — introduces the toolkit */}
@@ -73,6 +76,7 @@ function Home({
         <div className="showcase__hero-badges">
           <span className="showcase__hero-badge">GitHub repo: coming soon (MIT license)</span>
           <span className="showcase__hero-badge">npm package: coming soon</span>
+          <span className="showcase__hero-badge">Built: {built}</span>
         </div>
       </section>
 
@@ -96,6 +100,8 @@ function Home({
           </button>
         ))}
       </div>
+
+      <div className="showcase__buildinfo">Built: {built}</div>
     </div>
   );
 }
