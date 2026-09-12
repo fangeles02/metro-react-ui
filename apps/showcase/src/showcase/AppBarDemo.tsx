@@ -149,6 +149,25 @@ export function AppBarDemo() {
         </div>
       </div>
 
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">Secondary menu (overflow)</span>
+        <div className="showcase__demo-frame showcase__demo-frame--auto">
+          <div className="appbar-demo-content">tap ⋯ (or swipe up on touch)</div>
+          <AppBar
+            alignment="left"
+            secondaryMenu={[
+              { label: 'New message', onSelect: () => console.log('new message') },
+              { label: 'Mark all read', onSelect: () => console.log('mark all read') },
+              { label: 'Settings', onSelect: () => console.log('settings') },
+              { label: 'Delete', disabled: true },
+            ]}
+          >
+            <AppBarButton label="add" icon={<AddIcon />} />
+            <AppBarButton label="done" icon={<CheckIcon />} />
+          </AppBar>
+        </div>
+      </div>
+
       <CodeBlock
         code={`import { AppBar, AppBarButton } from '@metro-react-ui/core';
 
@@ -177,6 +196,27 @@ export function AppBarDemo() {
   <AppBarButton label="add" icon={<AddIcon />} />
   <AppBarButton label="done" icon={<CheckIcon />} />
 </AppBar>`}
+      />
+
+      <CodeBlock
+        code={`import { AppBar, AppBarButton } from '@metro-react-ui/core';
+
+{/* WP8 ApplicationBar.secondaryMenu: a text-only overflow menu.
+    The ⋯ button appears at the far right (always visible) and opens a
+    dark-chrome menu whose items slide up one-by-one. Tap/click toggles it;
+    on touch, swiping up on the button also opens it. */}
+<AppBar alignment="left" secondaryMenu={[
+  { label: 'New message', onSelect: () => { /* ... */ } },
+  { label: 'Mark all read', onSelect: () => { /* ... */ } },
+  { label: 'Settings', onSelect: () => { /* ... */ } },
+  { label: 'Delete', disabled: true },
+]}>
+  <AppBarButton label="add" icon={<AddIcon />} />
+  <AppBarButton label="done" icon={<CheckIcon />} />
+</AppBar>
+
+{/* Note: when secondaryMenu is set, the ⋯ button replaces the mobile
+    label-toggle, so on narrow screens the labels can't be toggled via ⋯. */}`}
       />
     </>
   );

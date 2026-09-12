@@ -1,4 +1,6 @@
-import { useEffect, useState, type HTMLAttributes, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
+import { ContextMenu } from '../ContextMenu/ContextMenu';
+import type { ContextMenuItem } from '../ContextMenu/ContextMenu';
 import './AppBar.css';
 
 export type AppBarBackground = 'chrome' | 'transparent' | 'accent';
@@ -54,6 +56,24 @@ export interface AppBarProps extends Omit<HTMLAttributes<HTMLElement>, 'children
   isOpen?: boolean;
   /** Called when the mobile toggle button is pressed. */
   onToggle?: (open: boolean) => void;
+  /**
+   * WP8 `ApplicationBar.secondaryMenu`: a text-only overflow menu. When set, a
+   * "more" (⋯) button appears at the far right of the bar.
+   *
+   * The presentation is responsive:
+   * - **Mobile** (width < `breakpoint`): tapping/clicking the ⋯ button — or
+   *   swiping up on touch — expands the app bar itself, revealing the menu
+   *   items below the buttons (dark-chrome surface, items slide up in
+   *   sequence).
+   * - **Wide** (width >= `breakpoint`): since button labels are always
+   *   visible, the ⋯ button opens a `ContextMenu` anchored above the button
+   *   (reusing the ContextMenu component).
+   *
+   * Note: when `secondaryMenu` is set, the overflow button REPLACES the
+   * mobile label-toggle button, so on narrow screens the button labels can no
+   * longer be expanded/collapsed via the ⋯ button.
+   */
+  secondaryMenu?: ContextMenuItem[];
 }
 
 /**
@@ -80,6 +100,7 @@ export function AppBar({
   defaultOpen = false,
   isOpen: isOpenProp,
   onToggle,
+  secondaryMenu,
   className,
   ...rest
 }: AppBarProps) {
@@ -90,6 +111,11 @@ export function AppBar({
     return window.matchMedia(`(max-width: ${breakpoint - 1}px)`).matches;
   });
   const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const overflowRef = useRef<HTMLButtonElement>(null);
+  const swipeStartY = useRef<number | null>(null);
+  const menuHeightRef = useRef<number>(0);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -101,6 +127,44 @@ export function AppBar({
     mql.addEventListener('change', onChange);
     return () => mql.removeEventListener('change', onChange);
   }, [breakpoint]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onDocClick = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (menuRef.current && menuRef.current.contains(target)) return;
+      if (overflowRef.current && overflowRef.current.contains(target)) return;
+      setMenuOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    document.addEventListener('mousedown', onDocClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDocClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [menuOpen]);
+
+  // Animate the menu panel's height from 0 to its natural content height so
+  // the app bar visibly expands downward with an easing curve.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const el = menuRef.current;
+    if (!el) return;
+    // Measure the natural (unclamped) content height.
+    el.style.height = 'auto';
+    const target = el.getBoundingClientRect().height;
+    el.style.height = '0px';
+    // Force a reflow so the 0px start applies before the transition.
+    void el.getBoundingClientRect();
+    menuHeightRef.current = target;
+    // Let the transition run to the measured height.
+    requestAnimationFrame(() => {
+      el.style.height = `${target}px`;
+    });
+  }, [menuOpen]);
 
   if (!isVisible) {
     return null;
@@ -119,6 +183,27 @@ export function AppBar({
     }
   };
 
+  const toggleMenu = () => setMenuOpen((open) => !open);
+
+  const handleOverflowPointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType === 'mouse') return; // handled by click
+    swipeStartY.current = e.clientY;
+  };
+
+  const handleOverflowPointerMove = (e: React.PointerEvent) => {
+    if (e.pointerType === 'mouse') return;
+    if (swipeStartY.current === null) return;
+    // Swiping up (finger moving toward smaller Y) opens the menu.
+    if (swipeStartY.current - e.clientY > 30) {
+      setMenuOpen(true);
+      swipeStartY.current = null;
+    }
+  };
+
+  const handleOverflowPointerUp = () => {
+    swipeStartY.current = null;
+  };
+
   const classes = [
     'metro-appbar',
     `metro-appbar--${background}`,
@@ -126,6 +211,7 @@ export function AppBar({
     `metro-appbar--pos-${position}`,
     isMobile ? 'metro-appbar--mobile' : 'metro-appbar--wide',
     isMobile && !isOpen ? 'metro-appbar--collapsed' : '',
+    menuOpen ? 'metro-appbar--menu-open' : '',
     accented ? 'metro-appbar--accented' : '',
     className ?? '',
   ]
@@ -134,21 +220,89 @@ export function AppBar({
 
   return (
     <div className={classes} role="toolbar" aria-label="app bar" {...rest}>
-      {children}
-      {isMobile && (
-        <button
-          type="button"
-          className="metro-appbar__toggle"
-          aria-label={isOpen ? 'Hide labels' : 'Show labels'}
-          aria-expanded={isOpen}
-          onClick={toggle}
+      <div className="metro-appbar__row">
+        {children}
+        {secondaryMenu ? (
+          isMobile ? (
+            <button
+              ref={overflowRef}
+              type="button"
+              className="metro-appbar__overflow"
+              aria-label="More options"
+              aria-expanded={menuOpen}
+              aria-controls="metro-appbar__menu"
+              onClick={toggleMenu}
+              onPointerDown={handleOverflowPointerDown}
+              onPointerMove={handleOverflowPointerMove}
+              onPointerUp={handleOverflowPointerUp}
+              onPointerLeave={handleOverflowPointerUp}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="5" cy="12" r="1.8" fill="currentColor" />
+                <circle cx="12" cy="12" r="1.8" fill="currentColor" />
+                <circle cx="19" cy="12" r="1.8" fill="currentColor" />
+              </svg>
+            </button>
+          ) : (
+            <ContextMenu
+              trigger="click"
+              placement="top"
+              items={secondaryMenu}
+            >
+              <button
+                type="button"
+                className="metro-appbar__overflow"
+                aria-label="More options"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="5" cy="12" r="1.8" fill="currentColor" />
+                  <circle cx="12" cy="12" r="1.8" fill="currentColor" />
+                  <circle cx="19" cy="12" r="1.8" fill="currentColor" />
+                </svg>
+              </button>
+            </ContextMenu>
+          )
+        ) : isMobile ? (
+          <button
+            type="button"
+            className="metro-appbar__toggle"
+            aria-label={isOpen ? 'Hide labels' : 'Show labels'}
+            aria-expanded={isOpen}
+            onClick={toggle}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="5" cy="12" r="1.8" fill="currentColor" />
+              <circle cx="12" cy="12" r="1.8" fill="currentColor" />
+              <circle cx="19" cy="12" r="1.8" fill="currentColor" />
+            </svg>
+          </button>
+        ) : null}
+      </div>
+      {secondaryMenu && isMobile && menuOpen && (
+        <div
+          id="metro-appbar__menu"
+          ref={menuRef}
+          className="metro-appbar__menu"
+          role="menu"
+          aria-label="More options"
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="5" cy="12" r="1.8" fill="currentColor" />
-            <circle cx="12" cy="12" r="1.8" fill="currentColor" />
-            <circle cx="19" cy="12" r="1.8" fill="currentColor" />
-          </svg>
-        </button>
+          {secondaryMenu.map((item, i) => (
+            <button
+              key={i}
+              type="button"
+              role="menuitem"
+              className="metro-appbar__menu__item"
+              style={{ '--i': i } as React.CSSProperties}
+              disabled={item.disabled}
+              onClick={() => {
+                setMenuOpen(false);
+                item.onSelect?.();
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );

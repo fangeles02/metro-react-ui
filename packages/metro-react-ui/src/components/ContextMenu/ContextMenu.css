@@ -12,13 +12,24 @@
   background: white;
   border: 2px solid var(--wp-accent);
   font-family: var(--wp-font-family);
-  animation: metro-fade-in var(--wp-duration-fast) var(--wp-easing);
+  /* Slide in with an easing curve; direction depends on placement. */
+  animation: metro-contextmenu-in-up var(--wp-duration-normal) var(--wp-easing) both;
+}
+
+/* Slide up (menu appears above the origin) */
+.metro-contextmenu--slide-up {
+  animation: metro-contextmenu-in-up var(--wp-duration-normal) var(--wp-easing) both;
+}
+
+/* Slide down (menu appears below the origin) */
+.metro-contextmenu--slide-down {
+  animation: metro-contextmenu-in-down var(--wp-duration-normal) var(--wp-easing) both;
 }
 
 .metro-contextmenu__item {
   display: block;
   width: 100%;
-  padding: 10px 12px;
+  padding: 14px 12px;
   border: none;
   background: transparent;
   color: black;
@@ -38,7 +49,26 @@
   cursor: default;
 }
 
-@keyframes metro-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Slide up + fade in (menu appears above the origin). */
+@keyframes metro-contextmenu-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide down + fade in (menu appears below the origin). */
+@keyframes metro-contextmenu-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

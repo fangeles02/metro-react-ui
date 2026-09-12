@@ -2,33 +2,44 @@
    A horizontal bar pinned to the bottom of the screen that hosts
    AppBarButton(s). Ports the placement of the WP8 shell:ApplicationBar.
    Default is `position: sticky; bottom: 0` so the bar stays in view while
-   content scrolls behind it (no overlay). */
+   content scrolls behind it (no overlay).
+
+   The bar is a column: a top row holds the buttons + overflow/toggle button,
+   and (when a secondaryMenu is provided) an expanding menu section is
+   revealed below the row. */
 
 .metro-appbar {
   display: flex;
-  align-items: center;
-  gap: 50px;
+  flex-direction: column;
   padding: 10px 30px;
   box-sizing: border-box;
   width: 100%;
-
 }
 
-/* --- Alignment --- */
-.metro-appbar--align-left {
+/* Inner row holding the buttons + overflow/toggle button. Positioned so the
+   absolutely-positioned overflow/toggle button anchors to it. */
+.metro-appbar__row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+/* --- Alignment (applies to the button row) --- */
+.metro-appbar--align-left .metro-appbar__row {
   justify-content: flex-start;
 }
-.metro-appbar--align-center {
+.metro-appbar--align-center .metro-appbar__row {
   justify-content: center;
 }
-.metro-appbar--align-right {
+.metro-appbar--align-right .metro-appbar__row {
   justify-content: flex-end;
 }
 /* Default keeps the original spaced-out look. */
-.metro-appbar--align-space-around {
+.metro-appbar--align-space-around .metro-appbar__row {
   justify-content: space-around;
 }
-.metro-appbar--align-space-between {
+.metro-appbar--align-space-between .metro-appbar__row {
   justify-content: space-between;
 }
 
@@ -84,10 +95,8 @@
   display: block;
 }
 
-/* Mobile: force center alignment + narrower gap.
-   The bar is a positioned element (sticky/fixed/static) so the absolutely
-   positioned toggle anchors to it without affecting button centering. */
-.metro-appbar--mobile {
+/* Mobile: force center alignment + narrower gap. */
+.metro-appbar--mobile .metro-appbar__row {
   justify-content: center;
   gap: 16px;
 }
@@ -106,18 +115,19 @@
     transform var(--wp-duration-normal) var(--wp-easing);
 }
 
-/* Mobile open: labels expand into view */
-.metro-appbar--mobile:not(.metro-appbar--collapsed) .metro-appbarbutton__label {
+/* Mobile open: labels expand into view. Also expand them when the secondary
+   menu is open, so the labels are visible alongside the menu on mobile. */
+.metro-appbar--mobile:not(.metro-appbar--collapsed) .metro-appbarbutton__label,
+.metro-appbar--mobile.metro-appbar--menu-open .metro-appbarbutton__label {
   max-height: 24px;
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Toggle button (mobile only) — absolutely positioned on the right so the
-   buttons stay truly centered in the bar. */
+/* Toggle button (mobile only) — pinned to the far right of the row. */
 .metro-appbar__toggle {
   position: absolute;
-  right: 12px;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
   display: grid;
@@ -138,4 +148,91 @@
 }
 .metro-appbar__toggle:active {
   opacity: 0.6;
+}
+
+/* --- Overflow (secondary menu) button ---
+   Always visible at the far right of the row when a `secondaryMenu` is
+   provided (wide + mobile). */
+.metro-appbar__overflow {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--wp-foreground);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.metro-appbar__overflow svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+.metro-appbar__overflow:active {
+  opacity: 0.6;
+}
+
+/* --- Secondary (overflow) menu ---
+   An expanding section of the app bar itself, revealed below the button row
+   when the ⋯ button is toggled. Dark-chrome surface matching the bar. The
+   panel's height is animated by the component (JS measures the content and
+   transitions height 0 → natural), so the app bar visibly expands downward
+   with an easing curve. Items slide up one-by-one with a staggered delay. */
+.metro-appbar__menu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  /* Pull the menu in from the bar's 30px horizontal padding so items start
+     closer to the left edge. */
+  margin-left: -18px;
+  margin-right: -18px;
+  background: var(--wp-chrome);
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  overflow: hidden;
+  /* Height is set inline by the component; transition it with the easing
+     curve so the expansion is clearly visible. Kept snappy so the staggered
+     item animations remain noticeable. */
+  height: 0;
+  transition: height 250ms var(--wp-easing);
+}
+
+.metro-appbar__menu__item {
+  display: block;
+  width: 100%;
+  padding: 14px 12px;
+  border: none;
+  background: transparent;
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-medium-large);
+  text-align: left;
+  cursor: pointer;
+  animation: metro-appbar-item-in var(--wp-duration-normal) var(--wp-easing) both;
+  animation-delay: calc(var(--i) * 40ms);
+}
+
+/* No hover/selected highlight — items stay flat on the chrome surface. */
+.metro-appbar__menu__item:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Staggered slide-up entrance: each item rises from below and fades in. */
+@keyframes metro-appbar-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

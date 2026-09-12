@@ -17,6 +17,7 @@ import { TileDemo } from './TileDemo';
 import { PivotDemo } from './PivotDemo';
 import { EffectsDemo } from './EffectsDemo';
 import { AppBarDemo } from './AppBarDemo';
+import { SpaDemo } from './SpaDemo';
 import { FlipTransitionDemo } from './FlipTransitionDemo';
 import { SettingsPage } from './SettingsPage';
 
@@ -44,7 +45,7 @@ export const showcasePages: ShowcasePage[] = [
   { id: 'autocomplete', name: 'AutoCompleteBox', description: 'Text autocomplete', icon: '⌕', render: () => <AutoCompleteBoxDemo /> },
   { id: 'expander', name: 'ExpanderView', description: 'Expandable content', icon: '▸', render: () => <ExpanderViewDemo /> },
   { id: 'messagebox', name: 'CustomMessageBox (todo)', description: 'Modal dialog', icon: '▣', render: () => <CustomMessageBoxDemo /> },
-  { id: 'contextmenu', name: 'ContextMenu (todo)', description: 'Tap-and-hold menu', icon: '☰', render: () => <ContextMenuDemo /> },
+  { id: 'contextmenu', name: 'ContextMenu', description: 'Tap-and-hold menu', icon: '☰', render: () => <ContextMenuDemo /> },
   { id: 'datetime', name: 'DateTimePickers (todo)', description: 'Date & time pickers', icon: '◷', render: () => <DateTimePickerDemo /> },
   { id: 'multiselect', name: 'MultiselectList', description: 'Multi-select list', icon: '☑', render: () => <MultiselectListDemo /> },
   { id: 'longlist', name: 'LongListMultiSelector (todo)', description: 'Grouped multi-select', icon: '☰', render: () => <LongListMultiSelectorDemo /> },
@@ -55,6 +56,7 @@ export const showcasePages: ShowcasePage[] = [
   { id: 'appbar', name: 'AppBar', description: 'Circular app bar buttons', icon: '◯', render: () => <AppBarDemo /> },
   { id: 'icons', name: 'Icons', description: 'Fluent UI System Icons gallery', icon: '✦', render: () => <Suspense fallback={<IconDemoFallback />}><IconDemo /></Suspense> },
   { id: 'transition', name: 'PageTransition', description: 'Flip page transition', icon: '⇄', render: () => <FlipTransitionDemo /> },
+  { id: 'spa', name: 'SPA Demo', description: 'App bar fixed to bottom', icon: '◧', render: () => <SpaDemo /> },
   { id: 'settings', name: 'Settings', description: 'Theme: light/dark + accent color', icon: '⚙', render: () => <SettingsPage /> },
 ];
 

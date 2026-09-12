@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FlipTransition } from '@metro-react-ui/core';
 import { Button } from '@metro-react-ui/core';
 import { showcasePages } from './showcase';
+import { SpaAppBar } from './showcase/SpaDemo';
 import './App.css';
 
 interface NavState {
@@ -51,6 +52,9 @@ export default function App() {
           <PageView page={active!} onBack={goBack} />
         )}
       </FlipTransition>
+      {/* The SPA app bar is rendered OUTSIDE the FlipTransition so its
+          transform doesn't become the containing block for position:fixed. */}
+      {current.pageId === 'spa' && <SpaAppBar />}
     </div>
   );
 }
