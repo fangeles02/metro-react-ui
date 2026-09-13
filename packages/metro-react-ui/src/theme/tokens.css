@@ -24,6 +24,9 @@
   --wp-chrome: #1f1f1f;                        /* PhoneChromeBrush */
   --wp-chrome-low: #2b2b2b;                    /* slightly lighter chrome */
   --wp-disabled: rgba(255, 255, 255, 0.3);     /* PhoneDisabledBrush */
+  /* Foreground at 20% opacity — the "filled" surface used by buttons and
+     app-bar buttons. Adapts to light/dark mode automatically. */
+  --wp-foreground-20: color-mix(in srgb, var(--wp-foreground) 20%, transparent);
 
   /* ---- Typography ----
      Segoe UI is the desktop family; weights carry the "Light/Semibold"

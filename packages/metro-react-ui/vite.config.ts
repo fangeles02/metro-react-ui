@@ -6,7 +6,7 @@ import { resolve } from 'node:path';
 export default defineConfig({
   plugins: [
     react(),
-    dts({ include: ['src'], rollupTypes: true }),
+    dts({ include: ['src'], bundleTypes: true }),
   ],
   build: {
     lib: {
@@ -24,7 +24,9 @@ export default defineConfig({
           'react/jsx-runtime': 'jsxRuntime',
         },
         assetFileNames: (assetInfo) =>
-          assetInfo.name === 'style.css' ? 'metro-ui.css' : assetInfo.name!,
+          // The bundled CSS is emitted as a single asset; always name it
+          // `metro-ui.css` so the package's `./styles.css` export resolves.
+          assetInfo.name?.endsWith('.css') ? 'metro-ui.css' : assetInfo.name!,
       },
     },
     sourcemap: true,

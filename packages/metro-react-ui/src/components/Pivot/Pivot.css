@@ -7,7 +7,6 @@
 .metro-pivot__headers {
   display: flex;
   gap: 24px;
-  /* border-bottom: 2px solid var(--wp-chrome-low); */
   overflow-x: auto;
   scroll-behavior: smooth;
   /* Hide the scrollbar while keeping the strip scrollable (carousel). */

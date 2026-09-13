@@ -52,8 +52,6 @@
 }
 .metro-appbar--accent {
   background: var(--wp-accent);
-}
-.metro-appbar--accent {
   border-top-color: var(--wp-accent-foreground);
 }
 

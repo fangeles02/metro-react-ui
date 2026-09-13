@@ -16,12 +16,7 @@
   animation: metro-contextmenu-in-up var(--wp-duration-normal) var(--wp-easing) both;
 }
 
-/* Slide up (menu appears above the origin) */
-.metro-contextmenu--slide-up {
-  animation: metro-contextmenu-in-up var(--wp-duration-normal) var(--wp-easing) both;
-}
-
-/* Slide down (menu appears below the origin) */
+/* Slide down (menu appears below the origin) — overrides the default up-slide. */
 .metro-contextmenu--slide-down {
   animation: metro-contextmenu-in-down var(--wp-duration-normal) var(--wp-easing) both;
 }

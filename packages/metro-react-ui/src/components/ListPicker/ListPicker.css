@@ -25,7 +25,7 @@
   background: transparent;
   color: var(--wp-foreground);
   font-family: var(--wp-font-family);
-  font-size: var(--wp-font-size-medium-normal);
+  font-size: var(--wp-font-size-medium);
   cursor: pointer;
   transition: border-color var(--wp-duration-normal) var(--wp-easing);
 }

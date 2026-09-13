@@ -284,9 +284,9 @@ export function Tile({
   }, [shouldSlide, slideItems.length, intervalMs, delay]);
 
   // Step scheduler — advances through `steps`, then returns to the front face.
-// In FLIP modes the whole tile flips (toggling `flipped` re-keys the button so
-// the tile-flip animation replays per step). In SLIDE modes the inner step
-// slides (stepPhase machine). Applies to all messages.
+  // In FLIP modes the whole tile flips (toggling `flipped` re-keys the button so
+  // the tile-flip animation replays per step). In SLIDE modes the inner step
+  // slides (stepPhase machine). Applies to all messages.
   const stepIsFlip =
     messageDisplayMode === 'inline-flip' || messageDisplayMode === 'alternate-flip';
 

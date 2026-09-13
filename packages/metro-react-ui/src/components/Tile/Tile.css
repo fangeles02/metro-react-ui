@@ -316,12 +316,6 @@
 .metro-tile__step--leaving {
   animation: metro-tile-slide-out 800ms var(--wp-easing) forwards;
 }
-/* Overlay content uses a translucent backing so it reads over the accent. */
-.metro-tile__step {
-  margin-top: 0px;
-  margin-left: 0px;
-  /* background: color-mix(in srgb, var(--wp-accent-dark) 85%, transparent); */
-}
 
 /* Inline-slide step with a message image: fill the WHOLE tile (drop the
    top-only strip + margins) so the background image spans the entire tile. */
@@ -347,15 +341,6 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
-}
-/* The image step slides in on its own step. The background image on a text
-   step is a STATIC sibling (rendered outside the sliding inner), so it does
-   not re-animate while the labels slide in over it. */
-.metro-tile__step-inner--image {
-  animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
-}
-.metro-tile__step-inner--text {
   animation: metro-tile-slide-up 800ms var(--wp-easing) forwards;
 }
 /* Static full-tile background image behind a text (labels) step — no

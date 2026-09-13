@@ -20,7 +20,7 @@
   color: var(--wp-foreground);
 }
 .metro-button--default:hover {
-  background: color-mix(in srgb, var(--wp-foreground) 20%, transparent);
+  background: var(--wp-foreground-20);
 }
 .metro-button--default:active {
   background: var(--wp-foreground);
@@ -30,7 +30,7 @@
 /* filled: slightly lighter (gray), no border.
    Background uses the mode foreground color at 20% — adapts to light/dark. */
 .metro-button--filled {
-  background: color-mix(in srgb, var(--wp-foreground) 20%, transparent);
+  background: var(--wp-foreground-20);
   border: none;
   color: var(--wp-foreground);
 }

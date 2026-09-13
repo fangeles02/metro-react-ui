@@ -138,9 +138,6 @@ export function AutoCompleteBox<T>({
     const t = getItemText(item);
     setText(t);
     closeMenu();
-    if (!isControlled) {
-      // uncontrolled: keep text as source of truth
-    }
     onSelectionChanged?.(item);
   };
 
