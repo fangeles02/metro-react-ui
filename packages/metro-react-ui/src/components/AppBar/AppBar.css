@@ -159,7 +159,10 @@
   top: 50%;
   transform: translateY(-50%);
   display: grid;
-  place-items: center;
+  /* Keep the icon horizontally centered but align it to the TOP of the
+     button (the button's dimensions and centered position are unchanged). */
+  justify-items: center;
+  align-items: start;
   width: 34px;
   height: 34px;
   padding: 0;
@@ -168,6 +171,9 @@
   color: var(--wp-foreground);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  /* Let the drag-to-reveal gesture own the touch stream — don't let the
+     browser hijack it for page scroll/zoom. */
+  touch-action: none;
 }
 
 .metro-appbar__overflow svg {
