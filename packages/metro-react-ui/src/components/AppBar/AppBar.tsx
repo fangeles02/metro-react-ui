@@ -112,7 +112,12 @@ export function AppBar({
   });
   const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen);
   const [menuOpen, setMenuOpen] = useState(false);
+  // True while the menu is animating closed (still mounted for the exit
+  // transition). Keeps the panel mounted so the collapse is smooth instead of
+  // an abrupt unmount.
+  const [closing, setClosing] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuContentRef = useRef<HTMLDivElement>(null);
   const overflowRef = useRef<HTMLButtonElement>(null);
   const menuHeightRef = useRef<number>(0);
   const barRef = useRef<HTMLDivElement>(null);
@@ -172,10 +177,10 @@ export function AppBar({
       const target = e.target as Node;
       if (menuRef.current && menuRef.current.contains(target)) return;
       if (overflowRef.current && overflowRef.current.contains(target)) return;
-      setMenuOpen(false);
+      closeMenu();
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuOpen(false);
+      if (e.key === 'Escape') closeMenu();
     };
     document.addEventListener('mousedown', onDocClick);
     document.addEventListener('keydown', onKey);
@@ -206,14 +211,13 @@ export function AppBar({
     el.style.height = 'auto';
     const target = el.getBoundingClientRect().height;
     el.style.height = '0px';
-    // Force a reflow so the 0px start applies before the transition.
+    // Force a reflow so the 0px start applies before the transition. This
+    // commits the start state synchronously, so setting the target height
+    // right after triggers the transition immediately — no setTimeout delay
+    // (which caused a visible pause between the buttons and the menu).
     void el.getBoundingClientRect();
     menuHeightRef.current = target;
-    // Let the transition run to the measured height. Use setTimeout (not
-    // requestAnimationFrame) — rAF can fail to fire in some contexts.
-    window.setTimeout(() => {
-      el.style.height = `${target}px`;
-    }, 30);
+    el.style.height = `${target}px`;
   }, [menuOpen]);
 
   if (!isVisible) {
@@ -240,8 +244,45 @@ export function AppBar({
       dragMoved.current = false;
       return;
     }
-    setMenuOpen((open) => !open);
+    if (menuOpen) {
+      closeMenu();
+    } else {
+      setMenuOpen(true);
+    }
   };
+
+  // Smoothly close the menu: animate the panel height to 0 (and slide the
+  // content down) while keeping it mounted, then unmount after the transition.
+  const closeMenu = () => {
+    if (!menuOpen || closing) return;
+    setClosing(true);
+    const el = menuRef.current;
+    const content = menuContentRef.current;
+    const natural = dragMenuHeight.current > 0 ? dragMenuHeight.current : menuHeightRef.current;
+    if (el) {
+      el.style.transition = '';
+      el.style.height = '0px';
+    }
+    if (content) {
+      content.style.transition = '';
+      content.style.transform = `translateY(${natural}px)`;
+    }
+  };
+
+  // Unmount the menu once the close animation completes. Managed by React's
+  // effect lifecycle (more reliable than a bare setTimeout for state updates).
+  useEffect(() => {
+    if (!closing) return;
+    const t = window.setTimeout(() => {
+      setMenuOpen(false);
+      setClosing(false);
+      const content = menuContentRef.current;
+      if (content) {
+        content.style.transform = '';
+      }
+    }, 250);
+    return () => window.clearTimeout(t);
+  }, [closing]);
 
   // Measure the menu's natural (full) height. If the menu isn't mounted yet
   // (during a drag before it opens) or its height can't be measured (e.g.
@@ -255,9 +296,11 @@ export function AppBar({
       el.style.height = prev;
       if (h > 0) return h;
     }
-    // Estimate from items: each item is ~52px (14px padding * 2 + 24px line).
+    // Estimate from items: each item is ~52px (14px padding * 2 + 24px line),
+    // plus the menu's bottom padding (40px) so the drag reveals the full
+    // height including the bottom margin.
     const count = secondaryMenu?.length ?? 0;
-    return count > 0 ? count * 52 : 0;
+    return count > 0 ? count * 52 + 40 : 0;
   };
 
   // Set the menu's height directly (no transition) so it follows the finger.
@@ -312,6 +355,13 @@ export function AppBar({
     h = Math.min(Math.max(h, 0), natural);
     dragCurrentHeight.current = h;
     setMenuHeight(h);
+    // When shrinking (drag-down to close), slide the content down so items
+    // exit through the top as the panel collapses — no "stuck first item".
+    const content = menuContentRef.current;
+    if (content) {
+      content.style.transition = 'none';
+      content.style.transform = `translateY(${Math.round(natural - h)}px)`;
+    }
     dragMoved.current = true;
     // Prevent the page from scrolling while dragging the button.
     e.preventDefault();
@@ -342,20 +392,26 @@ export function AppBar({
     const el = menuRef.current;
     const natural = dragMenuHeight.current;
     const current = dragCurrentHeight.current;
-    // Snap open if the drag passed 50% of the natural height, else closed.
-    if (current > natural / 2) {
+    // Snap based on the drag direction, symmetric at 10%:
+    // - Started closed (dragging up to open): open once past 10% of natural.
+    // - Started open (dragging down to close): close once dragged down past
+    //   10% (i.e. current height drops below 90% of natural).
+    const threshold = dragStartedOpen.current ? natural * 0.9 : natural * 0.1;
+    if (current > threshold) {
       setMenuOpen(true);
       // Let the transition animate to the full height.
       if (el) {
         el.style.transition = '';
         el.style.height = `${natural}px`;
       }
-    } else {
-      setMenuOpen(false);
-      if (el) {
-        el.style.transition = '';
-        el.style.height = '0px';
+      // Reset the content slide so items are back at the top.
+      const content = menuContentRef.current;
+      if (content) {
+        content.style.transition = '';
+        content.style.transform = 'translateY(0)';
       }
+    } else {
+      closeMenu();
     }
     dragStartY.current = null;
     dragCurrentHeight.current = 0;
@@ -448,7 +504,7 @@ export function AppBar({
           </button>
         ) : null}
       </div>
-      {secondaryMenu && isMobile && menuOpen && (
+      {secondaryMenu && isMobile && (menuOpen || closing) && (
         <div
           id="metro-appbar__menu"
           ref={menuRef}
@@ -456,22 +512,24 @@ export function AppBar({
           role="menu"
           aria-label="More options"
         >
-          {secondaryMenu.map((item, i) => (
-            <button
-              key={i}
-              type="button"
-              role="menuitem"
-              className="metro-appbar__menu__item"
-              style={{ '--i': i } as React.CSSProperties}
-              disabled={item.disabled}
-              onClick={() => {
-                setMenuOpen(false);
-                item.onSelect?.();
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
+          <div ref={menuContentRef} className="metro-appbar__menu__content">
+            {secondaryMenu.map((item, i) => (
+              <button
+                key={i}
+                type="button"
+                role="menuitem"
+                className="metro-appbar__menu__item"
+                style={{ '--i': i } as React.CSSProperties}
+                disabled={item.disabled}
+                onClick={() => {
+                  closeMenu();
+                  item.onSelect?.();
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>

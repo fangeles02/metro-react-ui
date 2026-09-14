@@ -161,8 +161,8 @@
      button (the button's dimensions and centered position are unchanged). */
   justify-items: center;
   align-items: start;
-  width: 34px;
-  height: 34px;
+  width: 50px;
+  height: 50px;
   padding: 0;
   border: none;
   background: transparent;
@@ -208,6 +208,18 @@
   transition: height 250ms var(--wp-easing);
 }
 
+/* Wraps the items so they can be translated together (slide down when the
+   panel shrinks during a drag-to-close, and during the exit animation). */
+.metro-appbar__menu__content {
+  display: flex;
+  flex-direction: column;
+  /* Spacing below the last item so the menu doesn't sit flush against the
+     bottom edge. Included in the JS-measured height, so the panel grows to
+     accommodate it. */
+  padding-bottom: 40px;
+  transition: transform 250ms var(--wp-easing);
+}
+
 .metro-appbar__menu__item {
   display: block;
   width: 100%;
@@ -225,7 +237,7 @@
 
 /* No hover/selected highlight — items stay flat on the chrome surface. */
 .metro-appbar__menu__item:disabled {
-  opacity: 0.3;
+  color: var(--wp-disabled);
   cursor: default;
 }
 
