@@ -4,6 +4,8 @@
 
 > Web port of the Windows Phone Toolkit (Metro/Modern UI) — React component library + showcase app.
 
+**[▶ Live demo](https://metro-ui-demo.fajstudio.me/)** — explore every component in the browser.
+
 ## Features
 
 - **Authentic Metro styling** — ported from the Windows Phone Toolkit XAML `StaticResource` values (accent, foreground, chrome, type scale, motion).
@@ -106,6 +108,8 @@ function App() {
 ## Showcase
 
 A live showcase app is included in this repo (`apps/showcase`) with interactive demos, props spec tables, and code samples for every component.
+
+**[▶ Try the live demo](https://metro-ui-demo.fajstudio.me/)**
 
 ```bash
 npm install
