@@ -218,6 +218,43 @@ export function AppBarDemo() {
 {/* Note: when secondaryMenu is set, the ⋯ button replaces the mobile
     label-toggle, so on narrow screens the labels can't be toggled via ⋯. */}`}
       />
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">AppBar properties</span>
+        <table className="showcase__specs">
+          <thead>
+            <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>children</code></td><td><code>ReactNode</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>isVisible</code></td><td><code>boolean</code></td><td><code>true</code></td><td>No</td></tr>
+            <tr><td><code>accented</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
+            <tr><td><code>background</code></td><td><code>'chrome' | 'transparent' | 'accent'</code></td><td><code>'chrome'</code></td><td>No</td></tr>
+            <tr><td><code>alignment</code></td><td><code>'left' | 'center' | 'right' | 'space-around' | 'space-between'</code></td><td><code>'space-around'</code></td><td>No</td></tr>
+            <tr><td><code>position</code></td><td><code>'sticky' | 'fixed' | 'static'</code></td><td><code>'sticky'</code></td><td>No</td></tr>
+            <tr><td><code>breakpoint</code></td><td><code>number</code></td><td><code>768</code></td><td>No</td></tr>
+            <tr><td><code>defaultOpen</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
+            <tr><td><code>isOpen</code></td><td><code>boolean</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>onToggle</code></td><td><code>{'(open: boolean) => void'}</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>secondaryMenu</code></td><td><code>ContextMenuItem[]</code></td><td>—</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">AppBarButton properties</span>
+        <table className="showcase__specs">
+          <thead>
+            <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>icon</code></td><td><code>ReactNode</code></td><td>—</td><td>Yes</td></tr>
+            <tr><td><code>label</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>variant</code></td><td><code>'default' | 'filled' | 'accent'</code></td><td><code>'default'</code></td><td>No</td></tr>
+            <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }

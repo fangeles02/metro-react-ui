@@ -179,6 +179,38 @@ export function FlipTransitionDemo() {
 // axis:      'horizontal' (rotateY) | 'vertical' (rotateX, swivel only)
 // phase:     'in' | 'out'`}
       />
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">FlipTransition properties</span>
+        <table className="showcase__specs">
+          <thead>
+            <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>children</code></td><td><code>ReactNode</code></td><td>—</td><td>Yes</td></tr>
+            <tr><td><code>direction</code></td><td><code>'forward' | 'backward'</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>phase</code></td><td><code>'in' | 'out'</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>animationKey</code></td><td><code>string | number</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>origin</code></td><td><code>'left' | 'center'</code></td><td><code>'left'</code></td><td>No</td></tr>
+            <tr><td><code>axis</code></td><td><code>'horizontal' | 'vertical'</code></td><td><code>'horizontal'</code></td><td>No</td></tr>
+            <tr><td><code>mode</code></td><td><code>'flip' | 'turnstile' | 'swivel'</code></td><td><code>'flip'</code></td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">mode values</span>
+        <table className="showcase__specs">
+          <thead>
+            <tr><th>Value</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>flip</code></td><td>Book-page flip around the vertical axis (left origin), matching the WP Toolkit TurnstileTransition.</td></tr>
+            <tr><td><code>turnstile</code></td><td>Turnstile flip + slide/scale entrance — flips on the left vertical axis while sliding in.</td></tr>
+            <tr><td><code>swivel</code></td><td>True 3D cube rotation around the vertical axis (like PowerPoint "Cube").</td></tr>
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }
