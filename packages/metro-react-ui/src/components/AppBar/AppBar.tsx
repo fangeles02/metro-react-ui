@@ -113,6 +113,7 @@ export function AppBar({
   const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuContentRef = useRef<HTMLDivElement>(null);
   const overflowRef = useRef<HTMLButtonElement>(null);
   const menuHeightRef = useRef<number>(0);
   const barRef = useRef<HTMLDivElement>(null);
@@ -163,6 +164,28 @@ export function AppBar({
         'transform 300ms cubic-bezier(0.3, 2.2, 0.5, 1), opacity 300ms cubic-bezier(0.3, 2.2, 0.5, 1)';
       row.style.transform = 'translateY(0)';
       row.style.opacity = '1';
+    }, 50);
+  }, [isMobile]);
+
+  // Wide entrance: slide the WHOLE app bar up from below the viewport into
+  // place once on mount (Windows 8 desktop appbar style). Targets the bar
+  // element itself (not the row content, which is the mobile behavior).
+  useEffect(() => {
+    if (isMobile) return;
+    const bar = barRef.current;
+    if (!bar) return;
+    // Start below the viewport, transparent.
+    bar.style.transition = 'none';
+    bar.style.transform = 'translateY(100%)';
+    bar.style.opacity = '0';
+    // Force a reflow so the start state applies before the transition.
+    void bar.getBoundingClientRect();
+    // Slide up into place with the easing curve.
+    window.setTimeout(() => {
+      bar.style.transition =
+        'transform 300ms var(--wp-easing), opacity 300ms var(--wp-easing)';
+      bar.style.transform = 'translateY(0)';
+      bar.style.opacity = '1';
     }, 50);
   }, [isMobile]);
 
@@ -255,9 +278,11 @@ export function AppBar({
       el.style.height = prev;
       if (h > 0) return h;
     }
-    // Estimate from items: each item is ~52px (14px padding * 2 + 24px line).
+    // Estimate from items: each item is ~52px (14px padding * 2 + 24px line),
+    // plus the menu's bottom padding (40px) so the drag reveals the full
+    // height including the bottom margin.
     const count = secondaryMenu?.length ?? 0;
-    return count > 0 ? count * 52 : 0;
+    return count > 0 ? count * 52 + 40 : 0;
   };
 
   // Set the menu's height directly (no transition) so it follows the finger.
@@ -342,8 +367,12 @@ export function AppBar({
     const el = menuRef.current;
     const natural = dragMenuHeight.current;
     const current = dragCurrentHeight.current;
-    // Snap open if the drag passed 50% of the natural height, else closed.
-    if (current > natural / 2) {
+    // Snap based on the drag direction, symmetric at 10%:
+    // - Started closed (dragging up to open): open once past 10% of natural.
+    // - Started open (dragging down to close): close once dragged down past
+    //   10% (i.e. current height drops below 90% of natural).
+    const threshold = dragStartedOpen.current ? natural * 0.9 : natural * 0.1;
+    if (current > threshold) {
       setMenuOpen(true);
       // Let the transition animate to the full height.
       if (el) {
@@ -456,22 +485,24 @@ export function AppBar({
           role="menu"
           aria-label="More options"
         >
-          {secondaryMenu.map((item, i) => (
-            <button
-              key={i}
-              type="button"
-              role="menuitem"
-              className="metro-appbar__menu__item"
-              style={{ '--i': i } as React.CSSProperties}
-              disabled={item.disabled}
-              onClick={() => {
-                setMenuOpen(false);
-                item.onSelect?.();
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
+          <div ref={menuContentRef} className="metro-appbar__menu__content">
+            {secondaryMenu.map((item, i) => (
+              <button
+                key={i}
+                type="button"
+                role="menuitem"
+                className="metro-appbar__menu__item"
+                style={{ '--i': i } as React.CSSProperties}
+                disabled={item.disabled}
+                onClick={() => {
+                  setMenuOpen(false);
+                  item.onSelect?.();
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>

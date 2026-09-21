@@ -126,18 +126,25 @@
 .metro-appbar__toggle {
   position: absolute;
   right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  /* Aligned to the TOP of the row so it stays stationary when the labels
+     expand (a percentage top would re-center it as the row height changes). */
+  top: 0;
   display: grid;
-  place-items: center;
+  /* Keep the icon horizontally centered but align it to the TOP of the
+     button (the button's dimensions and centered position are unchanged). */
+  justify-items: center;
+  align-items: start;
   width: 34px;
-  height: 34px;
+  height: 50px;
   padding: 0;
   border: none;
   background: transparent;
   color: var(--wp-foreground);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  /* Let the drag-to-reveal gesture own the touch stream — don't let the
+     browser hijack it for page scroll/zoom. */
+  touch-action: none;
 }
 .metro-appbar__toggle svg {
   width: 20px;
@@ -154,7 +161,7 @@
 .metro-appbar__overflow {
   position: absolute;
   right: 0;
-  top: 50%;
+  top: 40%;
   transform: translateY(-50%);
   display: grid;
   /* Keep the icon horizontally centered but align it to the TOP of the
@@ -162,7 +169,7 @@
   justify-items: center;
   align-items: start;
   width: 34px;
-  height: 34px;
+  height: 50px;
   padding: 0;
   border: none;
   background: transparent;
@@ -206,6 +213,17 @@
      item animations remain noticeable. */
   height: 0;
   transition: height 250ms var(--wp-easing);
+}
+
+/* Wraps the items so they can be translated together (slide down when the
+   panel shrinks during a drag-to-close, so items exit through the top). */
+.metro-appbar__menu__content {
+  display: flex;
+  flex-direction: column;
+  /* Spacing below the last item so the menu doesn't sit flush against the
+     bottom edge. Included in the JS-measured height, so the panel grows to
+     accommodate it. */
+  padding-bottom: 40px;
 }
 
 .metro-appbar__menu__item {
