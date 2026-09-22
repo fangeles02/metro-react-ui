@@ -67,6 +67,16 @@
   font-size: var(--wp-font-size-small);
 }
 
+/* Link badges (GitHub / npm) — inherit the badge look, no default link styling */
+.showcase__hero-badge[href] {
+  text-decoration: none;
+  color: var(--wp-foreground);
+}
+.showcase__hero-badge[href]:hover {
+  border-color: var(--wp-accent);
+  color: var(--wp-accent);
+}
+
 /* Title panel — matches WP8 page header:
    small all-caps app title above a huge light-weight page title */
 .showcase__titlepanel {

@@ -78,8 +78,22 @@ function Home({
           controls (Hub, Pivot, Tile, and more).
         </p>
         <div className="showcase__hero-badges">
-          <span className="showcase__hero-badge">GitHub repo: coming soon (MIT license)</span>
-          <span className="showcase__hero-badge">npm package: coming soon</span>
+          <a
+            className="showcase__hero-badge"
+            href="https://github.com/fangeles02/metro-react-ui"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub repo (MIT license)
+          </a>
+          <a
+            className="showcase__hero-badge"
+            href="https://www.npmjs.com/package/@metro-react-ui/core"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            npm package
+          </a>
           <span className="showcase__hero-badge">Built: {built}</span>
         </div>
       </section>
