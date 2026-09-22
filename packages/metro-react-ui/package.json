@@ -1,6 +1,6 @@
 {
   "name": "@metro-react-ui/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Web port of the Windows Phone Toolkit — Metro/Modern UI React components",
   "keywords": [
     "metro",
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "https://github.com/fangeles02/metro-react-ui.git"
   },
-  "homepage": "https://github.com/fangeles02/metro-react-ui",
+  "homepage": "https://metro-ui-demo.fajstudio.me",
   "bugs": {
     "url": "https://github.com/fangeles02/metro-react-ui/issues"
   },
