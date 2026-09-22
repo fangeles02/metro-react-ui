@@ -2,6 +2,26 @@
   "name": "@metro-react-ui/core",
   "version": "0.1.0",
   "description": "Web port of the Windows Phone Toolkit — Metro/Modern UI React components",
+  "keywords": [
+    "metro",
+    "windows-phone",
+    "windows-phone-toolkit",
+    "modern-ui",
+    "react",
+    "ui",
+    "components",
+    "component-library"
+  ],
+  "author": "Fernando Angeles",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fangeles02/metro-react-ui.git"
+  },
+  "homepage": "https://github.com/fangeles02/metro-react-ui",
+  "bugs": {
+    "url": "https://github.com/fangeles02/metro-react-ui/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -38,6 +58,5 @@
     "typescript": "^5.3.0",
     "vite": "^6.4.3",
     "vite-plugin-dts": "^5.1.0"
-  },
-  "license": "MIT"
+  }
 }
