@@ -6,6 +6,8 @@
 
 **[▶ Live demo](https://metro-ui-demo.fajstudio.me/)** — explore every component in the browser.
 
+> 🤖 **AI-assisted project** — this repository is **100% AI-assisted**: the code, components, documentation, and tests were written and reviewed with the help of AI coding assistants (e.g. GitHub Copilot). Human review and direction guided the process.
+
 ## Features
 
 - **Authentic Metro styling** — ported from the Windows Phone Toolkit XAML `StaticResource` values (accent, foreground, chrome, type scale, motion).
