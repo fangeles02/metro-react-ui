@@ -35,7 +35,14 @@ export { ExpanderView } from './components/ExpanderView/ExpanderView';
 export type { ExpanderViewProps } from './components/ExpanderView/ExpanderView';
 
 export { CustomMessageBox } from './components/CustomMessageBox/CustomMessageBox';
-export type { CustomMessageBoxProps, CustomMessageBoxButton } from './components/CustomMessageBox/CustomMessageBox';
+export type {
+  CustomMessageBoxProps,
+  CustomMessageBoxButton,
+  MessageBoxField,
+  MessageBoxOption,
+  MessageBoxVariant,
+  MessageBoxTransition,
+} from './components/CustomMessageBox/CustomMessageBox';
 
 export { ContextMenu } from './components/ContextMenu/ContextMenu';
 export type { ContextMenuProps, ContextMenuItem } from './components/ContextMenu/ContextMenu';

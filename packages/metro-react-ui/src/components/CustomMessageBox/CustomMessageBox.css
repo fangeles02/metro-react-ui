@@ -1,3 +1,8 @@
+/* =====================================================================
+   CustomMessageBox — authentic WP8.1 (mobile) / Win8 (wide) dialog.
+   Flat Metro design: no rounded corners, no shadows, no borders.
+   ===================================================================== */
+
 .metro-messagebox__overlay {
   position: fixed;
   inset: 0;
@@ -6,24 +11,43 @@
   align-items: flex-start;
   justify-content: center;
   background: rgba(0, 0, 0, 0.6);
-  animation: metro-fade-in var(--wp-duration-normal) var(--wp-easing);
+  animation: metro-messagebox-overlay-in var(--wp-duration-normal) var(--wp-easing);
+  animation-fill-mode: both;
+}
+
+.metro-messagebox__overlay--out {
+  /* No fade-out — the dialog flips out over the still-visible backdrop. */
 }
 
 .metro-messagebox {
   width: 100%;
-  max-width: 480px;
-  margin: 24px;
   background: var(--wp-chrome);
   color: var(--wp-foreground);
   font-family: var(--wp-font-family);
-  animation: metro-rise var(--wp-duration-normal) var(--wp-easing);
+  animation-fill-mode: both;
 }
 
+/* ---- Theming variants ---- */
+.metro-messagebox--default {
+  background: var(--wp-chrome);
+}
+
+.metro-messagebox--accent {
+  background: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+}
+
+.metro-messagebox--accentedButton {
+  background: var(--wp-chrome);
+}
+
+/* ---- Title (large, light-weight Segoe UI Light) ---- */
 .metro-messagebox__title {
-  padding: 16px 24px 0;
-  font-size: var(--wp-font-size-normal);
+  padding: 24px 24px 0;
+  font-size: var(--wp-font-size-extra-large);
   font-family: var(--wp-font-family);
-  font-weight: var(--wp-font-weight-semibold);
+  font-weight: var(--wp-font-weight-light);
+  line-height: 1.1;
 }
 
 .metro-messagebox__message {
@@ -34,38 +58,164 @@
   color: var(--wp-foreground);
 }
 
+.metro-messagebox--accent .metro-messagebox__message {
+  color: var(--wp-accent-foreground);
+}
+
+.metro-messagebox__fields {
+  padding: 12px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .metro-messagebox__content {
   padding: 0 12px;
 }
 
+/* ---- Buttons (uses the core Button component for visuals) ---- */
 .metro-messagebox__buttons {
   display: flex;
+  flex-direction: row;
   justify-content: flex-end;
-  gap: 8px;
-  padding: 12px;
+  align-items: center;
+  padding: 24px 24px 24px 12px;
 }
 
 .metro-messagebox__button {
-  padding: 10px 20px;
-  border: none;
-  background: transparent;
-  color: var(--wp-foreground);
-  font-family: var(--wp-font-family);
-  font-size: var(--wp-font-size-normal);
-  cursor: pointer;
-  transition: color var(--wp-duration-fast) var(--wp-easing);
+  /* Layout only — visual styling comes from .metro-button--* */
+  margin: 0 8px;
 }
 
-.metro-messagebox__button:hover {
-  color: var(--wp-accent);
+.metro-messagebox__button:last-child {
+  margin-right: 0;
 }
 
-@keyframes metro-fade-in {
+/* =====================================================================
+   Responsive layout
+   ===================================================================== */
+
+/* Mobile (WP8.1): top-anchored, zero margins, full-bleed */
+.metro-messagebox--mobile {
+  max-width: 100%;
+  margin: 0;
+  align-self: flex-start;
+}
+
+.metro-messagebox--mobile .metro-messagebox__buttons {
+  justify-content: flex-start;
+  padding: 24px 24px 24px 12px;
+}
+
+.metro-messagebox--mobile .metro-messagebox__button {
+  padding: 16px 24px;
+}
+
+/* Wide (Win8): centered vertically, full left/right width, capped width */
+.metro-messagebox--wide {
+  max-width: 480px;
+  margin: 24px;
+  align-self: center;
+}
+
+/* =====================================================================
+   Transitions
+   ===================================================================== */
+
+/* ---- Fade (wide default): ease-out in, ease-in out ---- */
+.metro-messagebox--fade.metro-messagebox--in {
+  animation-name: metro-messagebox-fade-in;
+  animation-duration: var(--wp-duration-normal);
+  animation-timing-function: cubic-bezier(0, 0, 0, 1); /* ease-out */
+}
+
+.metro-messagebox--fade.metro-messagebox--out {
+  animation-name: metro-messagebox-fade-out;
+  animation-duration: var(--wp-duration-normal);
+  animation-timing-function: cubic-bezier(1, 0, 1, 1); /* ease-in */
+}
+
+/* ---- Slide: vertical slide with easing ---- */
+.metro-messagebox--slide.metro-messagebox--in {
+  animation-name: metro-messagebox-slide-in;
+  animation-duration: var(--wp-duration-slow);
+  animation-timing-function: var(--wp-easing);
+}
+
+.metro-messagebox--slide.metro-messagebox--out {
+  animation-name: metro-messagebox-slide-out;
+  animation-duration: var(--wp-duration-normal);
+  animation-timing-function: var(--wp-easing);
+}
+
+/* ---- Swivel (mobile default): origin center, axis vertical (rotateX) ---- */
+.metro-messagebox--swivel.metro-messagebox--in {
+  animation-name: metro-messagebox-swivel-in;
+  animation-duration: var(--wp-duration-slow);
+  animation-timing-function: cubic-bezier(0, 0, 0, 1); /* ease-out */
+  transform-origin: 50% 50%;
+}
+
+.metro-messagebox--swivel.metro-messagebox--out {
+  animation-name: metro-messagebox-swivel-out;
+  animation-duration: 500ms;
+  animation-timing-function: cubic-bezier(1, 0, 1, 1); /* ease-in */
+  transform-origin: 50% 50%;
+}
+
+/* ---- Keyframes ---- */
+@keyframes metro-messagebox-overlay-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-@keyframes metro-rise {
-  from { transform: translateY(16px); opacity: 0; }
+@keyframes metro-messagebox-overlay-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes metro-messagebox-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes metro-messagebox-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes metro-messagebox-slide-in {
+  from { transform: translateY(40px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes metro-messagebox-slide-out {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(40px); opacity: 0; }
+}
+
+/* Swivel — true 3D cube rotation around the horizontal axis (rotateX),
+   origin center. Matches the Tile flip animation (rotateX 80° -> 0°).
+   Both IN and OUT rotate counter-clockwise (back -> surface -> back). */
+@keyframes metro-messagebox-swivel-in {
+  0% {
+    transform: perspective(1000px) rotateX(80deg);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1000px) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes metro-messagebox-swivel-out {
+  0% {
+    transform: perspective(1000px) rotateX(0deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateX(-80deg);
+  }
 }

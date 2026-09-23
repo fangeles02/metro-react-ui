@@ -57,7 +57,7 @@ test('CustomMessageBox: opens on button click', async ({ page }) => {
   await expect(page.locator('.metro-messagebox')).toHaveCount(0);
   await page.locator('.metro-button', { hasText: 'Show message box' }).click();
   await expect(page.locator('.metro-messagebox')).toBeVisible();
-  await expect(page.locator('.metro-messagebox__title')).toHaveText('Confirm');
+  await expect(page.locator('.metro-messagebox__title')).toHaveText('New contact');
 });
 
 test('ContextMenu: opens on right-click', async ({ page }) => {
