@@ -33,6 +33,18 @@ export type MessageBoxField =
       hint?: string;
       defaultValue?: string;
       required?: boolean;
+      /** Optional inline style applied to the field wrapper (e.g. to override the default full width). */
+      style?: CSSProperties;
+    }
+  | {
+      type: 'password';
+      name: string;
+      label?: ReactNode;
+      hint?: string;
+      defaultValue?: string;
+      required?: boolean;
+      /** Optional inline style applied to the field wrapper (e.g. to override the default full width). */
+      style?: CSSProperties;
     }
   | {
       type: 'select';
@@ -40,6 +52,8 @@ export type MessageBoxField =
       label?: ReactNode;
       options: MessageBoxOption[];
       defaultValue?: unknown;
+      /** Optional inline style applied to the field wrapper (e.g. to override the default full width). */
+      style?: CSSProperties;
     }
   | {
       type: 'multiselect';
@@ -47,12 +61,16 @@ export type MessageBoxField =
       label?: ReactNode;
       options: MessageBoxOption[];
       defaultValue?: unknown[];
+      /** Optional inline style applied to the field wrapper (e.g. to override the default full width). */
+      style?: CSSProperties;
     }
   | {
       type: 'toggle';
       name: string;
       label?: ReactNode;
       defaultValue?: boolean;
+      /** Optional inline style applied to the field wrapper (e.g. to override the default full width). */
+      style?: CSSProperties;
     };
 
 export type MessageBoxVariant = 'default' | 'accent' | 'accentedButton';
@@ -151,7 +169,7 @@ export function CustomMessageBox({
   const [values, setValues] = useState<Record<string, unknown>>({});
 
   const effectiveTransition: MessageBoxTransition =
-    transition ?? (isMobile ? 'swivel' : 'fade');
+    isMobile ? (transition ?? 'swivel') : 'fade';
 
   // When `open` transitions false -> true, reset the closing state.
   useEffect(() => {
@@ -202,7 +220,7 @@ export function CustomMessageBox({
     setClosing(true);
     // Unmount after the out animation finishes. Must be >= the longest out
     // animation duration (swivel out = 500ms).
-    timerRef.current = window.setTimeout(finishClose, 550);
+    timerRef.current = window.setTimeout(finishClose, 200);
   };
 
   const handleButtonPressed = (value: unknown) => {
@@ -247,7 +265,7 @@ export function CustomMessageBox({
         {fields != null && fields.length > 0 && (
           <div className="metro-messagebox__fields">
             {fields.map((field) => (
-              <div className="metro-messagebox__field" key={field.name}>
+              <div className="metro-messagebox__field" key={field.name} style={field.style}>
                 {renderField(field, values, setFieldValue)}
               </div>
             ))}
@@ -281,6 +299,17 @@ function renderField(
     case 'text':
       return (
         <PhoneTextBox
+          header={field.label}
+          hint={field.hint}
+          required={field.required}
+          value={(values[field.name] as string | undefined) ?? ''}
+          onValueChange={(v) => setValue(field.name, v)}
+        />
+      );
+    case 'password':
+      return (
+        <PhoneTextBox
+          type="password"
           header={field.label}
           hint={field.hint}
           required={field.required}

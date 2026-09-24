@@ -9,6 +9,9 @@ import { CodeBlock } from './CodeBlock';
 
 export function CustomMessageBoxDemo() {
   const [open, setOpen] = useState(false);
+  const [simpleMessageOpen, setSimpleMessageOpen] = useState(false);
+  const [passwordOpen, setPasswordOpen] = useState(false);
+  const [passwordValue, setPasswordValue] = useState<string>('');
   const [result, setResult] = useState<string | null>(null);
   const [variant, setVariant] = useState<MessageBoxVariant>('default');
   const [transition, setTransition] = useState<MessageBoxTransition | undefined>(undefined);
@@ -16,7 +19,7 @@ export function CustomMessageBoxDemo() {
   return (
     <>
       <div className="showcase__demo">
-        <span className="showcase__demo-label">Modal dialog</span>
+        <span className="showcase__demo-label">Modal dialog with fields</span>
         <div className="showcase__demo-row">
           <Button onClick={() => setOpen(true)}>Show message box</Button>
         </div>
@@ -49,6 +52,90 @@ export function CustomMessageBoxDemo() {
         </div>
         {result && <span>Result: {result}</span>}
       </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">Simple confirmation</span>
+        <div className="showcase__demo-row">
+          <Button onClick={() => setSimpleMessageOpen(true)}>Show confirmation</Button>
+        </div>
+      </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">Password input</span>
+        <div className="showcase__demo-row">
+          <Button onClick={() => setPasswordOpen(true)}>Show password box</Button>
+        </div>
+        {passwordValue && <span>Password: {passwordValue}</span>}
+      </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">CustomMessageBox properties</span>
+        <table className="showcase__specs">
+          <thead>
+            <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>open</code></td><td><code>boolean</code></td><td>—</td><td>Yes</td></tr>
+            <tr><td><code>title</code></td><td><code>ReactNode</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>message</code></td><td><code>ReactNode</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>children</code></td><td><code>ReactNode</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>fields</code></td><td><code>MessageBoxField[]</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>buttons</code></td><td><code>CustomMessageBoxButton[]</code></td><td><code>[{'{ label: "ok" }'}]</code></td><td>No</td></tr>
+            <tr><td><code>variant</code></td><td><code>'default' | 'accent' | 'accentedButton'</code></td><td><code>'default'</code></td><td>No</td></tr>
+            <tr><td><code>breakpoint</code></td><td><code>number</code></td><td><code>768</code></td><td>No</td></tr>
+            <tr><td><code>transition</code></td><td><code>'swivel' | 'slide' | 'fade'</code></td><td><code>'auto'</code></td><td>No</td></tr>
+            <tr><td><code>onButtonPressed</code></td><td><code>{'(value, values) => void'}</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>onDismiss</code></td><td><code>{'() => void'}</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>accent</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">variant values</span>
+        <table className="showcase__specs">
+          <thead>
+            <tr><th>Value</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>default</code></td><td>Chrome background with default buttons.</td></tr>
+            <tr><td><code>accent</code></td><td>Accent background with accent-light buttons.</td></tr>
+            <tr><td><code>accentedButton</code></td><td>Chrome background with accent buttons.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">transition values</span>
+        <table className="showcase__specs">
+          <thead>
+            <tr><th>Value</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>auto</code></td><td>Swivel on mobile, fade on wide screens.</td></tr>
+            <tr><td><code>swivel</code></td><td>Rotates in/out (WP8.1 style).</td></tr>
+            <tr><td><code>slide</code></td><td>Slides vertically with easing.</td></tr>
+            <tr><td><code>fade</code></td><td>Cross-fades in/out.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">field types</span>
+        <table className="showcase__specs">
+          <thead>
+            <tr><th>Type</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>text</code></td><td>Single-line text input (PhoneTextBox).</td></tr>
+            <tr><td><code>password</code></td><td>Masked text input.</td></tr>
+            <tr><td><code>select</code></td><td>Single-select dropdown (ListPicker).</td></tr>
+            <tr><td><code>multiselect</code></td><td>Multi-select list (MultiselectList).</td></tr>
+            <tr><td><code>toggle</code></td><td>On/off switch (ToggleSwitch).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <CustomMessageBox
         open={open}
         title="New contact"
@@ -62,6 +149,7 @@ export function CustomMessageBoxDemo() {
             label: 'Name',
             hint: 'Enter full name',
             defaultValue: '',
+            style: { width: '60%' },
           },
           {
             type: 'select',
@@ -102,6 +190,44 @@ export function CustomMessageBoxDemo() {
         }}
         onDismiss={() => setOpen(false)}
       />
+
+      <CustomMessageBox 
+        open={simpleMessageOpen}
+        title="Confirmation"
+        message="The quick brown fox jumps over the lazy dog"
+        buttons={[{ label: 'Ok', value: 'ok' }]}
+        variant="accent"
+        transition="swivel"
+        onButtonPressed={() => {
+          setSimpleMessageOpen(false);
+        }}
+      />
+
+      <CustomMessageBox
+        open={passwordOpen}
+        title="Enter password"
+        message="Password is required to gain access to this restricted content"
+        fields={[
+          {
+            type: 'password',
+            name: 'password',
+            label: 'Password',
+            hint: 'Enter password',
+            defaultValue: '',
+            style: { maxWidth: 500 },
+          },
+        ]}
+        buttons={[
+          { label: 'cancel', value: 'cancel' },
+          { label: 'ok', value: 'ok' },
+        ]}
+        onButtonPressed={(_v, values) => {
+          setPasswordValue(String(values.password ?? ''));
+          setPasswordOpen(false);
+        }}
+        onDismiss={() => setPasswordOpen(false)}
+      />
+
       <CodeBlock
         code={`import { CustomMessageBox } from '@metro-react-ui/core';
 

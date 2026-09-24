@@ -50,8 +50,21 @@
   line-height: 1.1;
 }
 
+/* Mobile: smaller, tighter title */
+.metro-messagebox--mobile .metro-messagebox__title {
+  padding: 25px 24px 15px;
+  font-size: var(--wp-font-size-extra-large);
+  font-weight: var(--wp-font-weight-semibold);
+}
+
+/* Wide: larger, more spacious title */
+.metro-messagebox--wide .metro-messagebox__title {
+  padding: 28px 24px 0;
+  font-size: var(--wp-font-size-extra-large);
+}
+
 .metro-messagebox__message {
-  padding: 11px 24px 0;
+  padding: 11px 24px 15px;
   font-size: var(--wp-font-size-medium);
   font-family: var(--wp-font-family);
   font-weight: var(--wp-font-weight-semilight);
@@ -69,6 +82,16 @@
   gap: 16px;
 }
 
+/* Each field fills the horizontal space by default. */
+.metro-messagebox__field {
+  width: 100%;
+}
+
+/* Child controls fill the field width by default. */
+.metro-messagebox__field > * {
+  width: 100%;
+}
+
 .metro-messagebox__content {
   padding: 0 12px;
 }
@@ -84,7 +107,7 @@
 
 .metro-messagebox__button {
   /* Layout only — visual styling comes from .metro-button--* */
-  margin: 0 8px;
+  margin: 0 2px;
 }
 
 .metro-messagebox__button:last-child {
@@ -103,19 +126,33 @@
 }
 
 .metro-messagebox--mobile .metro-messagebox__buttons {
-  justify-content: flex-start;
-  padding: 24px 24px 24px 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 24px;
+}
+
+.metro-messagebox--wide .metro-messagebox__buttons {
+  gap: 12px;
 }
 
 .metro-messagebox--mobile .metro-messagebox__button {
-  padding: 16px 24px;
+  padding: 8px 24px;
+  margin: 0;
 }
 
 /* Wide (Win8): centered vertically, full left/right width, capped width */
 .metro-messagebox--wide {
-  max-width: 480px;
-  margin: 24px;
+  width: 100%;
+  margin: 0;
+  padding-left: 20%;
+  padding-right: 20%;
   align-self: center;
+}
+
+/* Wide: default metro button style (taller, standard padding) */
+.metro-messagebox--wide .metro-messagebox__button {
+  padding: 10px 30px;
 }
 
 /* =====================================================================
@@ -151,15 +188,15 @@
 /* ---- Swivel (mobile default): origin center, axis vertical (rotateX) ---- */
 .metro-messagebox--swivel.metro-messagebox--in {
   animation-name: metro-messagebox-swivel-in;
-  animation-duration: var(--wp-duration-slow);
+  animation-duration: var(--wp-duration-normal);
   animation-timing-function: cubic-bezier(0, 0, 0, 1); /* ease-out */
   transform-origin: 50% 50%;
 }
 
 .metro-messagebox--swivel.metro-messagebox--out {
   animation-name: metro-messagebox-swivel-out;
-  animation-duration: 500ms;
-  animation-timing-function: cubic-bezier(1, 0, 1, 1); /* ease-in */
+  animation-duration: var(--wp-duration-fast);
+  animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); /* ease-in */
   transform-origin: 50% 50%;
 }
 
@@ -216,6 +253,6 @@
     transform: perspective(1000px) rotateX(0deg);
   }
   100% {
-    transform: perspective(1000px) rotateX(-80deg);
+    transform: perspective(1000px) rotateX(-90deg);
   }
 }
