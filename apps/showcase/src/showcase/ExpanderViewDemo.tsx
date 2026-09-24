@@ -16,6 +16,7 @@ export function ExpanderViewDemo() {
       </ExpanderView>
       <div className="showcase__demo">
         <span className="showcase__demo-label">ExpanderView properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -29,6 +30,7 @@ export function ExpanderViewDemo() {
             <tr><td><code>accent</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
       <CodeBlock
         code={`import { ExpanderView } from '@metro-react-ui/core';

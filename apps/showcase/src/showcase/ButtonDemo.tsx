@@ -34,6 +34,7 @@ export function ButtonDemo() {
       </div>
       <div className="showcase__demo">
         <span className="showcase__demo-label">Button properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -46,10 +47,12 @@ export function ButtonDemo() {
             <tr><td><code>className</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">variant values</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Value</th><th>Description</th></tr>
@@ -60,6 +63,7 @@ export function ButtonDemo() {
             <tr><td><code>accent</code></td><td>Uses the accent color as the background with a high-contrast foreground.</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <CodeBlock

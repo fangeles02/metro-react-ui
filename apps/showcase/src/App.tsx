@@ -92,7 +92,7 @@ function Home({
             target="_blank"
             rel="noopener noreferrer"
           >
-            npm package
+            npm package ({__PACKAGE_VERSION__})
           </a>
           <span className="showcase__hero-badge">Built: {built}</span>
         </div>

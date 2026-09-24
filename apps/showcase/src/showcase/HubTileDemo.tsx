@@ -18,6 +18,7 @@ export function HubTileDemo() {
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">HubTile properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -33,10 +34,12 @@ export function HubTileDemo() {
             <tr><td><code>onClick</code></td><td><code>{'() => void'}</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">animation values</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Value</th><th>Description</th></tr>
@@ -47,6 +50,7 @@ export function HubTileDemo() {
             <tr><td><code>bounceFlip</code></td><td>When <code>true</code>, flip-mode transitions use a springy WP8-style bounce (single overshoot) instead of a plain flip.</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <CodeBlock

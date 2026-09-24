@@ -21,6 +21,7 @@ export function ContextMenuDemo() {
       {action && <span>Action: {action}</span>}
       <div className="showcase__demo">
         <span className="showcase__demo-label">ContextMenu properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -33,10 +34,12 @@ export function ContextMenuDemo() {
             <tr><td><code>placement</code></td><td><code>'pointer' | 'top' | 'bottom'</code></td><td><code>'pointer'</code></td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">trigger / placement values</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Value</th><th>Description</th></tr>
@@ -49,6 +52,7 @@ export function ContextMenuDemo() {
             <tr><td><code>placement="bottom"</code></td><td>Menu opens downward, centered horizontally on the host.</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <CodeBlock

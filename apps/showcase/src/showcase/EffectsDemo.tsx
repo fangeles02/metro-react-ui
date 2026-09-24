@@ -51,6 +51,7 @@ export function EffectsDemo() {
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">TiltEffect properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -62,10 +63,12 @@ export function EffectsDemo() {
             <tr><td><code>className</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">SlideInEffect properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -78,6 +81,7 @@ export function EffectsDemo() {
             <tr><td><code>className</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
     </>
   );

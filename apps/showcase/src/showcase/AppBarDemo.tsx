@@ -221,6 +221,7 @@ export function AppBarDemo() {
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">AppBar properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -239,10 +240,12 @@ export function AppBarDemo() {
             <tr><td><code>secondaryMenu</code></td><td><code>ContextMenuItem[]</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">AppBarButton properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -254,6 +257,7 @@ export function AppBarDemo() {
             <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
     </>
   );

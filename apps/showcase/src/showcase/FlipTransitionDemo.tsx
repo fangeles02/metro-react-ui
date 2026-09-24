@@ -182,6 +182,7 @@ export function FlipTransitionDemo() {
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">FlipTransition properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -196,10 +197,12 @@ export function FlipTransitionDemo() {
             <tr><td><code>mode</code></td><td><code>'flip' | 'turnstile' | 'swivel'</code></td><td><code>'flip'</code></td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">mode values</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Value</th><th>Description</th></tr>
@@ -210,6 +213,7 @@ export function FlipTransitionDemo() {
             <tr><td><code>swivel</code></td><td>True 3D cube rotation around the vertical axis (like PowerPoint "Cube").</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
     </>
   );

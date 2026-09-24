@@ -70,6 +70,7 @@ export function TileDemo() {
 
             <div className="showcase__demo">
                 <span className="showcase__demo-label">Tile properties</span>
+                <div className="showcase__specs-scroll">
                 <table className="showcase__specs">
                     <thead>
                         <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -95,10 +96,12 @@ export function TileDemo() {
                         <tr><td><code>bounceFlip</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
                     </tbody>
                 </table>
+                </div>
             </div>
 
             <div className="showcase__demo">
                 <span className="showcase__demo-label">messageDisplayMode values</span>
+                <div className="showcase__specs-scroll">
                 <table className="showcase__specs">
                     <thead>
                         <tr><th>Value</th><th>Description</th></tr>
@@ -111,6 +114,7 @@ export function TileDemo() {
                         <tr><td><code>bounceFlip</code></td><td>When <code>true</code>, flips use a springy WP8-style bounce (single overshoot) instead of a plain flip. Applies to all flip modes.</td></tr>
                     </tbody>
                 </table>
+                </div>
             </div>
 
             <CodeBlock

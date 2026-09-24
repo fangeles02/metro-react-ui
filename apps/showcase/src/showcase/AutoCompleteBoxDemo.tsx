@@ -35,6 +35,7 @@ export function AutoCompleteBoxDemo() {
       </div>
       <div className="showcase__demo">
         <span className="showcase__demo-label">AutoCompleteBox properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -54,10 +55,12 @@ export function AutoCompleteBoxDemo() {
             <tr><td><code>aria-label</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">filterMode values</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Value</th><th>Description</th></tr>
@@ -69,6 +72,7 @@ export function AutoCompleteBoxDemo() {
             <tr><td><code>equals</code></td><td>Items whose text exactly equals the query.</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <CodeBlock

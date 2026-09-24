@@ -70,6 +70,7 @@ export function CustomMessageBoxDemo() {
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">CustomMessageBox properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -89,10 +90,12 @@ export function CustomMessageBoxDemo() {
             <tr><td><code>accent</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">variant values</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Value</th><th>Description</th></tr>
@@ -103,10 +106,12 @@ export function CustomMessageBoxDemo() {
             <tr><td><code>accentedButton</code></td><td>Chrome background with accent buttons.</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">transition values</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Value</th><th>Description</th></tr>
@@ -118,10 +123,12 @@ export function CustomMessageBoxDemo() {
             <tr><td><code>fade</code></td><td>Cross-fades in/out.</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">field types</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Type</th><th>Description</th></tr>
@@ -134,6 +141,7 @@ export function CustomMessageBoxDemo() {
             <tr><td><code>toggle</code></td><td>On/off switch (ToggleSwitch).</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <CustomMessageBox
@@ -214,7 +222,7 @@ export function CustomMessageBoxDemo() {
             label: 'Password',
             hint: 'Enter password',
             defaultValue: '',
-            style: { maxWidth: 500 },
+            style: { maxWidth: 900 },
           },
         ]}
         buttons={[

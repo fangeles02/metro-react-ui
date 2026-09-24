@@ -96,6 +96,9 @@
   font-weight: var(--wp-font-weight-light);
   line-height: 1.05;
   text-transform: lowercase;
+  /* Keep long titles (e.g. "CustomMessageBox") from widening the page on mobile */
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 /* Plain Metro list (matches MainPage.xaml hyperlink list) */
@@ -424,6 +427,10 @@
 }
 
 /* Component spec tables (properties / enum values) */
+/* Scroll wrapper keeps wide tables from expanding the page on mobile */
+.showcase__specs-scroll {
+  overflow-x: auto;
+}
 .showcase__specs {
   width: 100%;
   border-collapse: collapse;

@@ -20,7 +20,7 @@ const PAGES: [string, string][] = [
   ['AutoCompleteBox', '.metro-autocomplete'],
   ['ExpanderView', '.metro-expander'],
   // CustomMessageBox is hidden by default; handled in its own test below.
-  // ['CustomMessageBox (todo)', '.metro-messagebox'],
+  // ['CustomMessageBox', '.metro-messagebox'],
   ['ContextMenu', '.metro-contextmenu__host'],
   ['DateTimePickers (todo)', '.metro-datetime'],
   ['MultiselectList', '.metro-multiselect'],
@@ -51,7 +51,7 @@ test('Icons page renders (lazy-loaded)', async ({ page }) => {
 });
 
 test('CustomMessageBox: opens on button click', async ({ page }) => {
-  await gotoPage(page, 'CustomMessageBox (todo)');
+  await gotoPage(page, 'CustomMessageBox');
   await expectPageRendered(page);
   // Hidden by default.
   await expect(page.locator('.metro-messagebox')).toHaveCount(0);

@@ -14,6 +14,7 @@ export function WrapPanelDemo() {
       </WrapPanel>
       <div className="showcase__demo">
         <span className="showcase__demo-label">WrapPanel properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -26,6 +27,7 @@ export function WrapPanelDemo() {
             <tr><td><code>className</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
       <CodeBlock
         code={`import { WrapPanel } from '@metro-react-ui/core';

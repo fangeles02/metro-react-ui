@@ -95,6 +95,7 @@ export function PivotDemo() {
       />
       <div className="showcase__demo">
         <span className="showcase__demo-label">Pivot properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -108,10 +109,12 @@ export function PivotDemo() {
             <tr><td><code>animateTabLabels</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="showcase__demo">
         <span className="showcase__demo-label">PivotItem properties</span>
+        <div className="showcase__specs-scroll">
         <table className="showcase__specs">
           <thead>
             <tr><th>Property</th><th>Type</th><th>Default</th><th>Required</th></tr>
@@ -121,6 +124,7 @@ export function PivotDemo() {
             <tr><td><code>children</code></td><td><code>ReactNode</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );
