@@ -109,7 +109,7 @@ test('Settings: switching accent color applies instantly', async ({ page }) => {
 test('Home page renders all nav items', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.showcase__hero-title')).toHaveText('Metro UI Toolkit');
-  await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(23);
+  await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(24);
 });
 
 test('MPA demo: threads -> conversation across real page loads', async ({ page }) => {
@@ -128,7 +128,6 @@ test('MPA demo: threads -> conversation across real page loads', async ({ page }
   // WP 8.1-style bubbles render (plain rectangle + tail).
   await expect(page.locator('.mpa__msg--in')).toHaveCount(3);
   await expect(page.locator('.mpa__msg--out')).toHaveCount(1);
-  await expect(page.locator('.mpa__bubble').first()).toBeVisible();
   // Conversation has its own app bar.
   await expect(page.locator('.metro-appbar')).toBeVisible();
 

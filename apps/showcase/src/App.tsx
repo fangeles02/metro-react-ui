@@ -119,6 +119,38 @@ function Home({
         ))}
       </div>
 
+      {/* Changelog — recent component updates */}
+      <div className="showcase__changelog">
+        <div className="showcase__changelog-title">Changelog</div>
+
+        <div className="showcase__changelog-entry">
+          <div className="showcase__changelog-head">
+            <span className="showcase__changelog-component">CustomMessageBox</span>
+            <span className="showcase__changelog-date">v{__PACKAGE_VERSION__}</span>
+          </div>
+          <ul className="showcase__changelog-list">
+            <li>Declarative input fields — text, password, select, multiselect, and toggle.</li>
+            <li>Theming variants — <code>default</code>, <code>accent</code>, and <code>accentedButton</code>.</li>
+            <li>Responsive layout — top-anchored full-bleed on mobile, centered on wide screens.</li>
+            <li>In/out transitions — <code>swivel</code>, <code>slide</code>, and <code>fade</code>.</li>
+            <li>Field values collected and passed to <code>onButtonPressed</code>.</li>
+          </ul>
+        </div>
+
+        <div className="showcase__changelog-entry">
+          <div className="showcase__changelog-head">
+            <span className="showcase__changelog-component">ChatBubble</span>
+            <span className="showcase__changelog-date">v{__PACKAGE_VERSION__}</span>
+          </div>
+          <ul className="showcase__changelog-list">
+            <li>Incoming / outgoing message types with authentic WP 8.1 styling.</li>
+            <li>Configurable tail — <code>side</code>, <code>default</code>, <code>none</code>, or custom position/side.</li>
+            <li>Custom background color with an auto-matching tail.</li>
+            <li>Optional embedded timestamp.</li>
+          </ul>
+        </div>
+      </div>
+
       <div className="showcase__buildinfo">Built: {built}</div>
     </div>
   );

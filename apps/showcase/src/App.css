@@ -140,6 +140,60 @@
   opacity: 0.6;
 }
 
+/* Changelog — recent component updates on the home page */
+.showcase__changelog {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--wp-chrome-low);
+}
+
+.showcase__changelog-title {
+  font-size: var(--wp-font-size-large);
+  font-weight: var(--wp-font-weight-light);
+  text-transform: lowercase;
+  margin-bottom: 16px;
+}
+
+.showcase__changelog-entry {
+  margin-bottom: 20px;
+}
+
+.showcase__changelog-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.showcase__changelog-component {
+  font-size: var(--wp-font-size-medium);
+  font-weight: var(--wp-font-weight-semibold);
+  color: var(--wp-accent);
+}
+
+.showcase__changelog-date {
+  font-size: var(--wp-font-size-small);
+  color: var(--wp-subtle);
+  opacity: 0.6;
+}
+
+.showcase__changelog-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: var(--wp-font-size-normal);
+  color: var(--wp-foreground);
+}
+
+.showcase__changelog-list li {
+  margin-bottom: 4px;
+}
+
+.showcase__changelog-list code {
+  font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+  font-size: var(--wp-font-size-small);
+  color: var(--wp-accent);
+}
+
 .showcase__page-content {
   display: flex;
   flex-direction: column;
