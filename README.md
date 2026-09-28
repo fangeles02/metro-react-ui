@@ -63,6 +63,7 @@ function App() {
 | `TiltEffect` | Effects | 3D tilt on press |
 | `SlideInEffect` | Effects | Content slides in when scrolled into view |
 | `FlipTransition` | Transitions | Book-page / turnstile / swivel page transition |
+| `ChatBubble` | Messaging | WP 8.1-style chat message bubble (incoming/outgoing, tail) |
 | `AppBar` | AppBar | WP8 app bar container (sticky bottom) |
 | `AppBarButton` | AppBar | Circular app bar icon button |
 

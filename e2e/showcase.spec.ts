@@ -109,5 +109,31 @@ test('Settings: switching accent color applies instantly', async ({ page }) => {
 test('Home page renders all nav items', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.showcase__hero-title')).toHaveText('Metro UI Toolkit');
-  await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(22);
+  await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(23);
+});
+
+test('MPA demo: threads -> conversation across real page loads', async ({ page }) => {
+  // Open the standalone threads page directly (a separate HTML document).
+  await page.goto('/mpa/threads.html');
+  await expect(page.locator('.mpa__pagetitle')).toHaveText('threads');
+  await expect(page.locator('.mpa__thread')).toHaveCount(4);
+  // Each page has its own app bar.
+  await expect(page.locator('.metro-appbar')).toBeVisible();
+
+  // Clicking a thread navigates to a NEW document (URL changes).
+  await page.locator('.mpa__thread', { hasText: 'Alex Rivera' }).click();
+  await page.waitForURL(/\/mpa\/conversation\.html\?thread=alex/);
+  await expect(page.locator('.mpa__pagetitle')).toHaveText('Alex Rivera');
+
+  // WP 8.1-style bubbles render (plain rectangle + tail).
+  await expect(page.locator('.mpa__msg--in')).toHaveCount(3);
+  await expect(page.locator('.mpa__msg--out')).toHaveCount(1);
+  await expect(page.locator('.mpa__bubble').first()).toBeVisible();
+  // Conversation has its own app bar.
+  await expect(page.locator('.metro-appbar')).toBeVisible();
+
+  // Back returns to the threads document.
+  await page.locator('.mpa__back').click();
+  await page.waitForURL(/\/mpa\/threads\.html$/);
+  await expect(page.locator('.mpa__pagetitle')).toHaveText('threads');
 });

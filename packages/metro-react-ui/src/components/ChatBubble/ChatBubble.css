@@ -1,0 +1,92 @@
+/* Metro-style chat message bubble — ported from the WP 8.1 messaging shape.
+   A plain rectangle (no corner radius) with a small tail pointing toward the
+   sender. The bubble background is set inline (accent for outgoing,
+   accent-light for incoming by default); the tail color is cascaded via the
+   `--metro-chatbubble-tail-color` custom property so it always matches. */
+
+.metro-chatbubble {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 100%;
+  padding: 10px 14px;
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  line-height: 1.35;
+  color: var(--wp-accent-foreground);
+  word-wrap: break-word;
+}
+
+/* The tail is a CSS triangle. Hidden by default; shown via the tail classes. */
+.metro-chatbubble__tail {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  display: none;
+}
+
+.metro-chatbubble__content {
+  display: block;
+}
+
+/* Timestamp embedded at the lower-right of the bubble. */
+.metro-chatbubble__timestamp {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--wp-font-size-small);
+  color: var(--wp-subtle);
+  text-align: right;
+  align-self: flex-end;
+}
+
+/* ---- Tail: side placement (tail="side") ---- */
+/* Left tail: sits on the left side, points left toward the sender (incoming). */
+.metro-chatbubble--tail-left .metro-chatbubble__tail {
+  left: -8px;
+  top: 12px;
+  border-right-color: var(--metro-chatbubble-tail-color);
+  border-left: 0;
+  display: block;
+}
+
+/* Right tail: sits on the right side, points right toward the sender (outgoing). */
+.metro-chatbubble--tail-right .metro-chatbubble__tail {
+  right: -8px;
+  top: 12px;
+  border-left-color: var(--metro-chatbubble-tail-color);
+  border-right: 0;
+  display: block;
+}
+
+/* ---- Tail: edge placement (tail="default") ---- */
+/* Upper edge: right triangle on the top, left-aligned (with a small inset
+   from the edge), pointing up. The 90° angle is at the lower-right (incoming). */
+.metro-chatbubble--tail-edge-upper .metro-chatbubble__tail {
+  top: -16px;
+  left: 8px;
+  border-bottom: 16px solid var(--metro-chatbubble-tail-color);
+  border-right: 16px solid transparent;
+  border-top: 0;
+  border-left: 0;
+  display: block;
+}
+
+/* Lower edge: right triangle on the bottom, right-aligned (with a small
+   inset from the edge), pointing down. The 90° angle is at the upper-left
+   (outgoing). */
+.metro-chatbubble--tail-edge-lower .metro-chatbubble__tail {
+  bottom: -16px;
+  right: 8px;
+  border-top: 16px solid var(--metro-chatbubble-tail-color);
+  border-left: 16px solid transparent;
+  border-bottom: 0;
+  border-right: 0;
+  display: block;
+}
+
+/* ---- No tail ---- */
+.metro-chatbubble--no-tail .metro-chatbubble__tail {
+  display: none;
+}

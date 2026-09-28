@@ -86,3 +86,13 @@ export type { SlideInEffectProps } from './components/Effects/SlideInEffect';
 
 export { FlipTransition } from './components/Transitions/FlipTransition';
 export type { FlipTransitionProps } from './components/Transitions/FlipTransition';
+
+// Messaging
+export { ChatBubble } from './components/ChatBubble/ChatBubble';
+export type {
+  ChatBubbleProps,
+  ChatBubbleType,
+  ChatBubbleTail,
+  ChatBubbleTailPosition,
+  ChatBubbleTailSide,
+} from './components/ChatBubble/ChatBubble';
