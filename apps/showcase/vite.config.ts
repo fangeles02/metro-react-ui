@@ -20,4 +20,14 @@ export default defineConfig({
   server: {
     port: 5173,
   },
+  build: {
+    rollupOptions: {
+      // Multi-page build: the main SPA + the standalone MPA messaging pages.
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        threads: resolve(__dirname, 'mpa/threads.html'),
+        conversation: resolve(__dirname, 'mpa/conversation.html'),
+      },
+    },
+  },
 });

@@ -19,6 +19,8 @@ import { EffectsDemo } from './EffectsDemo';
 import { AppBarDemo } from './AppBarDemo';
 import { SpaDemo } from './SpaDemo';
 import { FlipTransitionDemo } from './FlipTransitionDemo';
+import { ChatBubbleDemo } from './ChatBubbleDemo';
+import { MpaDemo } from './MpaDemo';
 import { SettingsPage } from './SettingsPage';
 
 // The icon browser imports every Fluent icon (thousands). Lazy-load it so it
@@ -56,7 +58,9 @@ export const showcasePages: ShowcasePage[] = [
   { id: 'appbar', name: 'AppBar', description: 'Circular app bar buttons', icon: '◯', render: () => <AppBarDemo /> },
   { id: 'icons', name: 'Icons', description: 'Fluent UI System Icons gallery', icon: '✦', render: () => <Suspense fallback={<IconDemoFallback />}><IconDemo /></Suspense> },
   { id: 'transition', name: 'PageTransition', description: 'Flip page transition', icon: '⇄', render: () => <FlipTransitionDemo /> },
+  { id: 'chatbubble', name: 'ChatBubble', description: 'WP 8.1 chat message bubble', icon: '💬', render: () => <ChatBubbleDemo /> },
   { id: 'spa', name: 'SPA Demo', description: 'App bar fixed to bottom', icon: '◧', render: () => <SpaDemo /> },
+  { id: 'mpa', name: 'MPA Demo', description: 'Multi-page messaging sample', icon: '⇄', render: () => <MpaDemo /> },
   { id: 'settings', name: 'Settings', description: 'Theme: light/dark + accent color', icon: '⚙', render: () => <SettingsPage /> },
 ];
 

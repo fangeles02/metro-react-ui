@@ -1,0 +1,169 @@
+/* =====================================================================
+   MPA Demo — shared styles for the standalone messaging pages.
+   Plain rectangle message bubbles (no corner radius) with a small tail,
+   matching the Windows Phone 8.1 messaging shape.
+   ===================================================================== */
+
+.mpa {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--wp-font-family);
+  color: var(--wp-foreground);
+  background: var(--wp-background);
+}
+
+/* WP8 page header: small all-caps app title above a huge light page title */
+.mpa__header {
+  padding: 24px 24px 12px;
+}
+
+.mpa__apptitle {
+  font-size: var(--wp-font-size-normal);
+  font-weight: var(--wp-font-weight-normal);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mpa__pagetitle {
+  margin-top: -7px;
+  font-size: var(--wp-font-size-extra-extra-large);
+  font-weight: var(--wp-font-weight-light);
+  line-height: 1.05;
+  text-transform: lowercase;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* ---- Threads list (page 1) ---- */
+.mpa__threads {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 24px 24px;
+}
+
+.mpa__thread {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 0;
+  border: none;
+  border-bottom: 1px solid var(--wp-chrome-low);
+  background: transparent;
+  color: var(--wp-foreground);
+  text-align: left;
+  cursor: pointer;
+}
+
+.mpa__thread:active {
+  background: var(--wp-foreground-20);
+}
+
+.mpa__thread-avatar {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--wp-font-size-medium-large);
+  font-weight: var(--wp-font-weight-semibold);
+}
+
+.mpa__thread-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mpa__thread-name {
+  font-size: var(--wp-font-size-medium-large);
+  font-weight: var(--wp-font-weight-normal);
+}
+
+.mpa__thread-preview {
+  font-size: var(--wp-font-size-normal);
+  color: var(--wp-subtle);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mpa__thread-meta {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.mpa__thread-time {
+  font-size: var(--wp-font-size-small);
+  color: var(--wp-subtle);
+}
+
+.mpa__thread-unread {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 11px;
+  background: var(--wp-accent);
+  color: var(--wp-accent-foreground);
+  font-size: var(--wp-font-size-small);
+  font-weight: var(--wp-font-weight-semibold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- Conversation (page 2) ---- */
+.mpa__conversation {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  /* The `default` tail extends 16px beyond the bubble (top for incoming,
+     bottom for outgoing). Use a gap large enough that tails don't overlap
+     the adjacent bubble. */
+  gap: 24px;
+}
+
+/* A single message row. The ChatBubble component renders the bubble + tail;
+   this wrapper only handles alignment (incoming left, outgoing right). */
+.mpa__msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 78%;
+}
+
+.mpa__msg--in {
+  align-self: flex-start;
+}
+
+.mpa__msg--out {
+  align-self: flex-end;
+}
+
+/* ---- Back link (conversation -> threads) ---- */
+.mpa__back {
+  align-self: flex-start;
+  margin: 4px 24px 0;
+  border: none;
+  background: transparent;
+  color: var(--wp-accent);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.mpa__back:hover {
+  text-decoration: underline;
+}

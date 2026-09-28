@@ -6,11 +6,18 @@
  *
  * Bump CACHE_VERSION whenever you change the app so clients re-fetch assets.
  */
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE_NAME = `metro-ui-showcase-${CACHE_VERSION}`;
 
 // The app shell + core assets to precache on install.
-const PRECACHE = ['/', '/index.html', '/manifest.webmanifest'];
+const PRECACHE = [
+  '/',
+  '/index.html',
+  '/manifest.webmanifest',
+  // Standalone MPA messaging pages (threads -> conversation).
+  '/mpa/threads.html',
+  '/mpa/conversation.html',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

@@ -1,5 +1,6 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
 import type { ThemeMode } from '@metro-react-ui/core';
+import { readStoredTheme, writeStoredTheme } from '../mpa/theme';
 
 /**
  * The classic Windows 8 / Windows Phone 8 accent palette.
@@ -38,18 +39,31 @@ const ThemeSettingsContext = createContext<ThemeSettings>({
 /**
  * Holds the user's theme preferences (accent color + light/dark mode).
  * Changes apply instantly because ThemeProvider re-themes via CSS variables.
+ * Preferences are persisted to localStorage (shared with the MPA pages) so
+ * the theme carries across documents and visits.
  */
 export function ThemeSettingsProvider({ children }: { children: ReactNode }) {
-  const [accent, setAccent] = useState(DEFAULT_ACCENT);
-  const [mode, setMode] = useState<ThemeMode>(DEFAULT_MODE);
+  // Initialize from localStorage if present, else the WP defaults.
+  const [accent, setAccent] = useState(() => readStoredTheme()?.accent ?? DEFAULT_ACCENT);
+  const [mode, setMode] = useState<ThemeMode>(() => readStoredTheme()?.mode ?? DEFAULT_MODE);
 
   const value = useMemo<ThemeSettings>(
     () => ({
       accent,
       mode,
-      setAccent,
-      setMode,
-      toggleMode: () => setMode((m) => (m === 'dark' ? 'light' : 'dark')),
+      setAccent: (next) => {
+        setAccent(next);
+        writeStoredTheme({ accent: next, mode });
+      },
+      setMode: (next) => {
+        setMode(next);
+        writeStoredTheme({ accent, mode: next });
+      },
+      toggleMode: () => {
+        const next = mode === 'dark' ? 'light' : 'dark';
+        setMode(next);
+        writeStoredTheme({ accent, mode: next });
+      },
     }),
     [accent, mode],
   );
