@@ -67,7 +67,7 @@ export type { LongListMultiSelectorProps, LongListGroup } from './components/Lon
 
 // Animated / effects
 export { HubTile } from './components/HubTile/HubTile';
-export type { HubTileProps } from './components/HubTile/HubTile';
+export type { HubTileProps, HubTileSize } from './components/HubTile/HubTile';
 
 // WP 8.1 start-screen tiles
 export { Tile } from './components/Tile/Tile';

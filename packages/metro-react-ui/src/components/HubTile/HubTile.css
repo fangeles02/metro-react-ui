@@ -1,7 +1,5 @@
 .metro-hubtile {
   position: relative;
-  width: 173px;
-  height: 173px;
   padding: 0;
   border: none;
   background: var(--wp-accent);
@@ -10,10 +8,19 @@
   cursor: pointer;
   perspective: 600px;
   transform-style: preserve-3d;
-  /* Clip the slide-mode back face (translated down 100%) so it doesn't show
-     below the tile when not flipped. */
-  overflow: hidden;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- Sizing ----
+   Same grid spans as the Tile component (base cell 87px). */
+.metro-hubtile--medium { width: 182px; height: 182px; grid-column: span 2; grid-row: span 2; }
+.metro-hubtile--wide { width: 372px; height: 182px; grid-column: span 4; grid-row: span 2; }
+.metro-hubtile--large { width: 372px; height: 372px; grid-column: span 4; grid-row: span 4; }
+
+/* Inside a TileContainer, tiles fill their grid cell (spanning cols/rows). */
+.metro-tilecontainer .metro-hubtile {
+  width: 100%;
+  height: 100%;
 }
 
 .metro-hubtile__inner {
@@ -22,13 +29,13 @@
   transform-style: preserve-3d;
 }
 
-/* ---- Flip mode ---- */
+/* ---- Flip ---- */
 /* Whole-tile flip (origin center, axis vertical = rotateX), matching the
    Tile flip style — perspective + fade. The tile is re-mounted (via key) on
    every flip, so this animation re-runs each time — both to the back and
    back to the title. Gated on `data-flipping` so the tile is STATIC on
    initial mount (no animation until the first actual flip). */
-.metro-hubtile[data-animation='flip'][data-flipping='true'] {
+.metro-hubtile[data-flipping='true'] {
   animation: metro-hubtile-flip var(--wp-duration-slow) cubic-bezier(0.1, 0.9, 0.2, 1);
 }
 
@@ -51,7 +58,7 @@
    `bounceFlip` is set; the tile is re-mounted (via key) on every flip, so
    this animation re-runs each time. Gated on `data-flipping` so the tile is
    STATIC on initial mount. */
-.metro-hubtile[data-animation='flip'][data-bounce-flip='true'][data-flipping='true'] {
+.metro-hubtile[data-bounce-flip='true'][data-flipping='true'] {
   animation: metro-hubtile-flip-bounce var(--wp-duration-slow) cubic-bezier(0.1, 0.2, 0.1, 1.5);
 }
 
@@ -78,21 +85,8 @@
 /* Flipped state: rotate the inner 3D container so the back face shows. The
    whole-tile flip animation (above) provides the motion; the swap itself is
    instant. */
-.metro-hubtile[data-animation='flip'][data-flipped='true'] .metro-hubtile__inner {
+.metro-hubtile[data-flipped='true'] .metro-hubtile__inner {
   transform: rotateX(180deg);
-}
-
-/* ---- Slide mode ---- */
-/* The back face slides up over the front when flipped, and slides back down
-   when returning to the title face. The inner container stays put; only the
-   back face translates. */
-.metro-hubtile[data-animation='slide'] .metro-hubtile__back {
-  transform: translateY(100%);
-  transition: transform var(--wp-duration-slow) var(--wp-easing);
-}
-
-.metro-hubtile[data-animation='slide'][data-flipped='true'] .metro-hubtile__back {
-  transform: translateY(0);
 }
 
 .metro-hubtile__face {
@@ -102,7 +96,7 @@
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: flex-end;
   padding: 8px;
 }
 
@@ -113,10 +107,15 @@
 /* Back face uses the same accent as the front. */
 .metro-hubtile__back {
   background: var(--wp-accent);
+  transform: rotateX(180deg);
 }
 
-.metro-hubtile[data-animation='flip'] .metro-hubtile__back {
-  transform: rotateX(180deg);
+.metro-hubtile__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .metro-hubtile__title {
@@ -128,10 +127,31 @@
   margin: 0 0 6px 10px;
 }
 
+/* ---- Back face ---- */
+/* BackTitle header (upper-left) + Message body below it. */
 .metro-hubtile__back-title {
   font-size: var(--wp-font-size-normal);
   font-family: var(--wp-font-family);
   font-weight: var(--wp-font-weight-semibold);
   text-align: left;
   margin: 0 0 6px 10px;
+}
+
+.metro-hubtile__message {
+  font-size: var(--wp-font-size-small);
+  font-family: var(--wp-font-family);
+  font-weight: var(--wp-font-weight-normal);
+  text-align: left;
+  margin: 0 0 6px 10px;
+  white-space: pre-line;
+}
+
+/* Custom back content fills the whole back face. */
+.metro-hubtile__back-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 8px;
 }

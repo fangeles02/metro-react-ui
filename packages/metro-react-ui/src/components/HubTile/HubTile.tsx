@@ -1,23 +1,31 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent, type ReactNode } from 'react';
 import { accentForeground } from '../../theme/ThemeProvider';
 import './HubTile.css';
 
-/** How the back face is revealed. 'flip' rotates the whole tile; 'slide' slides the back face up/down. */
-export type HubTileAnimation = 'flip' | 'slide';
+/** HubTile sizes. 'medium'=2x2 (default), 'wide'=4x2, 'large'=4x4. */
+export type HubTileSize = 'medium' | 'wide' | 'large';
 
 export interface HubTileProps {
-  /** Text shown on the front (title) face, upper-left. */
-  titleFace?: string;
-  /** Text shown on the back face, upper-left. When set, the tile animates between faces. */
-  backTitleFace?: string;
+  /** Tile size. 'medium'=2x2 (default), 'wide'=4x2, 'large'=4x4. */
+  size?: HubTileSize;
+  /** Background image source shown on the front face. */
+  source?: string;
+  /** Text shown at the bottom-left of the front face. */
+  title?: string;
+  /** Detailed body text shown on the back face (below `backTitle`). */
+  message?: string;
+  /** Secondary header text shown on the back face (above `message`). */
+  backTitle?: string;
+  /**
+   * Custom content shown on the back face. When set, it replaces the default
+   * `backTitle` + `message` text layout.
+   */
+  backContent?: ReactNode;
   /** Accent color override. */
   accent?: string;
-  /** How the back face is revealed. Defaults to 'flip'. */
-  animation?: HubTileAnimation;
   /**
    * When true, flip-mode transitions use a springy WP8-style bounce (a single
-   * overshoot past the resting angle before settling). Only applies to
-   * `animation="flip"`. Defaults to false.
+   * overshoot past the resting angle before settling). Defaults to false.
    */
   bounceFlip?: boolean;
   /** How long each face is displayed, in ms. Defaults to 5000. */
@@ -38,17 +46,20 @@ export interface HubTileProps {
 }
 
 /**
- * Metro-style hub tile with two text faces. The front face shows `titleFace`
- * and the back face shows `backTitleFace`, both pinned to the upper-left.
- * When `backTitleFace` is set the tile cycles between faces using either a
- * whole-tile flip (`animation="flip"`, optionally with `bounceFlip`) or a
- * slide-up/down of the back face (`animation="slide"`).
+ * Metro-style hub tile, ported from the WP Toolkit `Microsoft.Phone.Controls.HubTile`.
+ * The front face shows a `source` image with a `title` at the bottom-left; the
+ * back face shows `backTitle` + `message` (or custom `backContent`). When back
+ * content is present the tile cycles between faces with a whole-tile flip
+ * (optionally with `bounceFlip`).
  */
 export function HubTile({
-  titleFace,
-  backTitleFace,
+  size = 'medium',
+  source,
+  title,
+  message,
+  backTitle,
+  backContent,
   accent,
-  animation = 'flip',
   bounceFlip = false,
   Duration = 5000,
   initialDelay,
@@ -94,8 +105,8 @@ export function HubTile({
     [initialDelay],
   );
 
-  // Only animate when there is a back face to reveal.
-  const canAnimate = backTitleFace != null;
+  // Only animate when there is back content to reveal.
+  const canAnimate = backContent != null || backTitle != null || message != null;
 
   useEffect(() => {
     if (!canAnimate) return;
@@ -117,11 +128,10 @@ export function HubTile({
       key={flipCount}
       ref={tiltRef}
       type="button"
-      className="metro-hubtile"
+      className={`metro-hubtile metro-hubtile--${size}`}
       data-flipped={flipped}
       data-bounce-flip={bounceFlip}
       data-flipping={flipCount > 0}
-      data-animation={animation}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
@@ -139,10 +149,18 @@ export function HubTile({
     >
       <div className="metro-hubtile__inner">
         <div className="metro-hubtile__face metro-hubtile__front">
-          {titleFace != null && <div className="metro-hubtile__title">{titleFace}</div>}
+          {source != null && <img className="metro-hubtile__image" src={source} alt="" />}
+          {title != null && <div className="metro-hubtile__title">{title}</div>}
         </div>
         <div className="metro-hubtile__face metro-hubtile__back">
-          {backTitleFace != null && <div className="metro-hubtile__back-title">{backTitleFace}</div>}
+          {backContent != null ? (
+            <div className="metro-hubtile__back-content">{backContent}</div>
+          ) : (
+            <>
+              {backTitle != null && <div className="metro-hubtile__back-title">{backTitle}</div>}
+              {message != null && <div className="metro-hubtile__message">{message}</div>}
+            </>
+          )}
         </div>
       </div>
     </button>
