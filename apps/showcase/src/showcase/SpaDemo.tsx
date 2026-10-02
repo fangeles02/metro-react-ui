@@ -59,6 +59,7 @@ export function SpaAppBar() {
     <AppBar
       position="fixed"
       alignment="left"
+      toggleOnContextMenu
       secondaryMenu={[
         { label: 'Settings', onSelect: () => console.log('settings') },
         { label: 'Notifications', onSelect: () => console.log('notifications') },

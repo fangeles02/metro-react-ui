@@ -31,7 +31,9 @@ const PAGES: [string, string][] = [
   ['Effects', '.metro-tilt'],
   ['AppBar', '.metro-appbar'],
   ['PageTransition', '.metro-flip'],
-  ['SPA Demo', '.metro-appbar'],
+  // SPA Demo's app bar is hidden by default on wide screens (isOpen=false);
+  // assert the page content instead.
+  ['SPA Demo', '.appbar-demo-content'],
   ['Settings', '.metro-toggle'],
 ];
 
@@ -112,13 +114,39 @@ test('Home page renders all nav items', async ({ page }) => {
   await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(24);
 });
 
+test('AppBar: wide-screen show/hide toggles on right-click', async ({ page }) => {
+  await gotoPage(page, 'AppBar');
+  await expectPageRendered(page);
+  // The wide-screen show/hide demo bar (the one with `toggleOnContextMenu`)
+  // starts hidden (isOpen defaults false). Target it via its demo frame.
+  const frame = page.locator('.showcase__demo-frame', { hasText: 'right-click (or long-press' });
+  const bar = frame.locator('.metro-appbar');
+  await expect(bar).toHaveClass(/metro-appbar--hidden/);
+  await expect(bar).toHaveAttribute('aria-hidden', 'true');
+
+  // Right-click anywhere toggles the bar open (slides up).
+  await page.mouse.click(400, 300, { button: 'right' });
+  await expect(bar).not.toHaveClass(/metro-appbar--hidden/);
+  await expect(bar).toHaveAttribute('aria-hidden', 'false');
+
+  // Right-click again toggles it closed (slides down).
+  await page.mouse.click(400, 300, { button: 'right' });
+  await expect(bar).toHaveClass(/metro-appbar--hidden/);
+  await expect(bar).toHaveAttribute('aria-hidden', 'true');
+});
+
 test('MPA demo: threads -> conversation across real page loads', async ({ page }) => {
   // Open the standalone threads page directly (a separate HTML document).
   await page.goto('/mpa/threads.html');
   await expect(page.locator('.mpa__pagetitle')).toHaveText('threads');
   await expect(page.locator('.mpa__thread')).toHaveCount(4);
-  // Each page has its own app bar.
-  await expect(page.locator('.metro-appbar')).toBeVisible();
+  // Each page has its own app bar, hidden by default on wide screens.
+  const threadsBar = page.locator('.metro-appbar');
+  await expect(threadsBar).toHaveClass(/metro-appbar--hidden/);
+  // Right-click toggles it open.
+  await page.mouse.click(400, 300, { button: 'right' });
+  await expect(threadsBar).not.toHaveClass(/metro-appbar--hidden/);
+  await expect(threadsBar).toBeVisible();
 
   // Clicking a thread navigates to a NEW document (URL changes).
   await page.locator('.mpa__thread', { hasText: 'Alex Rivera' }).click();
@@ -128,8 +156,12 @@ test('MPA demo: threads -> conversation across real page loads', async ({ page }
   // WP 8.1-style bubbles render (plain rectangle + tail).
   await expect(page.locator('.mpa__msg--in')).toHaveCount(3);
   await expect(page.locator('.mpa__msg--out')).toHaveCount(1);
-  // Conversation has its own app bar.
-  await expect(page.locator('.metro-appbar')).toBeVisible();
+  // Conversation has its own app bar, hidden by default; toggle it open.
+  const convBar = page.locator('.metro-appbar');
+  await expect(convBar).toHaveClass(/metro-appbar--hidden/);
+  await page.mouse.click(400, 300, { button: 'right' });
+  await expect(convBar).not.toHaveClass(/metro-appbar--hidden/);
+  await expect(convBar).toBeVisible();
 
   // Back returns to the threads document.
   await page.locator('.mpa__back').click();

@@ -91,7 +91,7 @@ export function AppBarDemo() {
         <span className="showcase__demo-label">App bar (bottom, accented)</span>
         <div className="showcase__demo-frame">
           <div className="appbar-demo-content">scrollable content above the bar</div>
-          <AppBar alignment='left'>
+          <AppBar alignment='left' defaultOpen>
             <AppBarButton label="add" icon={<AddIcon />} />
             <AppBarButton label="done" icon={<CheckIcon />} />
             <AppBarButton label="cancel" icon={<CancelIcon />} />
@@ -105,21 +105,21 @@ export function AppBarDemo() {
         <div className="showcase__demo-row">
           <div className="showcase__demo-frame showcase__demo-frame--auto">
             <div className="appbar-demo-content">left</div>
-            <AppBar alignment="left">
+            <AppBar alignment="left" defaultOpen>
               <AppBarButton label="add" icon={<AddIcon />} />
               <AppBarButton label="done" icon={<CheckIcon />} />
             </AppBar>
           </div>
           <div className="showcase__demo-frame showcase__demo-frame--auto">
             <div className="appbar-demo-content">center</div>
-            <AppBar alignment="center">
+            <AppBar alignment="center" defaultOpen>
               <AppBarButton label="add" icon={<AddIcon />} />
               <AppBarButton label="done" icon={<CheckIcon />} />
             </AppBar>
           </div>
           <div className="showcase__demo-frame showcase__demo-frame--auto">
             <div className="appbar-demo-content">right</div>
-            <AppBar alignment="right">
+            <AppBar alignment="right" defaultOpen>
               <AppBarButton label="add" icon={<AddIcon />} />
               <AppBarButton label="done" icon={<CheckIcon />} />
             </AppBar>
@@ -132,7 +132,7 @@ export function AppBarDemo() {
         <div className="showcase__demo-row">
           <div className="showcase__demo-frame showcase__demo-frame--auto">
             <div className="appbar-demo-content">wide — labels always visible</div>
-            <AppBar alignment="left">
+            <AppBar alignment="left" defaultOpen>
               <AppBarButton label="add" icon={<AddIcon />} />
               <AppBarButton label="done" icon={<CheckIcon />} />
               <AppBarButton label="cancel" icon={<CancelIcon />} />
@@ -168,6 +168,20 @@ export function AppBarDemo() {
         </div>
       </div>
 
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">Wide-screen show/hide (right-click or long-press)</span>
+        <div className="showcase__demo-frame showcase__demo-frame--auto">
+          <div className="appbar-demo-content">
+            right-click (or long-press on touch) anywhere to toggle the bar
+          </div>
+          <AppBar alignment="left" toggleOnContextMenu>
+            <AppBarButton label="add" icon={<AddIcon />} />
+            <AppBarButton label="done" icon={<CheckIcon />} />
+            <AppBarButton label="cancel" icon={<CancelIcon />} />
+          </AppBar>
+        </div>
+      </div>
+
       <CodeBlock
         code={`import { AppBar, AppBarButton } from '@metro-react-ui/core';
 
@@ -193,6 +207,14 @@ export function AppBarDemo() {
     breakpoint (px) separates wide from mobile. defaultOpen controls the
     initial mobile label visibility. */}
 <AppBar breakpoint={768} defaultOpen={false}>
+  <AppBarButton label="add" icon={<AddIcon />} />
+  <AppBarButton label="done" icon={<CheckIcon />} />
+</AppBar>
+
+{/* Wide-screen show/hide: on wide screens the whole bar slides up/down based
+    on isOpen (default false = hidden). toggleOnContextMenu lets a right-click
+    (mouse) or long-press (touch) anywhere toggle it. */}
+<AppBar toggleOnContextMenu>
   <AppBarButton label="add" icon={<AddIcon />} />
   <AppBarButton label="done" icon={<CheckIcon />} />
 </AppBar>`}

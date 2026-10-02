@@ -125,6 +125,18 @@ function Home({
 
         <div className="showcase__changelog-entry">
           <div className="showcase__changelog-head">
+            <span className="showcase__changelog-component">AppBar</span>
+            <span className="showcase__changelog-date">v{__PACKAGE_VERSION__}</span>
+          </div>
+          <ul className="showcase__changelog-list">
+            <li>Wide-screen show/hide — <code>isOpen</code> now slides the whole bar up/down on wide screens (defaults to hidden).</li>
+            <li>Context-menu toggle — <code>toggleOnContextMenu</code> lets a right-click (mouse) or long-press (touch) anywhere toggle the bar.</li>
+            <li>Responsive — the bar is always visible on mobile, where <code>isOpen</code> toggles the button labels.</li>
+          </ul>
+        </div>
+
+        <div className="showcase__changelog-entry">
+          <div className="showcase__changelog-head">
             <span className="showcase__changelog-component">CustomMessageBox</span>
             <span className="showcase__changelog-date">v{__PACKAGE_VERSION__}</span>
           </div>
