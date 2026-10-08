@@ -18,20 +18,31 @@ export interface MetroTheme {
  * an accent-colored surface. Light accents resolve to `#000000`, dark accents
  * to `#ffffff`.
  *
- * Uses the same YIQ perceived-brightness heuristic that editor color pickers
- * (e.g. VS Code's `isDarker`/`isLighter`) use to choose black/white text.
+ * Uses the YIQ perceived-brightness heuristic that editor color pickers
+ * (e.g. VS Code's `isDarker`/`isLighter`) use to choose black/white text,
+ * with a threshold tuned for the Windows Phone 8 accent palette.
  */
 export function accentForeground(accent: string): string {
   return isLightAccent(accent) ? '#000000' : '#ffffff';
 }
 
-/** Whether `accent` is a light color (should use dark text on top of it). */
+/**
+ * Whether `accent` is a light color (should use dark text on top of it).
+ *
+ * The classic 24ways threshold (YIQ >= 128) misclassifies mid-tone WP8
+ * accents — Cyan `#1BA1E2` (128.3), Green `#60A917` (130.5), Orange
+ * `#FA6800` (135.8), Pink `#F47D02` (146.6) — as "light", giving them black
+ * text. WP8 accent surfaces always used white text, so the threshold is
+ * raised to 150: those mid-tones resolve to white, while the truly light
+ * colors (Lime `#A4CC00` 168.8, Amber `#F0A30A` 168.6, Yellow `#D8C100`
+ * 177.9) keep black text for readability.
+ */
 export function isLightAccent(accent: string): boolean {
   const { r, g, b } = hexToRgb(accent);
-  // 24ways perceived-brightness — same heuristic VS Code's color picker uses.
+  // YIQ perceived-brightness — same heuristic VS Code's color picker uses.
   // http://24ways.org/2010/calculating-color-contrast
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-  return yiq >= 128;
+  return yiq >= 150;
 }
 
 export interface ThemeProviderProps {
