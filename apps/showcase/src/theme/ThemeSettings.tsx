@@ -3,18 +3,30 @@ import type { ThemeMode } from '@metro-react-ui/core';
 import { readStoredTheme, writeStoredTheme } from '../mpa/theme';
 
 /**
- * The classic Windows 8 / Windows Phone 8 accent palette.
- * These are the 8 stock accent colors users could pick in the OS settings.
+ * The full Windows Phone 8 accent palette — all 20 stock accent colors users
+ * could pick in the OS settings.
  */
 export const ACCENT_COLORS: { name: string; value: string }[] = [
-  { name: 'Blue', value: '#00a6fa' },
-  { name: 'Red', value: '#e51400' },
-  { name: 'Lime', value: '#a4c400' },
-  { name: 'Green', value: '#60a917' },
-  { name: 'Orange', value: '#f0a30a' },
-  { name: 'Brown', value: '#825a2c' },
-  { name: 'Magenta', value: '#6a00ff' },
-  { name: 'Pink', value: '#d80073' },
+  { name: 'Lime', value: '#A4CC00' },
+  { name: 'Green', value: '#60A917' },
+  { name: 'Emerald', value: '#008A00' },
+  { name: 'Teal', value: '#00ABA9' },
+  { name: 'Cyan', value: '#1BA1E2' },
+  { name: 'Cobalt', value: '#0050EF' },
+  { name: 'Indigo', value: '#6A00FF' },
+  { name: 'Violet', value: '#AA00FF' },
+  { name: 'Pink', value: '#F47D02' },
+  { name: 'Magenta', value: '#D80073' },
+  { name: 'Crimson', value: '#A20025' },
+  { name: 'Red', value: '#E51400' },
+  { name: 'Orange', value: '#FA6800' },
+  { name: 'Amber', value: '#F0A30A' },
+  { name: 'Yellow', value: '#D8C100' },
+  { name: 'Brown', value: '#825A2C' },
+  { name: 'Olive', value: '#6D8764' },
+  { name: 'Steel', value: '#647687' },
+  { name: 'Mauve', value: '#76608A' },
+  { name: 'Sienna', value: '#7A3B3F' },
 ];
 
 export const DEFAULT_ACCENT = ACCENT_COLORS[0].value; // Blue

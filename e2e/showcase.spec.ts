@@ -104,7 +104,7 @@ test('Settings: switching accent color applies instantly', async ({ page }) => {
   await gotoPage(page, 'Settings');
   const redSwatch = page.locator('.showcase__accent-swatch[aria-label="Red"]');
   await redSwatch.click();
-  await expect(page.locator('.showcase__demo-hint', { hasText: '#e51400' })).toBeVisible();
+  await expect(page.locator('.showcase__demo-hint', { hasText: '#E51400' })).toBeVisible();
 });
 
 test('Home page renders all nav items', async ({ page }) => {

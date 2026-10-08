@@ -57,7 +57,8 @@ useEffect(() => {
 - Sets `data-theme="light"` or `data-theme="dark"` on the root, which the
   `tokens.css` light-theme overrides key off of.
 - `accentForeground` picks black/white text for accent surfaces using the
-  YIQ perceived-brightness heuristic.
+  YIQ perceived-brightness heuristic, with a threshold tuned for the WP8
+  palette (see below).
 
 ### Context
 ```tsx
@@ -74,9 +75,16 @@ export function accentForeground(accent: string): string {
 export function isLightAccent(accent: string): boolean {
   const { r, g, b } = hexToRgb(accent);
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-  return yiq >= 128;
+  return yiq >= 150;
 }
 ```
+
+The threshold is 150 (not the classic 24ways 128) because the stock 128
+misclassifies mid-tone WP8 accents — Cyan `#1BA1E2` (128.3), Green `#60A917`
+(130.5), Orange `#FA6800` (135.8), Pink `#F47D02` (146.6) — as "light",
+giving them black text. WP8 accent surfaces always used white text, so those
+resolve to white, while the truly light colors (Lime `#A4CC00` 168.8, Amber
+`#F0A30A` 168.6, Yellow `#D8C100` 177.9) keep black text for readability.
 
 ---
 
@@ -127,14 +135,26 @@ Holds the user's chosen accent + mode and re-renders `ThemeProvider`.
 ### Stock WP8 accent palette
 ```tsx
 export const ACCENT_COLORS: { name: string; value: string }[] = [
-  { name: 'Blue',    value: '#1ba1e2' },
-  { name: 'Red',     value: '#e51400' },
-  { name: 'Lime',    value: '#a4c400' },
-  { name: 'Green',   value: '#60a917' },
-  { name: 'Orange',  value: '#f0a30a' },
-  { name: 'Brown',   value: '#825a2c' },
-  { name: 'Magenta', value: '#6a00ff' },
-  { name: 'Pink',    value: '#d80073' },
+  { name: 'Lime',    value: '#A4CC00' },
+  { name: 'Green',   value: '#60A917' },
+  { name: 'Emerald', value: '#008A00' },
+  { name: 'Teal',    value: '#00ABA9' },
+  { name: 'Cyan',    value: '#1BA1E2' },
+  { name: 'Cobalt',  value: '#0050EF' },
+  { name: 'Indigo',  value: '#6A00FF' },
+  { name: 'Violet',  value: '#AA00FF' },
+  { name: 'Pink',    value: '#F47D02' },
+  { name: 'Magenta', value: '#D80073' },
+  { name: 'Crimson', value: '#A20025' },
+  { name: 'Red',     value: '#E51400' },
+  { name: 'Orange',  value: '#FA6800' },
+  { name: 'Amber',   value: '#F0A30A' },
+  { name: 'Yellow',  value: '#D8C100' },
+  { name: 'Brown',   value: '#825A2C' },
+  { name: 'Olive',   value: '#6D8764' },
+  { name: 'Steel',   value: '#647687' },
+  { name: 'Mauve',   value: '#76608A' },
+  { name: 'Sienna',  value: '#7A3B3F' },
 ];
 ```
 
