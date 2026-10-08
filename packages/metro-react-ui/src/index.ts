@@ -81,6 +81,9 @@ export type { TileContainerProps } from './components/TileContainer/TileContaine
 export { Pivot, PivotItem } from './components/Pivot/Pivot';
 export type { PivotProps, PivotItemProps } from './components/Pivot/Pivot';
 
+export { Pivot2, Pivot2Item } from './components/Pivot2/Pivot2';
+export type { Pivot2Props, Pivot2ItemProps } from './components/Pivot2/Pivot2';
+
 export { TiltEffect } from './components/Effects/TiltEffect';
 export type { TiltEffectProps } from './components/Effects/TiltEffect';
 

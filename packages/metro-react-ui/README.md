@@ -33,7 +33,7 @@ All design tokens are CSS custom properties (`--wp-accent`, `--wp-foreground`, `
 - **Primitives:** `ToggleSwitch`, `RatingControl`, `PhoneTextBox`, `WrapPanel`
 - **Composite:** `ListPicker`, `AutoCompleteBox`, `ExpanderView`, `CustomMessageBox`, `ContextMenu`, `DatePicker`, `TimePicker`
 - **Lists:** `MultiselectList`, `LongListMultiSelector`
-- **Animated/Effects:** `HubTile`, `ProgressRing`, `Pivot`, `TiltEffect`, `SlideInEffect`
+- **Animated/Effects:** `HubTile`, `ProgressRing`, `Pivot`, `Pivot2`, `TiltEffect`, `SlideInEffect`
 
 ## License
 
