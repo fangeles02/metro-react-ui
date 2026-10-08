@@ -125,6 +125,20 @@ function Home({
 
         <div className="showcase__changelog-entry">
           <div className="showcase__changelog-head">
+            <span className="showcase__changelog-component">Pivot</span>
+            <span className="showcase__changelog-date">v{__PACKAGE_VERSION__}</span>
+          </div>
+          <ul className="showcase__changelog-list">
+            <li>Rebuilt with large lowercase WP8-style headers and an optional <code>title</code>.</li>
+            <li>Content slides left/right on navigation; swipe or tap headers to switch.</li>
+            <li>Removed the continuous/overflowing tab-header carousel (<code>animateTabLabels</code>).</li>
+            <li>Accessible — <code>role="tablist"</code> / <code>role="tab"</code> / <code>role="tabpanel"</code>.</li>
+            <li>Respects <code>prefers-reduced-motion</code>.</li>
+          </ul>
+        </div>
+
+        <div className="showcase__changelog-entry">
+          <div className="showcase__changelog-head">
             <span className="showcase__changelog-component">ProgressRing</span>
             <span className="showcase__changelog-date">v{__PACKAGE_VERSION__}</span>
           </div>

@@ -2,37 +2,93 @@
   font-family: var(--wp-font-family);
   color: var(--wp-foreground);
   touch-action: pan-y;
+  user-select: none;
+}
+
+.metro-pivot__title {
+  font-size: var(--wp-font-size-small);
+  font-weight: var(--wp-font-weight-semibold);
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  color: var(--wp-subtle);
 }
 
 .metro-pivot__headers {
   display: flex;
+  align-items: baseline;
   gap: 24px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  /* Hide the scrollbar while keeping the strip scrollable (carousel). */
-  -ms-overflow-style: none;
-}
-
-.metro-pivot__headers::-webkit-scrollbar {
-  display: none;
+  white-space: nowrap;
+  margin-bottom: 24px;
 }
 
 .metro-pivot__header {
-  padding: 12px 4px;
+  padding: 0;
   border: none;
   background: transparent;
-  color: var(--wp-subtle);
   font-family: var(--wp-font-family);
-  font-size: var(--wp-font-size-large);
+  font-size: var(--wp-font-size-extra-extra-large);
+  font-weight: var(--wp-font-weight-light);
+  letter-spacing: -1.5px;
+  text-transform: lowercase;
+  line-height: 1.1;
   cursor: pointer;
-  white-space: nowrap;
-  transition: color var(--wp-duration-normal) var(--wp-easing);
+  transition: opacity var(--wp-duration-normal) var(--wp-easing);
 }
 
-.metro-pivot__header[data-active='true'] {
+.metro-pivot__header--active {
   color: var(--wp-foreground);
+  opacity: 1;
+}
+
+.metro-pivot__header--inactive {
+  color: var(--wp-subtle);
+  opacity: 0.4;
+}
+
+.metro-pivot__header--inactive:hover {
+  opacity: 0.6;
 }
 
 .metro-pivot__content {
-  padding: 16px 0;
+  font-size: var(--wp-font-size-normal);
+  font-weight: var(--wp-font-weight-normal);
+  line-height: 1.5;
+}
+
+/* Metro-style slide animations */
+.metro-pivot__panel.slide-left {
+  animation: pivot-slide-left var(--wp-duration-slow) var(--wp-easing) forwards;
+}
+
+.metro-pivot__panel.slide-right {
+  animation: pivot-slide-right var(--wp-duration-slow) var(--wp-easing) forwards;
+}
+
+@keyframes pivot-slide-left {
+  0% {
+    transform: translateX(80px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pivot-slide-right {
+  0% {
+    transform: translateX(-80px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metro-pivot__panel.slide-left,
+  .metro-pivot__panel.slide-right {
+    animation: none;
+  }
 }

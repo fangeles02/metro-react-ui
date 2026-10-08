@@ -110,7 +110,7 @@ test('Settings: switching accent color applies instantly', async ({ page }) => {
 test('Home page renders all nav items', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.showcase__hero-title')).toHaveText('Metro UI Toolkit');
-  await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(25);
+  await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(26);
 });
 
 test('MPA demo: threads -> conversation across real page loads', async ({ page }) => {
