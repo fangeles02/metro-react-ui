@@ -1,0 +1,99 @@
+/*
+ * Metro-style indeterminate progress ring.
+ * Ported from Chudesnov's CodePen "Progress ring"
+ * (https://codepen.io/Chudesnov) — used with attribution.
+ *
+ * Geometry is driven by --wp-progress-size so the ring scales with the
+ * `size` prop; the orbit keyframes are size-independent.
+ */
+
+.metro-progressring {
+  position: relative;
+  padding-top: calc(var(--wp-progress-size) / 5);
+  width: var(--wp-progress-size);
+  height: var(--wp-progress-size);
+}
+
+.metro-progressring__wrap {
+  position: absolute;
+  width: calc(var(--wp-progress-size) - 2px);
+  height: calc(var(--wp-progress-size) - 2px);
+}
+
+.metro-progressring__circle {
+  transform: rotate(225deg);
+  animation-iteration-count: infinite;
+  animation-name: orbit;
+  animation-duration: var(--wp-progress-duration);
+  width: calc(var(--wp-progress-size) - 2px);
+  height: calc(var(--wp-progress-size) - 2px);
+  opacity: 0;
+}
+
+.metro-progressring__circle::after {
+  content: '';
+  position: absolute;
+  width: calc(var(--wp-progress-size) / 8);
+  height: calc(var(--wp-progress-size) / 8);
+  border-radius: calc(var(--wp-progress-size) / 8);
+  /* The original uses `box-shadow: 0 0 5%` which is invalid CSS (blur must
+     be a length); a fixed 2px blur preserves the glow. */
+  box-shadow: 0 0 2px var(--wp-progress-accent);
+  background: var(--wp-progress-accent);
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(225deg);
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+
+  7% {
+    transform: rotate(345deg);
+    animation-timing-function: linear;
+  }
+
+  35% {
+    transform: rotate(495deg);
+    animation-timing-function: ease-in-out;
+  }
+
+  42% {
+    transform: rotate(690deg);
+    animation-timing-function: linear;
+  }
+
+  70% {
+    transform: rotate(835deg);
+    opacity: 1;
+    animation-timing-function: linear;
+  }
+
+  76% {
+    opacity: 1;
+  }
+
+  77% {
+    transform: rotate(955deg);
+    animation-timing-function: ease-in;
+  }
+
+  78% {
+    transform: rotate(955deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: rotate(955deg);
+    opacity: 0;
+  }
+}
+
+/* Respect users who prefer reduced motion: freeze the ring. */
+@media (prefers-reduced-motion: reduce) {
+  .metro-progressring__circle {
+    animation: none;
+    opacity: 1;
+  }
+}

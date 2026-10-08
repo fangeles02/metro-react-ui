@@ -125,6 +125,20 @@ function Home({
 
         <div className="showcase__changelog-entry">
           <div className="showcase__changelog-head">
+            <span className="showcase__changelog-component">ProgressRing</span>
+            <span className="showcase__changelog-date">v{__PACKAGE_VERSION__}</span>
+          </div>
+          <ul className="showcase__changelog-list">
+            <li>Indeterminate progress ring with orbiting dots and a trailing comet effect.</li>
+            <li>Configurable <code>size</code>, <code>accent</code>, <code>dots</code>, and <code>duration</code>.</li>
+            <li>Accessible — <code>role="status"</code> with a customizable <code>aria-label</code>.</li>
+            <li>Respects <code>prefers-reduced-motion</code>.</li>
+            <li>Orbit animation by <a href="https://codepen.io/Chudesnov" target="_blank" rel="noreferrer">Chudesnov</a> (CodePen), ported with attribution.</li>
+          </ul>
+        </div>
+
+        <div className="showcase__changelog-entry">
+          <div className="showcase__changelog-head">
             <span className="showcase__changelog-component">CustomMessageBox</span>
             <span className="showcase__changelog-date">v{__PACKAGE_VERSION__}</span>
           </div>

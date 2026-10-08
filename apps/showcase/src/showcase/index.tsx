@@ -13,6 +13,7 @@ import { DateTimePickerDemo } from './DateTimePickerDemo';
 import { MultiselectListDemo } from './MultiselectListDemo';
 import { LongListMultiSelectorDemo } from './LongListMultiSelectorDemo';
 import { HubTileDemo } from './HubTileDemo';
+import { ProgressRingDemo } from './ProgressRingDemo';
 import { TileDemo } from './TileDemo';
 import { PivotDemo } from './PivotDemo';
 import { EffectsDemo } from './EffectsDemo';
@@ -52,6 +53,7 @@ export const showcasePages: ShowcasePage[] = [
   { id: 'multiselect', name: 'MultiselectList', description: 'Multi-select list', icon: '☑', render: () => <MultiselectListDemo /> },
   { id: 'longlist', name: 'LongListMultiSelector (todo)', description: 'Grouped multi-select', icon: '☰', render: () => <LongListMultiSelectorDemo /> },
   { id: 'hubtile', name: 'HubTile', description: 'Animated tile', icon: '▣', render: () => <HubTileDemo /> },
+  { id: 'progressring', name: 'ProgressRing', description: 'Indeterminate progress ring', icon: '◌', render: () => <ProgressRingDemo /> },
   { id: 'tile', name: 'Tile', description: 'WP 8.1 start tile', icon: '▣', render: () => <TileDemo /> },
   { id: 'pivot', name: 'Pivot', description: 'Swipeable tabs', icon: '⇋', render: () => <PivotDemo /> },
   { id: 'effects', name: 'Effects', description: 'Tilt & slide-in', icon: '✦', render: () => <EffectsDemo /> },
