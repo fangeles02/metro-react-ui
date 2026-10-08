@@ -31,12 +31,15 @@
   display: block;
 }
 
-/* Timestamp embedded at the lower-right of the bubble. */
+/* Timestamp embedded at the lower-right of the bubble. Uses the accent
+   foreground (the high-contrast color for text on accent surfaces) at 60%
+   opacity so it stays dimmed like the original subtle treatment, but follows
+   the accent instead of the global foreground. */
 .metro-chatbubble__timestamp {
   display: block;
   margin-top: 4px;
   font-size: var(--wp-font-size-small);
-  color: var(--wp-subtle);
+  color: color-mix(in srgb, var(--wp-accent-foreground) 60%, transparent);
   text-align: right;
   align-self: flex-end;
 }
