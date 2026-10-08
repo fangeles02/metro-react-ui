@@ -16,7 +16,6 @@ import { HubTileDemo } from './HubTileDemo';
 import { ProgressRingDemo } from './ProgressRingDemo';
 import { TileDemo } from './TileDemo';
 import { PivotDemo } from './PivotDemo';
-import { Pivot2Demo } from './Pivot2Demo';
 import { EffectsDemo } from './EffectsDemo';
 import { AppBarDemo } from './AppBarDemo';
 import { SpaDemo } from './SpaDemo';
@@ -57,7 +56,6 @@ export const showcasePages: ShowcasePage[] = [
   { id: 'progressring', name: 'ProgressRing', description: 'Indeterminate progress ring', icon: '◌', render: () => <ProgressRingDemo /> },
   { id: 'tile', name: 'Tile', description: 'WP 8.1 start tile', icon: '▣', render: () => <TileDemo /> },
   { id: 'pivot', name: 'Pivot', description: 'Swipeable tabs', icon: '⇋', render: () => <PivotDemo /> },
-  { id: 'pivot2', name: 'Pivot2', description: 'Large-header swipeable tabs', icon: '⇋', render: () => <Pivot2Demo /> },
   { id: 'effects', name: 'Effects', description: 'Tilt & slide-in', icon: '✦', render: () => <EffectsDemo /> },
   { id: 'appbar', name: 'AppBar', description: 'Circular app bar buttons', icon: '◯', render: () => <AppBarDemo /> },
   { id: 'icons', name: 'Icons', description: 'Fluent UI System Icons gallery', icon: '✦', render: () => <Suspense fallback={<IconDemoFallback />}><IconDemo /></Suspense> },

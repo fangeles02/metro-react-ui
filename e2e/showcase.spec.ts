@@ -29,7 +29,6 @@ const PAGES: [string, string][] = [
   ['ProgressRing', '.metro-progressring'],
   ['Tile', '.metro-tile'],
   ['Pivot', '.metro-pivot'],
-  ['Pivot2', '.metro-pivot2'],
   ['Effects', '.metro-tilt'],
   ['AppBar', '.metro-appbar'],
   ['PageTransition', '.metro-flip'],
