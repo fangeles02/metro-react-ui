@@ -341,26 +341,34 @@ export function Panorama({
   };
 
   const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
-    // Wide mode: translate wheel input (vertical mouse wheel OR horizontal
-    // trackpad) into horizontal scrolling of the native scroll container.
-    // Chromium does not reliably natively-scroll a horizontal container from
-    // deltaX wheel events, so we drive scrollLeft ourselves.
+    // Wide mode: only horizontal wheel input pans the panorama. Determine the
+    // dominant axis so a diagonal/circular scroll only acts on ONE axis —
+    // vertical scrolls the page, horizontal pans the panorama.
     if (isWide) {
       const el = scrollRef.current;
       if (!el) return;
-      const delta = e.deltaX !== 0 ? e.deltaX : e.deltaY;
-      if (delta === 0) return;
-      el.scrollLeft += delta;
+      const dx = e.deltaX;
+      const dy = e.deltaY;
+      // If vertical is dominant (or there's no horizontal), let the page
+      // scroll vertically — don't touch the panorama.
+      if (Math.abs(dy) >= Math.abs(dx)) return;
+      if (dx === 0) return;
+      el.scrollLeft += dx;
       return;
     }
     const delta = e.deltaX !== 0 ? e.deltaX : e.shiftKey ? e.deltaY : 0;
     if (delta === 0) return;
+    // Determine the dominant axis so a diagonal/circular scroll only acts on
+    // ONE axis. Vertical (deltaY) is left to the page; only horizontal pans.
+    const dx = e.deltaX;
+    const dy = e.deltaY;
+    if (Math.abs(dy) >= Math.abs(dx)) return;
     // If we're within the throttle window, swallow the event (do NOT reset the
     // timer — that would extend the lock and make continuous scrolling feel
     // unresponsive).
     if (wheelLocked.current) return;
     // Advance immediately on the first event of the gesture.
-    if (delta > 0) goToNext();
+    if (dx > 0) goToNext();
     else goToPrev();
     // Lock for a fixed interval; releases on schedule regardless of further
     // events, so the next page can advance as soon as the snap completes.

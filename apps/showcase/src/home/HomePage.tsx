@@ -31,11 +31,12 @@ function SettingsIcon() {
  */
 function HomeAppBar({ onNavigate }: { onNavigate: (id: string) => void }) {
   return (
-    <AppBar defaultOpen alignment="left">
+    <AppBar defaultOpen={false} toggleOnContextMenu={true} alignment="left">
       <AppBarButton
         label="settings"
         icon={<SettingsIcon />}
         onClick={() => onNavigate('settings')}
+        
       />
     </AppBar>
   );

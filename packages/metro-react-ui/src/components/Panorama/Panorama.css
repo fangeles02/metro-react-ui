@@ -177,7 +177,8 @@
   position: relative;
   display: flex;
   flex-wrap: nowrap;
-  align-items: flex-start;
+  align-items: stretch;
+  height: 100%;
   transition: transform var(--wp-duration-slow) var(--wp-easing);
   will-change: transform;
 }
@@ -186,9 +187,16 @@
   flex: 0 0 auto;
   box-sizing: border-box;
   padding: 0 var(--wp-content-margin);
+  /* Each section fills the available vertical height and does NOT scroll
+     itself — only its content scrolls. */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .metro-panorama__header {
+  flex: none;
   margin: 0 0 16px;
   font-size: var(--wp-font-size-extra-extra-large);
   font-weight: var(--wp-font-weight-light);
@@ -199,6 +207,13 @@
 }
 
 .metro-panorama__content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  /* Only vertical panning is handled here — horizontal touch gestures are
+     delegated to the panorama's horizontal scroll container, so swiping
+     left/right on the content still pans the panorama. */
+  touch-action: pan-y;
   font-size: var(--wp-font-size-normal);
   font-weight: var(--wp-font-weight-normal);
   line-height: 1.5;

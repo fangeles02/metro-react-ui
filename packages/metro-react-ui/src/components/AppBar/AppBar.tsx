@@ -44,9 +44,10 @@ export interface AppBarProps extends Omit<HTMLAttributes<HTMLElement>, 'children
    */
   breakpoint?: number;
   /**
-   * Initial open state of the button labels on mobile. On wide screens the
-   * labels are always visible regardless of this value. Defaults to `false`
-   * (labels hidden until the user expands the bar).
+   * Initial open state. On **wide** screens this controls whether the whole
+   * bar is visible by default (labels are always visible on wide regardless).
+   * On **mobile** this is ignored — the button labels always default to hidden
+   * until the user expands the bar via the toggle button. Defaults to `false`.
    */
   defaultOpen?: boolean;
   /**
@@ -119,7 +120,16 @@ export function AppBar({
     }
     return window.matchMedia(`(max-width: ${breakpoint - 1}px)`).matches;
   });
-  const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen);
+  const [internalOpen, setInternalOpen] = useState<boolean>(() => {
+    // `defaultOpen` only affects WIDE screens (bar visibility). On mobile the
+    // button labels always default to hidden (collapsed) — the user reveals
+    // them via the toggle button.
+    if (typeof window === 'undefined') {
+      return defaultOpen;
+    }
+    const mobile = window.matchMedia(`(max-width: ${breakpoint - 1}px)`).matches;
+    return mobile ? false : defaultOpen;
+  });
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuContentRef = useRef<HTMLDivElement>(null);

@@ -253,7 +253,7 @@ export function AppBarDemo() {
             <tr><td><code>defaultOpen</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
             <tr><td><code>isOpen</code></td><td><code>boolean</code></td><td>—</td><td>No</td></tr>
             <tr><td><code>onToggle</code></td><td><code>{'(open: boolean) => void'}</code></td><td>—</td><td>No</td></tr>
-            <tr><td><code>toggleOnContextMenu</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
+            <tr><td><code>toggleOnContextMenu</code></td><td><code>boolean</code></td><td><code>true</code></td><td>No</td></tr>
             <tr><td><code>secondaryMenu</code></td><td><code>ContextMenuItem[]</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>
