@@ -55,7 +55,7 @@ export type { AppBarButtonProps, AppBarButtonVariant } from './components/AppBar
 
 // Layout
 export { MetroLayout } from './components/MetroLayout/MetroLayout';
-export type { MetroLayoutProps, MetroLayoutScroll } from './components/MetroLayout/MetroLayout';
+export type { MetroLayoutProps, MetroLayoutScroll, MetroLayoutTitleSize } from './components/MetroLayout/MetroLayout';
 
 export { DatePicker } from './components/DateTimePicker/DatePicker';
 export type { DatePickerProps } from './components/DateTimePicker/DatePicker';

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { FlipTransition } from '@metro-react-ui/core';
 import { Button } from '@metro-react-ui/core';
 import { showcasePages } from './showcase';
-import { SpaAppBar } from './showcase/SpaDemo';
 import './App.css';
 
 interface NavState {
@@ -52,9 +51,6 @@ export default function App() {
           <PageView page={active!} onBack={goBack} />
         )}
       </FlipTransition>
-      {/* The SPA app bar is rendered OUTSIDE the FlipTransition so its
-          transform doesn't become the containing block for position:fixed. */}
-      {current.pageId === 'spa' && <SpaAppBar />}
     </div>
   );
 }
@@ -125,6 +121,19 @@ function Home({
 
         <div className="showcase__changelog-entry">
           <div className="showcase__changelog-head">
+            <span className="showcase__changelog-component">Panorama</span>
+            <span className="showcase__changelog-date">v0.1.3</span>
+          </div>
+          <ul className="showcase__changelog-list">
+            <li>MetroLayout-style header — <code>title</code> / <code>headerTitle</code>, <code>headerSubtitle</code>, <code>onBack</code>, <code>headerTitleSize</code>, and <code>showHeader</code> (always reserves <code>min-height: 50px</code>).</li>
+            <li>Header moves with parallax (<code>headerParallaxRatio</code>, default 30% less than the background) and reveals the full title on narrow screens as you pan.</li>
+            <li>Percentage page widths — <code>sectionWidth="80%"</code> shows the next page in the viewport, with a trailing spacer so the last page stays left-aligned.</li>
+            <li><code>fullscreen</code> portals the background/overlay to the viewport so it fills the whole screen even inside a clipped/transformed ancestor.</li>
+          </ul>
+        </div>
+
+        <div className="showcase__changelog-entry">
+          <div className="showcase__changelog-head">
             <span className="showcase__changelog-component">MetroLayout</span>
             <span className="showcase__changelog-date">v0.1.3</span>
           </div>
@@ -133,6 +142,9 @@ function Home({
             <li><code>scroll</code> prop — <code>fixed</code> (default) pins the header and scrolls the body + footer internally; <code>scrollable</code> scrolls the whole page (header + body + footer).</li>
             <li>App bar is pinned to the bottom of the viewport in both modes while content scrolls behind it.</li>
             <li>App bar accepts the full <code>&lt;AppBar&gt;</code> component via the <code>appBar</code> slot.</li>
+            <li><code>titleSize</code> prop — <code>large</code> (default, extra-extra-large light lowercase) or <code>small</code> (large semibold uppercase).</li>
+            <li><code>title</code> accepts any React node — an image or SVG logo fills the title's height.</li>
+            <li><code>title</code> is optional — with no title/back/subtitle the header collapses to a <code>min-height: 50px</code>.</li>
           </ul>
         </div>
 

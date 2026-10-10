@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import './ContextMenu.css';
 
 export interface ContextMenuItem {
@@ -149,30 +150,32 @@ export function ContextMenu({
       style={accent ? { '--wp-accent': accent } as React.CSSProperties : undefined}
     >
       {children}
-      {open && (
-        <div
-          ref={menuRef}
-          className={`metro-contextmenu metro-contextmenu--slide-${slide}`}
-          style={menuStyle}
-          role="menu"
-        >
-          {items.map((item, i) => (
-            <button
-              key={i}
-              type="button"
-              role="menuitem"
-              className="metro-contextmenu__item"
-              disabled={item.disabled}
-              onClick={() => {
-                close();
-                item.onSelect?.();
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      )}
+      {open &&
+        createPortal(
+          <div
+            ref={menuRef}
+            className={`metro-contextmenu metro-contextmenu--slide-${slide}`}
+            style={menuStyle}
+            role="menu"
+          >
+            {items.map((item, i) => (
+              <button
+                key={i}
+                type="button"
+                role="menuitem"
+                className="metro-contextmenu__item"
+                disabled={item.disabled}
+                onClick={() => {
+                  close();
+                  item.onSelect?.();
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

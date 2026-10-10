@@ -35,6 +35,53 @@
   pointer-events: none;
 }
 
+/* Fullscreen mode: the background/overlay are portaled to `document.body` and
+   fixed to the viewport, so they fill the entire screen (escaping any clipped
+   or transformed ancestor) and stay stable when surrounding in-flow content
+   resizes. They use `z-index: 0` (NOT negative — a negative z-index would
+   paint behind the body's own opaque background and be invisible). The page
+   content must establish a stacking context above them (e.g. `z-index: 1`).
+
+   They fade in on mount so the background participates in the page transition
+   instead of "popping" in instantly (the portaled element is outside the
+   FlipTransition, so it doesn't inherit its animation). */
+.metro-panorama__background--fullscreen {
+  position: fixed;
+  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  animation: metro-panorama-bg-in var(--wp-duration-slow) var(--wp-easing) both;
+}
+
+.metro-panorama__overlay--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  /* Fade in to the overlay's own configured opacity (not 1 — animating to 1
+     would make the overlay fully opaque and cover the background). */
+  animation: metro-panorama-overlay-in var(--wp-duration-slow) var(--wp-easing) both;
+}
+
+@keyframes metro-panorama-bg-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes metro-panorama-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--metro-overlay-opacity, 0.5);
+  }
+}
+
 .metro-panorama__title {
   position: relative;
   font-size: var(--wp-font-size-small);
@@ -43,6 +90,69 @@
   margin: 0 0 8px;
   padding: 0 var(--wp-content-margin);
   color: var(--wp-subtle);
+}
+
+/* Header bar (like MetroLayout) — moves with parallax as the panorama pans. */
+.metro-panorama__headerbar {
+  position: relative;
+  flex: none;
+  min-height: 50px;
+  padding: 24px 24px 12px;
+  transition: transform var(--wp-duration-slow) var(--wp-easing);
+  will-change: transform;
+  z-index: 1;
+}
+
+.metro-panorama__headerbar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metro-panorama__headerbar-title {
+  margin: 0;
+  line-height: 1.05;
+  /* Keep the title on a single line (no wrapping). The full text stays
+     visible — on narrow screens it extends beyond the viewport and is
+     revealed as the header parallaxes during panning (no ellipsis). */
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.metro-panorama__headerbar-title--large {
+  font-size: var(--wp-font-size-gigantic);
+  font-weight: var(--wp-font-weight-light);
+  text-transform: lowercase;
+}
+
+.metro-panorama__headerbar-title--small {
+  font-size: var(--wp-font-size-large);
+  font-weight: var(--wp-font-weight-semibold);
+  text-transform: uppercase;
+}
+
+.metro-panorama__headerbar-subtitle {
+  margin-top: 4px;
+  font-size: var(--wp-font-size-normal);
+  color: var(--wp-subtle);
+}
+
+.metro-panorama__headerbar-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--wp-foreground);
+  cursor: pointer;
+}
+
+.metro-panorama__headerbar-back svg {
+  width: 24px;
+  height: 24px;
 }
 
 /* Solid overlay drawn over the background (behind the content) to keep the
@@ -144,7 +254,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .metro-panorama__track,
-  .metro-panorama__background {
+  .metro-panorama__background,
+  .metro-panorama__headerbar {
     transition: none;
   }
 }

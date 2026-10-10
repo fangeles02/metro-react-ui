@@ -53,6 +53,12 @@ export function PanoramaDemo() {
             <tr><td><code>children</code></td><td><code>PanoramaItem[]</code></td><td>—</td><td>Yes*</td></tr>
             <tr><td><code>items</code></td><td><code>PanoramaItemData[]</code></td><td>—</td><td>Yes*</td></tr>
             <tr><td><code>title</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>headerTitle</code></td><td><code>ReactNode</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>headerSubtitle</code></td><td><code>ReactNode</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>onBack</code></td><td><code>{'() => void'}</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>headerTitleSize</code></td><td><code>'small' | 'large'</code></td><td><code>'large'</code></td><td>No</td></tr>
+            <tr><td><code>headerParallaxRatio</code></td><td><code>number</code></td><td><code>parallaxRatio</code></td><td>No</td></tr>
+            <tr><td><code>showHeader</code></td><td><code>boolean</code></td><td><code>true</code></td><td>No</td></tr>
             <tr><td><code>background</code></td><td><code>string</code></td><td>—</td><td>No</td></tr>
             <tr><td><code>overlay</code></td><td><code>string | null</code></td><td><code>var(--wp-background)</code></td><td>No</td></tr>
             <tr><td><code>overlayOpacity</code></td><td><code>number</code></td><td><code>0.5</code></td><td>No</td></tr>

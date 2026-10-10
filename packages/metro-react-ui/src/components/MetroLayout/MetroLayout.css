@@ -44,6 +44,7 @@
 /* ---- Header ---- */
 .metro-layout__header {
   flex: none;
+  min-height: 50px;
   padding: 24px 24px 12px;
 }
 
@@ -56,12 +57,32 @@
 
 .metro-layout__title {
   margin: 0;
-  font-size: var(--wp-font-size-title-large);
-  font-weight: var(--wp-font-weight-light);
   line-height: 1.05;
-  text-transform: lowercase;
   overflow-wrap: anywhere;
   min-width: 0;
+}
+
+/* Large title (default): extra-extra-large, light, lowercase. */
+.metro-layout__title--large {
+  font-size: var(--wp-font-size-extra-extra-large);
+  font-weight: var(--wp-font-weight-light);
+  text-transform: lowercase;
+}
+
+/* Small title: large, semibold, uppercase. */
+.metro-layout__title--small {
+  font-size: var(--wp-font-size-large);
+  font-weight: var(--wp-font-weight-semibold);
+  text-transform: uppercase;
+}
+
+/* Image titles: fill the title's height (tied to the font-size via `em`), so
+   an image occupies the same vertical space as text of that size. */
+.metro-layout__title img,
+.metro-layout__title svg {
+  display: block;
+  height: 1em;
+  width: auto;
 }
 
 /* Back button — accent-colored ‹ arrow, sized to the touch target. */
@@ -112,7 +133,7 @@
    clip its tall content to a fixed box and overflow it over the footer. */
 .metro-layout__body {
   flex: none;
-  padding: 0 24px 24px;
+  padding: 0;
 }
 
 /* ---- Footer ---- */

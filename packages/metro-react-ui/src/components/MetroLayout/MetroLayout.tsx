@@ -3,10 +3,20 @@ import type { AppBarProps } from '../AppBar/AppBar';
 import './MetroLayout.css';
 
 export type MetroLayoutScroll = 'fixed' | 'scrollable';
+export type MetroLayoutTitleSize = 'small' | 'large';
 
 export interface MetroLayoutProps {
-  /** Page title shown in the header (first line, required). */
-  title: ReactNode;
+  /** Page title shown in the header (first line). Accepts any React node
+   * (text or an image). When an image, it fills the title's height. Optional —
+   * when omitted (and no `onBack`/`subtitle`), the header is not rendered. */
+  title?: ReactNode;
+  /**
+   * Title size:
+   * - `large` (default): `--wp-font-size-extra-extra-large`, light weight,
+   *   lowercase.
+   * - `small`: `--wp-font-size-large`, semibold weight, uppercase.
+   */
+  titleSize?: MetroLayoutTitleSize;
   /** Optional subtitle shown beneath the title. */
   subtitle?: ReactNode;
   /** When provided, a back button (‹) is rendered in the header and calls
@@ -59,6 +69,7 @@ export interface MetroLayoutProps {
  */
 export function MetroLayout({
   title,
+  titleSize = 'large',
   subtitle,
   onBack,
   children,
@@ -118,31 +129,37 @@ export function MetroLayout({
   return (
     <div className={classes}>
       <div className="metro-layout__scroll">
-        <header className="metro-layout__header">
-          <div className="metro-layout__header-row">
-            {onBack ? (
-              <button
-                type="button"
-                className="metro-layout__back"
-                aria-label="Back"
-                onClick={onBack}
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d="M15 5l-7 7 7 7"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            ) : null}
-            <h1 className="metro-layout__title">{title}</h1>
-          </div>
-          {subtitle ? <div className="metro-layout__subtitle">{subtitle}</div> : null}
-        </header>
+        {title || subtitle || onBack ? (
+          <header className="metro-layout__header">
+            <div className="metro-layout__header-row">
+              {onBack ? (
+                <button
+                  type="button"
+                  className="metro-layout__back"
+                  aria-label="Back"
+                  onClick={onBack}
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M15 5l-7 7 7 7"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              ) : null}
+              {title ? (
+                <h1 className={`metro-layout__title metro-layout__title--${titleSize}`}>
+                  {title}
+                </h1>
+              ) : null}
+            </div>
+            {subtitle ? <div className="metro-layout__subtitle">{subtitle}</div> : null}
+          </header>
+        ) : null}
 
         <div className="metro-layout__content">
           <div className="metro-layout__body">{children}</div>

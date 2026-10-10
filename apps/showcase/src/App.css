@@ -3,6 +3,10 @@
   width: 100%;
   font-family: var(--wp-font-family);
   color: var(--wp-foreground);
+  /* Stack above the fullscreen Panorama background, which is portaled to
+     `document.body` at `z-index: 0`. */
+  position: relative;
+  z-index: 1;
 }
 
 /* Outgoing page overlay during the flip exit animation */
@@ -36,6 +40,25 @@
 .showcase__page--fullscreen .metro-panorama {
   flex: 1;
   min-height: 0;
+}
+
+/* The SPA demo wraps its Panorama in a MetroLayout. Make the layout's body
+   fill the available height so the Panorama fills the viewport. */
+.showcase__page--fullscreen .metro-layout__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.showcase__page--fullscreen .metro-layout__body .metro-panorama {
+  flex: 1;
+  min-height: 0;
+}
+
+/* The fullscreen Panorama's background is portaled to `document.body` (fixed,
+   z-index 0). Make the MetroLayout transparent so the background shows
+   through instead of being covered by the layout's opaque background. */
+.showcase__page--fullscreen .metro-layout {
+  background: transparent;
 }
 
 .showcase__fullscreen-back {

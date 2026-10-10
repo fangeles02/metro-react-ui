@@ -8,6 +8,7 @@ import {
   type ReactNode,
   type WheelEvent,
 } from 'react';
+import { createPortal } from 'react-dom';
 import './Panorama.css';
 
 /** Tracks a CSS media query (e.g. `(min-width: 768px)`) reactively. */
@@ -47,6 +48,32 @@ export interface PanoramaProps {
   items?: PanoramaItemData[];
   /** Optional app title shown above the sections (uppercased). */
   title?: string;
+  /**
+   * Page header title (like `MetroLayout`). Rendered large and lowercase by
+   * default. When provided (with `headerSubtitle`/`onBack`), a header bar is
+   * shown above the sections and moves with parallax as the panorama pans.
+   * Falls back to `title` when omitted.
+   */
+  headerTitle?: ReactNode;
+  /** Optional subtitle shown beneath the header title. */
+  headerSubtitle?: ReactNode;
+  /** When provided, a back button (‹) is rendered in the header. */
+  onBack?: () => void;
+  /** Header title size: `large` (default) or `small`. */
+  headerTitleSize?: 'small' | 'large';
+  /**
+   * How fast the header moves relative to the content (parallax). 0 = fixed,
+   * 1 = same speed as content. Defaults to `parallaxRatio * 0.35` (0.175),
+   * which is 30% less than the previous default (`parallaxRatio * 0.5`).
+   */
+  headerParallaxRatio?: number;
+  /**
+   * Whether to render the header bar (with its `min-height: 50px`, matching
+   * `MetroLayout`). Defaults to `true`, so the header always reserves space
+   * even when `headerTitle`/`headerSubtitle`/`onBack` are omitted. Set to
+   * `false` to remove the header entirely.
+   */
+  showHeader?: boolean;
   /**
    * Parallax background — an image URL or a CSS color. The background scrolls
    * slower than the content to create the classic WP7 depth effect.
@@ -102,6 +129,15 @@ export interface PanoramaProps {
    * isn't hidden behind the overlay. Defaults to 0.
    */
   bottomInset?: number;
+  /**
+   * When `true`, the parallax background (and overlay) are portaled to
+   * `document.body` as `position: fixed; inset: 0` elements, so they fill the
+   * entire viewport — escaping any clipped/transformed ancestor (e.g. a
+   * `MetroLayout` body or a `FlipTransition`). This keeps the background
+   * full-bleed and stable even when surrounding in-flow content (like an app
+   * bar) resizes. Defaults to `false`.
+   */
+  fullscreen?: boolean;
 }
 
 /** Detect whether a background string is a URL (image) or a plain CSS color. */
@@ -127,6 +163,12 @@ export function Panorama({
   children,
   items,
   title,
+  headerTitle,
+  headerSubtitle,
+  onBack,
+  headerTitleSize = 'large',
+  headerParallaxRatio,
+  showHeader = true,
   background,
   overlay,
   overlayOpacity = 0.5,
@@ -140,10 +182,15 @@ export function Panorama({
   breakpoint = 768,
   scrollbar = 'auto',
   bottomInset = 0,
+  fullscreen = false,
 }: PanoramaProps) {
   // Wide mode = free native scrolling (no snap/lock). Mobile mode = the
   // classic WP7 snap-to-section with a wheel lock.
   const isWide = useMediaQuery(`(min-width: ${breakpoint}px)`);
+  // Header parallax ratio defaults to 70% of the background's half-ratio
+  // (parallaxRatio * 0.5 * 0.7 = parallaxRatio * 0.35), so the header moves
+  // 30% less than its previous default (subtler parallax).
+  const headerRatio = headerParallaxRatio ?? parallaxRatio * 0.35;
   // Normalize sections from either `items` or `PanoramaItem` children.
   const sections: PanoramaItemData[] = items
     ? items
@@ -161,6 +208,7 @@ export function Panorama({
   const trackRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
 
   // Resolve `sectionWidth` to a pixel value for the snap/offset math. Numeric
   // widths are used directly; string widths (e.g. '100%') are measured from
@@ -234,6 +282,9 @@ export function Panorama({
     }
     if (bgRef.current) {
       bgRef.current.style.transform = `translateX(${-offset * parallaxRatio}px)`;
+    }
+    if (headerRef.current) {
+      headerRef.current.style.transform = `translateX(${-offset * headerRatio}px)`;
     }
   };
 
@@ -324,8 +375,12 @@ export function Panorama({
   const handleScroll = () => {
     if (!isWide) return;
     const el = scrollRef.current;
-    if (el && bgRef.current) {
+    if (!el) return;
+    if (bgRef.current) {
       bgRef.current.style.transform = `translateX(${-el.scrollLeft * parallaxRatio}px)`;
+    }
+    if (headerRef.current) {
+      headerRef.current.style.transform = `translateX(${-el.scrollLeft * headerRatio}px)`;
     }
   };
 
@@ -349,6 +404,11 @@ export function Panorama({
 
   const targetOffset = activeIndex * resolvedWidth;
   const trackStyle: CSSProperties = { transform: `translateX(${-targetOffset}px)` };
+  // Header parallax transform — applied on render so wheel/keyboard navigation
+  // (which re-renders) also moves the header, not just pointer drags.
+  const headerStyle: CSSProperties = {
+    transform: `translateX(${-targetOffset * headerRatio}px)`,
+  };
   // Trailing spacer so the last page aligns to the left edge when the page
   // width is less than the viewport (e.g. sectionWidth="80%"). Without it, the
   // last page would sit at the far right with a gap on the left.
@@ -368,12 +428,39 @@ export function Panorama({
     'metro-panorama',
     isWide ? 'metro-panorama--wide' : 'metro-panorama--mobile',
     `metro-panorama--scrollbar-${scrollbar}`,
+    fullscreen ? 'metro-panorama--fullscreen' : '',
   ].join(' ');
 
   const rootStyle: CSSProperties = {
     ...(accent ? ({ '--wp-accent': accent } as CSSProperties) : undefined),
     ...(bottomInset ? { paddingBottom: bottomInset } : undefined),
   };
+
+  // The background + overlay layers. In fullscreen mode they are portaled to
+  // `document.body` so they fill the entire viewport (escaping any clipped or
+  // transformed ancestor). The parallax `translateX` still applies via the
+  // inline transform on the fixed element.
+  const backgroundLayer = background ? (
+    <div
+      className={`metro-panorama__background${fullscreen ? ' metro-panorama__background--fullscreen' : ''}`}
+      ref={bgRef}
+      style={bgStyle}
+    />
+  ) : null;
+  const overlayLayer =
+    overlay !== null ? (
+      <div
+        className={`metro-panorama__overlay${fullscreen ? ' metro-panorama__overlay--fullscreen' : ''}`}
+        style={{
+          backgroundColor: overlay ?? 'var(--wp-background)',
+          opacity: overlayOpacity,
+          '--metro-overlay-opacity': overlayOpacity,
+        } as CSSProperties}
+      />
+    ) : null;
+
+  const portalTarget =
+    typeof document !== 'undefined' ? document.body : null;
 
   return (
     <div
@@ -390,21 +477,53 @@ export function Panorama({
       onWheel={handleWheel}
       onKeyDown={handleKeyDown}
     >
-      {background ? (
-        <div className="metro-panorama__background" ref={bgRef} style={bgStyle} />
-      ) : null}
+      {fullscreen && portalTarget ? (
+        <>
+          {backgroundLayer ? createPortal(backgroundLayer, portalTarget) : null}
+          {overlayLayer ? createPortal(overlayLayer, portalTarget) : null}
+        </>
+      ) : (
+        <>
+          {backgroundLayer}
+          {overlayLayer}
+        </>
+      )}
 
-      {overlay !== null ? (
-        <div
-          className="metro-panorama__overlay"
-          style={{
-            backgroundColor: overlay ?? 'var(--wp-background)',
-            opacity: overlayOpacity,
-          }}
-        />
+      {showHeader ? (
+        <header className="metro-panorama__headerbar" ref={headerRef} style={headerStyle}>
+          <div className="metro-panorama__headerbar-row">
+            {onBack ? (
+              <button
+                type="button"
+                className="metro-panorama__headerbar-back"
+                aria-label="Back"
+                onClick={onBack}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M15 5l-7 7 7 7"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            ) : null}
+            {headerTitle ?? title ? (
+              <h1
+                className={`metro-panorama__headerbar-title metro-panorama__headerbar-title--${headerTitleSize}`}
+              >
+                {headerTitle ?? title}
+              </h1>
+            ) : null}
+          </div>
+          {headerSubtitle ? (
+            <div className="metro-panorama__headerbar-subtitle">{headerSubtitle}</div>
+          ) : null}
+        </header>
       ) : null}
-
-      {title ? <div className="metro-panorama__title">{title.toUpperCase()}</div> : null}
 
       <div
         className="metro-panorama__scroll"

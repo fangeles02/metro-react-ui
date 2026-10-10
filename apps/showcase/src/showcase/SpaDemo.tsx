@@ -1,4 +1,4 @@
-import { AppBar, AppBarButton, Panorama, PanoramaItem } from '@metro-react-ui/core';
+import { AppBar, AppBarButton, MetroLayout, Panorama, PanoramaItem } from '@metro-react-ui/core';
 
 /* Simple inline SVG glyphs (stroke-based, inherit currentColor) used for the
    demo. Consumers can pass any React node as an AppBarButton `icon`. */
@@ -50,15 +50,15 @@ function TrashIcon() {
 }
 
 /**
- * The SPA app bar, rendered at the app level (outside the page-transition
- * wrapper) so `position="fixed"` pins it to the viewport bottom. A transformed
- * ancestor (the FlipTransition) would otherwise become its containing block.
+ * The SPA app bar, rendered inside the MetroLayout's `appBar` slot. The
+ * MetroLayout keeps it in normal flow (inflow mode), so it stays pinned to the
+ * bottom of the viewport without needing `position: fixed` (which would break
+ * inside the FlipTransition's transformed ancestor).
  */
 export function SpaAppBar() {
   return (
     <AppBar
       toggleOnContextMenu
-      position="fixed"
       alignment="left"
       secondaryMenu={[
         { label: 'Settings', onSelect: () => console.log('settings') },
@@ -76,29 +76,37 @@ export function SpaAppBar() {
 
 /**
  * SPA Demo — a full-page demo of the AppBar pinned to the bottom of the
- * screen (`position="fixed"`). The app bar itself is rendered at the app
- * level (outside the page-transition wrapper) so `position: fixed` pins it
- * to the viewport; this page provides a full-screen Panorama workspace.
+ * screen. The page is wrapped in a `MetroLayout` (header + body + app bar),
+ * so the layout is uniform with the rest of the app. The body holds a
+ * full-screen Panorama workspace.
  */
 export function SpaDemo() {
   return (
-    <Panorama
-      title="My Application"
-      background="/panorama-bg.svg"
-      overlayOpacity={0.3}
-      sectionWidth="80%"
-      bottomInset={84}
+    <MetroLayout
+
+      appBar={<SpaAppBar />}
     >
-      <PanoramaItem header="home">
-        <p>Welcome to the SPA demo.</p>
-        <p>Pan left/right to explore the pages. The background scrolls slower for a parallax effect.</p>
-      </PanoramaItem>
-      <PanoramaItem header="activity">
-        <p>Recent activity lives here.</p>
-      </PanoramaItem>
-      <PanoramaItem header="settings">
-        <p>Settings content.</p>
-      </PanoramaItem>
-    </Panorama>
+      <Panorama
+        background="/panorama-bg.svg"
+        overlayOpacity={0.3}
+        sectionWidth="80%"
+        fullscreen
+        title="SPA Demo"
+        headerTitleSize="large"
+        headerSubtitle="Lorem ipsum sit dolor"
+      
+      >
+        <PanoramaItem header="home">
+          <p>Welcome to the SPA demo.</p>
+          <p>Pan left/right to explore the pages. The background scrolls slower for a parallax effect.</p>
+        </PanoramaItem>
+        <PanoramaItem header="activity">
+          <p>Recent activity lives here.</p>
+        </PanoramaItem>
+        <PanoramaItem header="settings">
+          <p>Settings content.</p>
+        </PanoramaItem>
+      </Panorama>
+    </MetroLayout>
   );
 }

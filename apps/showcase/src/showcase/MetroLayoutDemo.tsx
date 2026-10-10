@@ -45,6 +45,18 @@ function LongContent() {
   );
 }
 
+/** A simple logo used as an image title. */
+function LogoTitle() {
+  return (
+    <svg viewBox="0 0 200 40" aria-label="Metro UI" role="img">
+      <rect x="0" y="0" width="40" height="40" rx="6" fill="var(--wp-accent)" />
+      <text x="52" y="30" fontFamily="var(--wp-font-family)" fontSize="26" fontWeight="300" fill="currentColor">
+        Metro UI
+      </text>
+    </svg>
+  );
+}
+
 export function MetroLayoutDemo() {
   return (
     <>
@@ -88,10 +100,48 @@ export function MetroLayoutDemo() {
       </div>
 
       <div className="showcase__demo">
+        <span className="showcase__demo-label">Title sizes — large (default) &amp; small</span>
+        <div className="showcase__demo-frame" style={{ maxHeight: 'none', overflow: 'hidden' }}>
+          <MetroLayout title="large title" titleSize="large">
+            <p style={{ color: 'var(--wp-subtle)' }}>Large title — extra-extra-large, light, lowercase.</p>
+          </MetroLayout>
+        </div>
+        <div className="showcase__demo-frame" style={{ maxHeight: 'none', overflow: 'hidden' }}>
+          <MetroLayout title="small title" titleSize="small">
+            <p style={{ color: 'var(--wp-subtle)' }}>Small title — large, semibold, uppercase.</p>
+          </MetroLayout>
+        </div>
+      </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">Image title</span>
+        <div className="showcase__demo-frame" style={{ maxHeight: 'none', overflow: 'hidden' }}>
+          <MetroLayout title={<LogoTitle />}>
+            <p style={{ color: 'var(--wp-subtle)' }}>
+              The title accepts any React node — here it's an SVG logo that fills the title's height.
+            </p>
+          </MetroLayout>
+        </div>
+      </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">Empty header — min-height 50px</span>
+        <div className="showcase__demo-frame" style={{ maxHeight: 'none', overflow: 'hidden' }}>
+          <MetroLayout>
+            <p style={{ color: 'var(--wp-subtle)' }}>
+              With no title, onBack, or subtitle, the header still renders but collapses to a
+              min-height of 50px.
+            </p>
+          </MetroLayout>
+        </div>
+      </div>
+
+      <div className="showcase__demo">
         <span className="showcase__demo-label">How it works</span>
         <CodeBlock
           code={`<MetroLayout
   title="settings"
+  titleSize="large"          // or "small"
   subtitle="Optional subtitle"
   onBack={() => navigate(-1)}
   footer={<span>Footer</span>}
@@ -103,7 +153,14 @@ export function MetroLayoutDemo() {
   }
 >
   {/* body content */}
-</MetroLayout>`}
+</MetroLayout>
+
+// Image title — any React node fills the title's height.
+<MetroLayout title={<Logo />}>...</MetroLayout>
+
+// Empty header — omit title, onBack, and subtitle; the header
+// collapses to a min-height of 50px.
+<MetroLayout>...</MetroLayout>`}
         />
       </div>
     </>
