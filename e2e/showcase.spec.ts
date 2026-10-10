@@ -35,7 +35,6 @@ const PAGES: [string, string][] = [
   ['MetroLayout', '.metro-layout'],
   ['PageTransition', '.metro-flip'],
   ['SPA Demo', '.metro-appbar'],
-  ['Settings', '.metro-toggle'],
 ];
 
 for (const [name, rootClass] of PAGES) {
@@ -103,16 +102,33 @@ test('ListPicker: opens and selects an option', async ({ page }) => {
 });
 
 test('Settings: switching accent color applies instantly', async ({ page }) => {
-  await gotoPage(page, 'Settings');
+  // Settings is reachable via the home app bar's settings button.
+  await page.goto('/');
+  await page.locator('.metro-appbarbutton[aria-label="settings"]').dispatchEvent('click');
+  await expect(page.locator('.showcase__pagetitle')).toHaveText('Settings');
   const redSwatch = page.locator('.showcase__accent-swatch[aria-label="Red"]');
   await redSwatch.click();
   await expect(page.locator('.showcase__demo-hint', { hasText: '#E51400' })).toBeVisible();
 });
 
-test('Home page renders all nav items', async ({ page }) => {
+test('Home page renders the panorama with all nav items', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.showcase__hero-title')).toHaveText('Metro UI Toolkit');
-  await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(27);
+  // The home page is a full-bleed MetroLayout + Panorama.
+  await expect(page.locator('.metro-panorama')).toBeVisible();
+  await expect(page.locator('.metro-panorama__headerbar-title')).toHaveText('Metro UI Toolkit');
+  // The first panorama section is "overview".
+  await expect(page.locator('.metro-panorama__header').first()).toHaveText('overview');
+  // The Controls section lists every sample except Settings (26 items).
+  await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(26);
+  // The app bar has a single settings button.
+  await expect(page.locator('.metro-appbarbutton[aria-label="settings"]')).toBeVisible();
+});
+
+test('Home page: settings app bar button opens the Settings page', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('.metro-appbarbutton[aria-label="settings"]').dispatchEvent('click');
+  await expect(page.locator('.showcase__pagetitle')).toHaveText('Settings');
+  await expect(page.locator('.metro-toggle')).toBeVisible();
 });
 
 test('MPA demo: threads -> conversation across real page loads', async ({ page }) => {

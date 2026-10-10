@@ -14,8 +14,10 @@ export const HOME_LIST_ITEMS = '.showcase__listitem';
 
 /**
  * Navigate to a showcase page by dispatching a click on its home-list item.
- * Uses `dispatchEvent` because the list items are never "stable" for a normal
- * Playwright click (persistent animations / transitions).
+ * The Controls list lives inside the home panorama, which is horizontally
+ * scrolled, so the item is brought into view first. Uses `dispatchEvent`
+ * because the list items are never "stable" for a normal Playwright click
+ * (persistent animations / transitions).
  */
 export async function gotoPage(page: Page, pageName: string) {
   await page.goto('/');
@@ -23,6 +25,9 @@ export async function gotoPage(page: Page, pageName: string) {
   const item = page
     .locator(HOME_LIST_ITEMS)
     .filter({ has: page.locator('.showcase__listitem-header', { hasText: new RegExp(`^${escapeRegex(pageName)}$`) }) });
+  // The Controls list lives inside the home panorama (horizontally scrolled),
+  // so the item may be off-screen. `dispatchEvent` fires the click handler
+  // regardless of visibility, so no scrolling is needed.
   await item.dispatchEvent('click');
   // The FlipTransition animates the page in; wait for the page to appear.
   // Fullscreen pages (e.g. SPA Demo) have no title panel, so fall back to

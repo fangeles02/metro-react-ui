@@ -81,6 +81,52 @@
   color: var(--wp-background);
 }
 
+/* ---- Home page (MetroLayout + Panorama) ----
+   The home page is a full-bleed MetroLayout whose body holds a Panorama.
+   The panorama handles horizontal panning; each section scrolls vertically
+   so tall content (e.g. the Controls list or Changelog) stays within the
+   fixed viewport. */
+
+/* Let each panorama section scroll vertically on its own, so horizontal
+   panning between pages still works. */
+.showcase__page--fullscreen .metro-panorama__section {
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* The panorama's scroll strip must not clip the sections' vertical scroll. */
+.showcase__page--fullscreen .metro-panorama__scroll {
+  overflow-y: hidden;
+}
+
+/* Home page section scaffolding */
+.showcase__home-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.showcase__home-lead {
+  margin: 0;
+  font-size: var(--wp-font-size-normal);
+  line-height: 1.5;
+  color: var(--wp-foreground);
+  max-width: 60ch;
+}
+
+.showcase__home-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.showcase__home-hint {
+  margin: 0;
+  font-size: var(--wp-font-size-normal);
+  color: var(--wp-subtle);
+  opacity: 0.6;
+}
+
 /* Hero — introduces the toolkit on the home page */
 .showcase__hero {
   margin: 0 0 48px;
