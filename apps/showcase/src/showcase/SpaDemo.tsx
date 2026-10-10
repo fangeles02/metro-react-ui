@@ -57,6 +57,7 @@ function TrashIcon() {
 export function SpaAppBar() {
   return (
     <AppBar
+      toggleOnContextMenu
       position="fixed"
       alignment="left"
       secondaryMenu={[

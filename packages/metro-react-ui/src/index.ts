@@ -53,6 +53,10 @@ export type { AppBarProps, AppBarBackground, AppBarAlignment } from './component
 export { AppBarButton } from './components/AppBarButton/AppBarButton';
 export type { AppBarButtonProps, AppBarButtonVariant } from './components/AppBarButton/AppBarButton';
 
+// Layout
+export { MetroLayout } from './components/MetroLayout/MetroLayout';
+export type { MetroLayoutProps, MetroLayoutScroll } from './components/MetroLayout/MetroLayout';
+
 export { DatePicker } from './components/DateTimePicker/DatePicker';
 export type { DatePickerProps } from './components/DateTimePicker/DatePicker';
 export { TimePicker } from './components/DateTimePicker/TimePicker';

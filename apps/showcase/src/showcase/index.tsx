@@ -19,6 +19,7 @@ import { PivotDemo } from './PivotDemo';
 import { PanoramaDemo } from './PanoramaDemo';
 import { EffectsDemo } from './EffectsDemo';
 import { AppBarDemo } from './AppBarDemo';
+import { MetroLayoutDemo } from './MetroLayoutDemo';
 import { SpaDemo } from './SpaDemo';
 import { FlipTransitionDemo } from './FlipTransitionDemo';
 import { ChatBubbleDemo } from './ChatBubbleDemo';
@@ -62,6 +63,7 @@ export const showcasePages: ShowcasePage[] = [
   { id: 'panorama', name: 'Panorama', description: 'Pannable parallax sections', icon: '⇄', render: () => <PanoramaDemo /> },
   { id: 'effects', name: 'Effects', description: 'Tilt & slide-in', icon: '✦', render: () => <EffectsDemo /> },
   { id: 'appbar', name: 'AppBar', description: 'Circular app bar buttons', icon: '◯', render: () => <AppBarDemo /> },
+  { id: 'metrolayout', name: 'MetroLayout', description: 'Uniform page layout container', icon: '▤', render: () => <MetroLayoutDemo /> },
   { id: 'icons', name: 'Icons', description: 'Fluent UI System Icons gallery', icon: '✦', render: () => <Suspense fallback={<IconDemoFallback />}><IconDemo /></Suspense> },
   { id: 'transition', name: 'PageTransition', description: 'Flip page transition', icon: '⇄', render: () => <FlipTransitionDemo /> },
   { id: 'chatbubble', name: 'ChatBubble', description: 'WP 8.1 chat message bubble', icon: '💬', render: () => <ChatBubbleDemo /> },

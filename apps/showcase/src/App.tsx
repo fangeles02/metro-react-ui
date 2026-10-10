@@ -125,6 +125,31 @@ function Home({
 
         <div className="showcase__changelog-entry">
           <div className="showcase__changelog-head">
+            <span className="showcase__changelog-component">MetroLayout</span>
+            <span className="showcase__changelog-date">v0.1.3</span>
+          </div>
+          <ul className="showcase__changelog-list">
+            <li>New general-purpose page container that standardizes layout across all pages — header (title + back button + optional subtitle), body, footer, and app bar.</li>
+            <li><code>scroll</code> prop — <code>fixed</code> (default) pins the header and scrolls the body + footer internally; <code>scrollable</code> scrolls the whole page (header + body + footer).</li>
+            <li>App bar is pinned to the bottom of the viewport in both modes while content scrolls behind it.</li>
+            <li>App bar accepts the full <code>&lt;AppBar&gt;</code> component via the <code>appBar</code> slot.</li>
+          </ul>
+        </div>
+
+        <div className="showcase__changelog-entry">
+          <div className="showcase__changelog-head">
+            <span className="showcase__changelog-component">AppBar</span>
+            <span className="showcase__changelog-date">v0.1.3</span>
+          </div>
+          <ul className="showcase__changelog-list">
+            <li>Wide-screen show/hide — the whole bar is hidden by default on wide screens and slides up/down when toggled.</li>
+            <li>New <code>toggleOnContextMenu</code> prop — right-click (mouse) or long-press (touch) anywhere on the page toggles the bar; the native context menu is suppressed while enabled.</li>
+            <li>Mobile is unaffected — the bar stays visible and only the button labels toggle.</li>
+          </ul>
+        </div>
+
+        <div className="showcase__changelog-entry">
+          <div className="showcase__changelog-head">
             <span className="showcase__changelog-component">Panorama</span>
             <span className="showcase__changelog-date">v0.1.3</span>
           </div>

@@ -32,6 +32,7 @@ const PAGES: [string, string][] = [
   ['Panorama', '.metro-panorama'],
   ['Effects', '.metro-tilt'],
   ['AppBar', '.metro-appbar'],
+  ['MetroLayout', '.metro-layout'],
   ['PageTransition', '.metro-flip'],
   ['SPA Demo', '.metro-appbar'],
   ['Settings', '.metro-toggle'],
@@ -111,7 +112,7 @@ test('Settings: switching accent color applies instantly', async ({ page }) => {
 test('Home page renders all nav items', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.showcase__hero-title')).toHaveText('Metro UI Toolkit');
-  await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(26);
+  await expect(page.locator(HOME_LIST_ITEMS)).toHaveCount(27);
 });
 
 test('MPA demo: threads -> conversation across real page loads', async ({ page }) => {
@@ -168,4 +169,22 @@ test('AppBar: wide-screen show/hide toggles on right-click', async ({ page }) =>
   await page.mouse.click(400, 300, { button: 'right' });
   await expect(bar).toHaveClass(/metro-appbar--hidden/);
   await expect(bar).toHaveAttribute('aria-hidden', 'true');
+});
+
+test('MetroLayout: fixed mode scrolls body internally', async ({ page }) => {
+  await gotoPage(page, 'MetroLayout');
+  await expectPageRendered(page);
+  // The first demo is the fixed layout (title "settings").
+  const layout = page.locator('.metro-layout--fixed').first();
+  await expect(layout).toBeVisible();
+  await expect(layout.locator('.metro-layout__title')).toHaveText('settings');
+  // The content region (body + footer) is the internal scroll container.
+  const content = layout.locator('.metro-layout__content');
+  await expect(content).toHaveCSS('overflow-y', 'auto');
+  // The content has scrollable overflow (long body content).
+  const overflow = await content.evaluate((el) => el.scrollHeight > el.clientHeight);
+  expect(overflow).toBe(true);
+  // The app bar is pinned to the bottom of the viewport (last flex child of
+  // the fixed 100vh layout).
+  await expect(layout.locator('.metro-appbar')).toHaveCSS('position', 'relative');
 });

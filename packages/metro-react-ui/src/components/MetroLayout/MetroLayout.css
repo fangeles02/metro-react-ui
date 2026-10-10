@@ -1,0 +1,141 @@
+/* ---- MetroLayout: general page container ----
+   Standardizes page layout with four slots: header (title + back + subtitle),
+   body (scrollable content), footer (optional), and an AppBar pinned to the
+   bottom of the viewport.
+
+   The layout is always a fixed 100vh flex column. The app bar is the last
+   flex child, so it stays pinned to the bottom of the viewport while the
+   scroll region above it scrolls. */
+
+.metro-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-family: var(--wp-font-family);
+  color: var(--wp-foreground);
+  background: var(--wp-background);
+}
+
+/* The scroll region (header + content). Which parts scroll depends on mode. */
+.metro-layout__scroll {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Fixed: the header is pinned; only the content (body + footer) scrolls. */
+.metro-layout--fixed .metro-layout__scroll {
+  overflow: hidden;
+}
+.metro-layout--fixed .metro-layout__content {
+  overflow-y: auto;
+}
+
+/* Scrollable: the whole region (header + body + footer) scrolls. */
+.metro-layout--scrollable .metro-layout__scroll {
+  overflow-y: auto;
+}
+
+/* ---- Header ---- */
+.metro-layout__header {
+  flex: none;
+  padding: 24px 24px 12px;
+}
+
+/* First line: back button + title, laid out in a row. */
+.metro-layout__header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metro-layout__title {
+  margin: 0;
+  font-size: var(--wp-font-size-title-large);
+  font-weight: var(--wp-font-weight-light);
+  line-height: 1.05;
+  text-transform: lowercase;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* Back button — accent-colored ‹ arrow, sized to the touch target. */
+.metro-layout__back {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--wp-touch-target);
+  height: var(--wp-touch-target);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--wp-accent);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.metro-layout__back svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+}
+
+.metro-layout__back:active {
+  opacity: 0.6;
+}
+
+/* Optional subtitle — smaller, subtle, with a bottom margin. */
+.metro-layout__subtitle {
+  margin-top: 4px;
+  margin-bottom: 12px;
+  font-size: var(--wp-font-size-normal);
+  color: var(--wp-subtle);
+}
+
+/* ---- Content (body + footer) ---- */
+.metro-layout__content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Body ----
+   Sizes to its content (flex: none) so the footer sits cleanly below it and
+   the two scroll together inside the content region. A `flex: 1` body would
+   clip its tall content to a fixed box and overflow it over the footer. */
+.metro-layout__body {
+  flex: none;
+  padding: 0 24px 24px;
+}
+
+/* ---- Footer ---- */
+.metro-layout__footer {
+  flex: none;
+  padding: 12px 24px;
+  border-top: 1px solid var(--wp-chrome-low);
+}
+
+/* ---- AppBar (pinned to viewport bottom) ----
+   The app bar is wrapped in `.metro-layout__appbar`, the last flex child of
+   the fixed 100vh layout, so it stays pinned to the bottom of the viewport
+   while the scroll region above it scrolls. In inflow mode the wrapper
+   collapses to height 0 when the bar is hidden on wide screens (the component
+   sets the inline height), so the body expands to fill the space. The
+   secondary menu keeps its original in-flow behavior: it expands below the
+   buttons and the app bar slides up to reveal it. */
+.metro-layout__appbar {
+  flex: none;
+  overflow: hidden;
+  transition: height 300ms var(--wp-easing);
+}
+
+.metro-layout .metro-appbar {
+  position: relative;
+}
