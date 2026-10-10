@@ -16,6 +16,7 @@ import { HubTileDemo } from './HubTileDemo';
 import { ProgressRingDemo } from './ProgressRingDemo';
 import { TileDemo } from './TileDemo';
 import { PivotDemo } from './PivotDemo';
+import { PanoramaDemo } from './PanoramaDemo';
 import { EffectsDemo } from './EffectsDemo';
 import { AppBarDemo } from './AppBarDemo';
 import { SpaDemo } from './SpaDemo';
@@ -35,6 +36,8 @@ export interface ShowcasePage {
   name: string;
   description: string;
   icon: string;
+  /** Render the page full-bleed (no title panel / footer chrome). */
+  fullscreen?: boolean;
   render: () => ReactNode;
 }
 
@@ -56,12 +59,13 @@ export const showcasePages: ShowcasePage[] = [
   { id: 'progressring', name: 'ProgressRing', description: 'Indeterminate progress ring', icon: '◌', render: () => <ProgressRingDemo /> },
   { id: 'tile', name: 'Tile', description: 'WP 8.1 start tile', icon: '▣', render: () => <TileDemo /> },
   { id: 'pivot', name: 'Pivot', description: 'Swipeable tabs', icon: '⇋', render: () => <PivotDemo /> },
+  { id: 'panorama', name: 'Panorama', description: 'Pannable parallax sections', icon: '⇄', render: () => <PanoramaDemo /> },
   { id: 'effects', name: 'Effects', description: 'Tilt & slide-in', icon: '✦', render: () => <EffectsDemo /> },
   { id: 'appbar', name: 'AppBar', description: 'Circular app bar buttons', icon: '◯', render: () => <AppBarDemo /> },
   { id: 'icons', name: 'Icons', description: 'Fluent UI System Icons gallery', icon: '✦', render: () => <Suspense fallback={<IconDemoFallback />}><IconDemo /></Suspense> },
   { id: 'transition', name: 'PageTransition', description: 'Flip page transition', icon: '⇄', render: () => <FlipTransitionDemo /> },
   { id: 'chatbubble', name: 'ChatBubble', description: 'WP 8.1 chat message bubble', icon: '💬', render: () => <ChatBubbleDemo /> },
-  { id: 'spa', name: 'SPA Demo', description: 'App bar fixed to bottom', icon: '◧', render: () => <SpaDemo /> },
+  { id: 'spa', name: 'SPA Demo', description: 'App bar fixed to bottom', icon: '◧', fullscreen: true, render: () => <SpaDemo /> },
   { id: 'mpa', name: 'MPA Demo', description: 'Multi-page messaging sample', icon: '⇄', render: () => <MpaDemo /> },
   { id: 'settings', name: 'Settings', description: 'Theme: light/dark + accent color', icon: '⚙', render: () => <SettingsPage /> },
 ];

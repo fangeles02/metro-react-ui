@@ -24,8 +24,12 @@ export async function gotoPage(page: Page, pageName: string) {
     .locator(HOME_LIST_ITEMS)
     .filter({ has: page.locator('.showcase__listitem-header', { hasText: new RegExp(`^${escapeRegex(pageName)}$`) }) });
   await item.dispatchEvent('click');
-  // The FlipTransition animates the page in; wait for the page title to appear.
-  await expect(page.locator('.showcase__pagetitle')).toHaveText(pageName, { timeout: 5000 });
+  // The FlipTransition animates the page in; wait for the page to appear.
+  // Fullscreen pages (e.g. SPA Demo) have no title panel, so fall back to
+  // waiting for the fullscreen container.
+  await expect(
+    page.locator('.showcase__pagetitle, .showcase__page--fullscreen').first(),
+  ).toBeVisible({ timeout: 5000 });
 }
 
 /** Escape regex special characters in a literal string. */
@@ -35,7 +39,9 @@ function escapeRegex(s: string): string {
 
 /** Assert the page rendered without crashing (no error text, page content present). */
 export async function expectPageRendered(page: Page) {
-  await expect(page.locator('.showcase__page-content')).toBeVisible();
+  await expect(
+    page.locator('.showcase__page-content, .showcase__page--fullscreen').first(),
+  ).toBeVisible();
 }
 
 /** Assert a component root with the given class is present on the page. */

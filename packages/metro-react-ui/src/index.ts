@@ -81,6 +81,13 @@ export type { TileContainerProps } from './components/TileContainer/TileContaine
 export { Pivot, PivotItem } from './components/Pivot/Pivot';
 export type { PivotProps, PivotItemProps } from './components/Pivot/Pivot';
 
+export { Panorama, PanoramaItem } from './components/Panorama/Panorama';
+export type {
+  PanoramaProps,
+  PanoramaItemProps,
+  PanoramaItemData,
+} from './components/Panorama/Panorama';
+
 export { TiltEffect } from './components/Effects/TiltEffect';
 export type { TiltEffectProps } from './components/Effects/TiltEffect';
 

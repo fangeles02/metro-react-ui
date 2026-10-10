@@ -125,6 +125,19 @@ function Home({
 
         <div className="showcase__changelog-entry">
           <div className="showcase__changelog-head">
+            <span className="showcase__changelog-component">Panorama</span>
+            <span className="showcase__changelog-date">v0.1.3</span>
+          </div>
+          <ul className="showcase__changelog-list">
+            <li>New WP7/8-style panorama — all sections side-by-side in a continuous strip with a parallax background.</li>
+            <li>Wide mode (≥ <code>breakpoint</code>, default 768px) uses free native scrolling with a configurable <code>scrollbar</code>; mobile mode snaps to sections with a wheel lock.</li>
+            <li>Configurable <code>sectionWidth</code> (px or CSS length like <code>'100%'</code>), <code>overlay</code> color + <code>overlayOpacity</code>, and <code>bottomInset</code> to sit above a fixed AppBar.</li>
+            <li>Pointer drag, wheel/trackpad, and keyboard arrow navigation.</li>
+          </ul>
+        </div>
+
+        <div className="showcase__changelog-entry">
+          <div className="showcase__changelog-head">
             <span className="showcase__changelog-component">Pivot</span>
             <span className="showcase__changelog-date">v{__PACKAGE_VERSION__}</span>
           </div>
@@ -191,6 +204,17 @@ function PageView({
   page: (typeof showcasePages)[number];
   onBack: () => void;
 }) {
+  if (page.fullscreen) {
+    return (
+      <div className="showcase__page showcase__page--fullscreen">
+        <button type="button" className="showcase__fullscreen-back" onClick={onBack}>
+          ← back
+        </button>
+        {page.render()}
+      </div>
+    );
+  }
+
   return (
     <div className="showcase__page">
       <div className="showcase__titlepanel">

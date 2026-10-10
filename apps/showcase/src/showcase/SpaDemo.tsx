@@ -1,4 +1,4 @@
-import { AppBar, AppBarButton } from '@metro-react-ui/core';
+import { AppBar, AppBarButton, Panorama, PanoramaItem } from '@metro-react-ui/core';
 
 /* Simple inline SVG glyphs (stroke-based, inherit currentColor) used for the
    demo. Consumers can pass any React node as an AppBarButton `icon`. */
@@ -57,6 +57,7 @@ function TrashIcon() {
 export function SpaAppBar() {
   return (
     <AppBar
+    
       position="fixed"
       alignment="left"
       secondaryMenu={[
@@ -77,18 +78,27 @@ export function SpaAppBar() {
  * SPA Demo — a full-page demo of the AppBar pinned to the bottom of the
  * screen (`position="fixed"`). The app bar itself is rendered at the app
  * level (outside the page-transition wrapper) so `position: fixed` pins it
- * to the viewport; this page only provides the workspace content.
+ * to the viewport; this page provides a full-screen Panorama workspace.
  */
 export function SpaDemo() {
   return (
-    <div className="showcase__demo">
-      <span className="showcase__demo-label">SPA Demo</span>
-
-      <div className="showcase__demo-frame showcase__demo-frame--auto">
-        <div className="appbar-demo-content">
-          Content will be added soon
-        </div>
-      </div>
-    </div>
+    <Panorama
+      title="My Application"
+      background="/panorama-bg.svg"
+      overlayOpacity={0.3}
+      sectionWidth="80%"
+      bottomInset={84}
+    >
+      <PanoramaItem header="home">
+        <p>Welcome to the SPA demo.</p>
+        <p>Pan left/right to explore the pages. The background scrolls slower for a parallax effect.</p>
+      </PanoramaItem>
+      <PanoramaItem header="activity">
+        <p>Recent activity lives here.</p>
+      </PanoramaItem>
+      <PanoramaItem header="settings">
+        <p>Settings content.</p>
+      </PanoramaItem>
+    </Panorama>
   );
 }

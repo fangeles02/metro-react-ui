@@ -60,6 +60,7 @@ function App() {
 | `Tile` | Animated | WP 8.1 start-screen tile (4 sizes, message modes) |
 | `TileContainer` | Animated | WP 8.1 start-screen grid container |
 | `Pivot` | Animated | Swipeable tabs with large lowercase headers |
+| `Panorama` | Animated | Pannable full-width sections with parallax background |
 | `TiltEffect` | Effects | 3D tilt on press |
 | `SlideInEffect` | Effects | Content slides in when scrolled into view |
 | `FlipTransition` | Transitions | Book-page / turnstile / swivel page transition |

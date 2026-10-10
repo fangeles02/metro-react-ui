@@ -1,0 +1,150 @@
+.metro-panorama {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--wp-font-family);
+  color: var(--wp-foreground);
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  outline: none;
+}
+
+.metro-panorama:active {
+  cursor: grabbing;
+}
+
+.metro-panorama:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--wp-accent);
+}
+
+/* Parallax background layer — sits behind the content and scrolls slower. */
+.metro-panorama__background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Width is set inline to the full content width so the image never runs
+     out when scrolled to the last section (parallax moves it slower). */
+  transition: transform var(--wp-duration-slow) var(--wp-easing);
+  will-change: transform;
+  pointer-events: none;
+}
+
+.metro-panorama__title {
+  position: relative;
+  font-size: var(--wp-font-size-small);
+  font-weight: var(--wp-font-weight-semibold);
+  letter-spacing: 1.5px;
+  margin: 0 0 8px;
+  padding: 0 var(--wp-content-margin);
+  color: var(--wp-subtle);
+}
+
+/* Solid overlay drawn over the background (behind the content) to keep the
+   content readable. Color is set inline (defaults to the theme background). */
+.metro-panorama__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Scroll container. In mobile mode it clips (transform-based panning); in
+   wide mode it becomes the native horizontal scroll container. */
+.metro-panorama__scroll {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* The horizontal strip holding all sections side-by-side. */
+.metro-panorama__track {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  transition: transform var(--wp-duration-slow) var(--wp-easing);
+  will-change: transform;
+}
+
+.metro-panorama__section {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  padding: 0 var(--wp-content-margin);
+}
+
+.metro-panorama__header {
+  margin: 0 0 16px;
+  font-size: var(--wp-font-size-extra-extra-large);
+  font-weight: var(--wp-font-weight-light);
+  letter-spacing: -1.5px;
+  text-transform: lowercase;
+  line-height: 1.1;
+  color: var(--wp-foreground);
+}
+
+.metro-panorama__content {
+  font-size: var(--wp-font-size-normal);
+  font-weight: var(--wp-font-weight-normal);
+  line-height: 1.5;
+}
+
+/* Trailing spacer so the last page aligns to the left edge when pages are
+   narrower than the viewport. */
+.metro-panorama__spacer {
+  flex: 0 0 auto;
+  /* Match the track height so the spacer is a real flex item that contributes
+     to the track's scrollable width. */
+  align-self: stretch;
+  min-height: 1px;
+}
+
+/* ---- Wide mode: free native scrolling (no snap/lock) ---- */
+.metro-panorama--wide {
+  cursor: auto;
+  /* Allow native horizontal touch panning (mobile mode keeps pan-y so the
+     JS pointer handlers own horizontal gestures). */
+  touch-action: pan-x pan-y;
+}
+
+.metro-panorama--wide .metro-panorama__scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.metro-panorama--wide .metro-panorama__track {
+  /* Native scroll positions the strip; no transform needed. */
+  transform: none;
+  transition: none;
+}
+
+/* Scrollbar visibility variants (wide mode only). */
+.metro-panorama--wide.metro-panorama--scrollbar-auto .metro-panorama__scroll {
+  overflow-x: auto;
+}
+
+.metro-panorama--wide.metro-panorama--scrollbar-visible .metro-panorama__scroll {
+  overflow-x: scroll;
+}
+
+.metro-panorama--wide.metro-panorama--scrollbar-hidden .metro-panorama__scroll {
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.metro-panorama--wide.metro-panorama--scrollbar-hidden .metro-panorama__scroll::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metro-panorama__track,
+  .metro-panorama__background {
+    transition: none;
+  }
+}

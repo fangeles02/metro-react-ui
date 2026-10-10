@@ -23,6 +23,41 @@
   padding: 0 24px 24px;
 }
 
+/* Fullscreen demo pages (e.g. SPA) — fill the viewport, no title/footer chrome. */
+.showcase__page--fullscreen {
+  position: relative;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.showcase__page--fullscreen .metro-panorama {
+  flex: 1;
+  min-height: 0;
+}
+
+.showcase__fullscreen-back {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 40;
+  border: 2px solid var(--wp-foreground);
+  background: var(--wp-background);
+  color: var(--wp-foreground);
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-normal);
+  font-weight: var(--wp-font-weight-semibold);
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.showcase__fullscreen-back:active {
+  background: var(--wp-foreground);
+  color: var(--wp-background);
+}
+
 /* Hero — introduces the toolkit on the home page */
 .showcase__hero {
   margin: 0 0 48px;
