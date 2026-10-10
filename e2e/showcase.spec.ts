@@ -119,8 +119,14 @@ test('MPA demo: threads -> conversation across real page loads', async ({ page }
   await page.goto('/mpa/threads.html');
   await expect(page.locator('.mpa__pagetitle')).toHaveText('threads');
   await expect(page.locator('.mpa__thread')).toHaveCount(4);
-  // Each page has its own app bar.
-  await expect(page.locator('.metro-appbar')).toBeVisible();
+  // Each page has its own app bar, hidden by default on wide screens
+  // (toggleOnContextMenu). Right-click anywhere reveals it.
+  const appbar = page.locator('.metro-appbar');
+  await expect(appbar).toHaveClass(/metro-appbar--hidden/);
+  // Dispatch a synthetic contextmenu (MPA elements aren't stable for
+  // coordinate-based right-clicks — see repo memory).
+  await page.locator('.mpa__thread').first().dispatchEvent('contextmenu');
+  await expect(appbar).not.toHaveClass(/metro-appbar--hidden/);
 
   // Clicking a thread navigates to a NEW document (URL changes).
   await page.locator('.mpa__thread', { hasText: 'Alex Rivera' }).click();
@@ -130,11 +136,36 @@ test('MPA demo: threads -> conversation across real page loads', async ({ page }
   // WP 8.1-style bubbles render (plain rectangle + tail).
   await expect(page.locator('.mpa__msg--in')).toHaveCount(3);
   await expect(page.locator('.mpa__msg--out')).toHaveCount(1);
-  // Conversation has its own app bar.
-  await expect(page.locator('.metro-appbar')).toBeVisible();
+  // Conversation has its own app bar, also hidden by default on wide.
+  const convBar = page.locator('.metro-appbar');
+  await expect(convBar).toHaveClass(/metro-appbar--hidden/);
+  await page.locator('.mpa__msg--in').first().dispatchEvent('contextmenu');
+  await expect(convBar).not.toHaveClass(/metro-appbar--hidden/);
 
   // Back returns to the threads document.
   await page.locator('.mpa__back').click();
   await page.waitForURL(/\/mpa\/threads\.html$/);
   await expect(page.locator('.mpa__pagetitle')).toHaveText('threads');
+});
+
+test('AppBar: wide-screen show/hide toggles on right-click', async ({ page }) => {
+  await gotoPage(page, 'AppBar');
+  await expectPageRendered(page);
+  // The wide-screen demo bar is hidden by default (toggleOnContextMenu).
+  const frame = page.locator('.showcase__demo-frame', {
+    hasText: 'right-click (or long-press',
+  });
+  const bar = frame.locator('.metro-appbar');
+  await expect(bar).toHaveClass(/metro-appbar--hidden/);
+  await expect(bar).toHaveAttribute('aria-hidden', 'true');
+
+  // Right-click anywhere toggles it open.
+  await page.mouse.click(400, 300, { button: 'right' });
+  await expect(bar).not.toHaveClass(/metro-appbar--hidden/);
+  await expect(bar).toHaveAttribute('aria-hidden', 'false');
+
+  // Right-click again toggles it closed.
+  await page.mouse.click(400, 300, { button: 'right' });
+  await expect(bar).toHaveClass(/metro-appbar--hidden/);
+  await expect(bar).toHaveAttribute('aria-hidden', 'true');
 });

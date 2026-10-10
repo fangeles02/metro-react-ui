@@ -91,7 +91,7 @@ export function AppBarDemo() {
         <span className="showcase__demo-label">App bar (bottom, accented)</span>
         <div className="showcase__demo-frame">
           <div className="appbar-demo-content">scrollable content above the bar</div>
-          <AppBar alignment='left'>
+          <AppBar alignment='left' defaultOpen>
             <AppBarButton label="add" icon={<AddIcon />} />
             <AppBarButton label="done" icon={<CheckIcon />} />
             <AppBarButton label="cancel" icon={<CancelIcon />} />
@@ -105,21 +105,21 @@ export function AppBarDemo() {
         <div className="showcase__demo-row">
           <div className="showcase__demo-frame showcase__demo-frame--auto">
             <div className="appbar-demo-content">left</div>
-            <AppBar alignment="left">
+            <AppBar alignment="left" defaultOpen>
               <AppBarButton label="add" icon={<AddIcon />} />
               <AppBarButton label="done" icon={<CheckIcon />} />
             </AppBar>
           </div>
           <div className="showcase__demo-frame showcase__demo-frame--auto">
             <div className="appbar-demo-content">center</div>
-            <AppBar alignment="center">
+            <AppBar alignment="center" defaultOpen>
               <AppBarButton label="add" icon={<AddIcon />} />
               <AppBarButton label="done" icon={<CheckIcon />} />
             </AppBar>
           </div>
           <div className="showcase__demo-frame showcase__demo-frame--auto">
             <div className="appbar-demo-content">right</div>
-            <AppBar alignment="right">
+            <AppBar alignment="right" defaultOpen>
               <AppBarButton label="add" icon={<AddIcon />} />
               <AppBarButton label="done" icon={<CheckIcon />} />
             </AppBar>
@@ -132,7 +132,7 @@ export function AppBarDemo() {
         <div className="showcase__demo-row">
           <div className="showcase__demo-frame showcase__demo-frame--auto">
             <div className="appbar-demo-content">wide — labels always visible</div>
-            <AppBar alignment="left">
+            <AppBar alignment="left" defaultOpen>
               <AppBarButton label="add" icon={<AddIcon />} />
               <AppBarButton label="done" icon={<CheckIcon />} />
               <AppBarButton label="cancel" icon={<CancelIcon />} />
@@ -140,7 +140,7 @@ export function AppBarDemo() {
           </div>
           <div className="showcase__demo-frame showcase__demo-frame--auto">
             <div className="appbar-demo-content">mobile — labels toggle</div>
-            <AppBar breakpoint={9999}>
+            <AppBar breakpoint={9999} defaultOpen>
               <AppBarButton label="add" icon={<AddIcon />} />
               <AppBarButton label="done" icon={<CheckIcon />} />
               <AppBarButton label="cancel" icon={<CancelIcon />} />
@@ -155,6 +155,7 @@ export function AppBarDemo() {
           <div className="appbar-demo-content">tap ⋯ (or swipe up on touch)</div>
           <AppBar
             alignment="left"
+            defaultOpen
             secondaryMenu={[
               { label: 'New message', onSelect: () => console.log('new message') },
               { label: 'Mark all read', onSelect: () => console.log('mark all read') },
@@ -164,6 +165,21 @@ export function AppBarDemo() {
           >
             <AppBarButton label="add" icon={<AddIcon />} />
             <AppBarButton label="done" icon={<CheckIcon />} />
+          </AppBar>
+        </div>
+      </div>
+
+      <div className="showcase__demo">
+        <span className="showcase__demo-label">Wide-screen show/hide</span>
+        <div className="showcase__demo-frame showcase__demo-frame--auto">
+          <div className="appbar-demo-content">
+            hidden by default on wide — right-click (or long-press on touch)
+            anywhere to toggle
+          </div>
+          <AppBar toggleOnContextMenu alignment="left">
+            <AppBarButton label="add" icon={<AddIcon />} />
+            <AppBarButton label="done" icon={<CheckIcon />} />
+            <AppBarButton label="cancel" icon={<CancelIcon />} />
           </AppBar>
         </div>
       </div>
@@ -237,6 +253,7 @@ export function AppBarDemo() {
             <tr><td><code>defaultOpen</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
             <tr><td><code>isOpen</code></td><td><code>boolean</code></td><td>—</td><td>No</td></tr>
             <tr><td><code>onToggle</code></td><td><code>{'(open: boolean) => void'}</code></td><td>—</td><td>No</td></tr>
+            <tr><td><code>toggleOnContextMenu</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
             <tr><td><code>secondaryMenu</code></td><td><code>ContextMenuItem[]</code></td><td>—</td><td>No</td></tr>
           </tbody>
         </table>

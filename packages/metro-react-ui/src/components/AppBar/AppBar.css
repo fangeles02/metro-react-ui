@@ -93,6 +93,13 @@
   display: block;
 }
 
+/* Wide + hidden (closed): the bar is translated off-screen by the component
+   (inline transform/opacity). Disable pointer events so the off-screen bar
+   doesn't intercept clicks. */
+.metro-appbar--wide.metro-appbar--hidden {
+  pointer-events: none;
+}
+
 /* Mobile: force center alignment + narrower gap. */
 .metro-appbar--mobile .metro-appbar__row {
   justify-content: center;

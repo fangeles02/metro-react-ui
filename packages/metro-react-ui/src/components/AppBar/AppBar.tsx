@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { ContextMenu } from '../ContextMenu/ContextMenu';
 import type { ContextMenuItem } from '../ContextMenu/ContextMenu';
 import './AppBar.css';
@@ -57,6 +57,14 @@ export interface AppBarProps extends Omit<HTMLAttributes<HTMLElement>, 'children
   /** Called when the mobile toggle button is pressed. */
   onToggle?: (open: boolean) => void;
   /**
+   * Wide-screen only: when `true`, the whole app bar is hidden by default and
+   * can be revealed/hidden by right-clicking (mouse) or long-pressing (touch,
+   * 500ms) anywhere on the page. The native context menu is suppressed while
+   * this is enabled. On mobile this has no effect — the bar is always visible
+   * and only the button labels toggle. Defaults to `false`.
+   */
+  toggleOnContextMenu?: boolean;
+  /**
    * WP8 `ApplicationBar.secondaryMenu`: a text-only overflow menu. When set, a
    * "more" (⋯) button appears at the far right of the bar.
    *
@@ -100,6 +108,7 @@ export function AppBar({
   defaultOpen = false,
   isOpen: isOpenProp,
   onToggle,
+  toggleOnContextMenu = false,
   secondaryMenu,
   className,
   ...rest
@@ -117,6 +126,13 @@ export function AppBar({
   const overflowRef = useRef<HTMLButtonElement>(null);
   const menuHeightRef = useRef<number>(0);
   const barRef = useRef<HTMLDivElement>(null);
+  // Whether the wide slide animation has run at least once. The first run
+  // applies the resting state without animating (avoids a flash on mount).
+  const wideSlideReady = useRef(false);
+  // Ref to the latest `toggle` so document-level listeners never go stale.
+  const toggleRef = useRef<() => void>(() => {});
+  // Long-press timer for the wide-screen toggle (touch devices).
+  const longPressTimer = useRef<number | null>(null);
   // Drag-to-reveal gesture state (mobile).
   const dragStartY = useRef<number | null>(null);
   const dragActive = useRef(false);
@@ -127,6 +143,26 @@ export function AppBar({
   // direction — must NOT use the live `menuOpen` flag, because the first
   // upward move flips it to true and would then compute full height.
   const dragStartedOpen = useRef(false);
+
+  // `isOpen` means "expanded": on mobile it shows/hides the button labels; on
+  // wide screens it shows/hides the WHOLE bar. Computed here (above the
+  // effects) because the wide slide effect references it.
+  const isControlled = isOpenProp !== undefined;
+  const isOpen = isControlled ? isOpenProp : internalOpen;
+
+  const toggle = () => {
+    const next = !isOpen;
+    if (isControlled) {
+      onToggle?.(next);
+    } else {
+      setInternalOpen(next);
+      onToggle?.(next);
+    }
+  };
+
+  // Keep the latest `toggle` in a ref so document-level listeners (right-click
+  // / long-press) never call a stale closure.
+  toggleRef.current = toggle;
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -167,27 +203,72 @@ export function AppBar({
     }, 50);
   }, [isMobile]);
 
-  // Wide entrance: slide the WHOLE app bar up from below the viewport into
-  // place once on mount (Windows 8 desktop appbar style). Targets the bar
-  // element itself (not the row content, which is the mobile behavior).
-  useEffect(() => {
-    if (isMobile) return;
+  // Wide slide: show/hide the WHOLE app bar by translating it up/down from
+  // below the viewport (Windows 8 desktop appbar style). Keyed on `isOpen`
+  // (wide) so toggling slides the bar in/out. On mobile this effect only
+  // clears the inline transform/opacity — the bar is always visible there and
+  // `isOpen` only toggles the button labels.
+  useLayoutEffect(() => {
     const bar = barRef.current;
     if (!bar) return;
-    // Start below the viewport, transparent.
-    bar.style.transition = 'none';
-    bar.style.transform = 'translateY(100%)';
-    bar.style.opacity = '0';
-    // Force a reflow so the start state applies before the transition.
+    if (isMobile) {
+      // CRITICAL: clear any inline transform/opacity left over from the wide
+      // slide, otherwise the bar stays hidden after a wide→mobile resize.
+      bar.style.transition = 'none';
+      bar.style.transform = '';
+      bar.style.opacity = '';
+      return;
+    }
+    const open = isOpen;
+    // First run: apply the resting state without animating (no flash).
+    if (!wideSlideReady.current) {
+      wideSlideReady.current = true;
+      bar.style.transition = 'none';
+      bar.style.transform = open ? 'translateY(0)' : 'translateY(100%)';
+      bar.style.opacity = open ? '1' : '0';
+      return;
+    }
+    // Force a reflow so the current state commits before the transition.
     void bar.getBoundingClientRect();
-    // Slide up into place with the easing curve.
-    window.setTimeout(() => {
-      bar.style.transition =
-        'transform 300ms var(--wp-easing), opacity 300ms var(--wp-easing)';
-      bar.style.transform = 'translateY(0)';
-      bar.style.opacity = '1';
-    }, 50);
-  }, [isMobile]);
+    bar.style.transition =
+      'transform 300ms var(--wp-easing), opacity 300ms var(--wp-easing)';
+    bar.style.transform = open ? 'translateY(0)' : 'translateY(100%)';
+    bar.style.opacity = open ? '1' : '0';
+  }, [isOpen, isMobile]);
+
+  // Wide-screen toggle via right-click (mouse) or long-press (touch, 500ms)
+  // anywhere on the page. Only active when `toggleOnContextMenu` is set and
+  // the layout is wide. Suppresses the native context menu while enabled.
+  useEffect(() => {
+    if (!toggleOnContextMenu || isMobile) return;
+    const onContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+      toggleRef.current();
+    };
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse') return; // handled by contextmenu event
+      longPressTimer.current = window.setTimeout(() => {
+        toggleRef.current();
+      }, 500);
+    };
+    const clearLongPress = () => {
+      if (longPressTimer.current) {
+        clearTimeout(longPressTimer.current);
+        longPressTimer.current = null;
+      }
+    };
+    document.addEventListener('contextmenu', onContextMenu);
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('pointerup', clearLongPress);
+    document.addEventListener('pointercancel', clearLongPress);
+    return () => {
+      document.removeEventListener('contextmenu', onContextMenu);
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('pointerup', clearLongPress);
+      document.removeEventListener('pointercancel', clearLongPress);
+      clearLongPress();
+    };
+  }, [toggleOnContextMenu, isMobile]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -242,19 +323,6 @@ export function AppBar({
   if (!isVisible) {
     return null;
   }
-
-  const isControlled = isOpenProp !== undefined;
-  const isOpen = isControlled ? isOpenProp : internalOpen;
-
-  const toggle = () => {
-    const next = !isOpen;
-    if (isControlled) {
-      onToggle?.(next);
-    } else {
-      setInternalOpen(next);
-      onToggle?.(next);
-    }
-  };
 
   const toggleMenu = () => {
     // If a drag just happened, the click is a byproduct of the gesture —
@@ -410,6 +478,8 @@ export function AppBar({
     `metro-appbar--pos-${position}`,
     isMobile ? 'metro-appbar--mobile' : 'metro-appbar--wide',
     isMobile && !isOpen ? 'metro-appbar--collapsed' : '',
+    // Wide + closed: the whole bar is hidden (off-screen, pointer-events none).
+    !isMobile && !isOpen ? 'metro-appbar--hidden' : '',
     menuOpen ? 'metro-appbar--menu-open' : '',
     accented ? 'metro-appbar--accented' : '',
     className ?? '',
@@ -418,7 +488,14 @@ export function AppBar({
     .join(' ');
 
   return (
-    <div ref={barRef} className={classes} role="toolbar" aria-label="app bar" {...rest}>
+    <div
+      ref={barRef}
+      className={classes}
+      role="toolbar"
+      aria-label="app bar"
+      aria-hidden={!isMobile && !isOpen}
+      {...rest}
+    >
       <div className="metro-appbar__row">
         {children}
         {secondaryMenu ? (

@@ -88,7 +88,7 @@ function ThreadsApp() {
 
       {/* The app bar is rendered OUTSIDE the FlipTransition so its transform
           doesn't become the containing block for position:fixed. */}
-      <AppBar position="fixed" alignment="left" secondaryMenu={[{ label: 'Settings', onSelect: () => {} }]}>
+      <AppBar position="fixed" alignment="left" toggleOnContextMenu secondaryMenu={[{ label: 'Settings', onSelect: () => {} }]}>
         <AppBarButton label="new" icon={<NewIcon />} />
         <AppBarButton label="search" icon={<SearchIcon />} />
         <AppBarButton label="settings" icon={<SettingsIcon />} />

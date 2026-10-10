@@ -89,7 +89,7 @@ function ConversationApp() {
       </FlipTransition>
 
       {/* App bar rendered outside the FlipTransition (position:fixed). */}
-      <AppBar position="fixed" alignment="left" secondaryMenu={[{ label: 'Delete conversation', onSelect: () => {} }]}>
+      <AppBar position="fixed" alignment="left" toggleOnContextMenu secondaryMenu={[{ label: 'Delete conversation', onSelect: () => {} }]}>
         <AppBarButton label="attach" icon={<AttachIcon />} />
         <AppBarButton label="call" icon={<CallIcon />} />
         <AppBarButton label="delete" icon={<DeleteIcon />} />
