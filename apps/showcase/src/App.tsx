@@ -24,17 +24,34 @@ export default function App() {
     };
   }, []);
 
+  // Handle the browser back/forward buttons (and gesture back). The SPA pushes
+  // a history entry when navigating to a demo page, so the browser back button
+  // returns to home instead of leaving the app (to about:blank etc.).
+  useEffect(() => {
+    const onPopState = (e: PopStateEvent) => {
+      const pageId = (e.state?.pageId as string | undefined) ?? 'home';
+      const direction: 'forward' | 'backward' = pageId === 'home' ? 'backward' : 'forward';
+      window.scrollTo(0, 0);
+      setCurrent({ pageId, direction });
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
   const navigate = (id: string) => {
     if (id === current.pageId) return;
     // Always start the transition from the top, regardless of current scroll.
     window.scrollTo(0, 0);
+    // Push a history entry so the browser back button returns to home.
+    window.history.pushState({ pageId: id }, '');
     setCurrent({ pageId: id, direction: 'forward' });
   };
 
   const goBack = () => {
     if (current.pageId === 'home') return;
-    window.scrollTo(0, 0);
-    setCurrent({ pageId: 'home', direction: 'backward' });
+    // Delegate to the browser history so the in-app back button and the
+    // browser back button behave identically (popstate updates the state).
+    window.history.back();
   };
 
   const isHome = current.pageId === 'home';
