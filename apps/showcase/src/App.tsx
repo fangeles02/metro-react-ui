@@ -112,7 +112,7 @@ function PageView({
   }
 
   return (
-    <MetroLayout title={page.name} onBack={onBack} previousPageLabel="< Back" scroll="scrollable">
+    <MetroLayout title={page.name} onBack={onBack} previousPageLabel="Metro UI Showcase" scroll="scrollable">
       <div className="showcase__page-content">{page.render({ onBack })}</div>
     </MetroLayout>
   );
