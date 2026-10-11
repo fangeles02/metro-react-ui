@@ -50,6 +50,8 @@
   flex: none;
   min-height: 50px;
   padding: 24px 24px 12px;
+  /* Extra breathing room between the header and the body content. */
+  margin-bottom: 10px;
 }
 
 /* First line: back button + title, laid out in a row. */
