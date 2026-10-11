@@ -141,12 +141,8 @@ export function MetroLayout({
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path
-                      d="M15 5l-7 7 7 7"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      d="M10.3 4.3a1 1 0 0 1 1.4 1.4L6.4 11H20a1 1 0 1 1 0 2H6.4l5.3 5.3a1 1 0 1 1-1.4 1.4l-7-7a1 1 0 0 1 0-1.4l7-7z"
+                      fill="currentColor"
                     />
                   </svg>
                 </button>

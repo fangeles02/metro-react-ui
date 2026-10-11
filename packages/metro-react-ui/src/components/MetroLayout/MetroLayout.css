@@ -52,7 +52,7 @@
 .metro-layout__header-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 20px;
 }
 
 .metro-layout__title {
@@ -85,30 +85,40 @@
   width: auto;
 }
 
-/* Back button — accent-colored ‹ arrow, sized to the touch target. */
+/* Back button — circular (like an AppBar button), theme-foreground colored,
+   with a filled ArrowLeft icon. */
 .metro-layout__back {
   flex: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--wp-touch-target);
-  height: var(--wp-touch-target);
+  width: 45px;
+  height: 45px;
   padding: 0;
-  border: none;
+  border: 2px solid var(--wp-foreground);
+  border-radius: 50%;
   background: transparent;
-  color: var(--wp-accent);
+  color: var(--wp-foreground);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transition: background var(--wp-duration-fast) var(--wp-easing),
+    color var(--wp-duration-fast) var(--wp-easing),
+    border-color var(--wp-duration-fast) var(--wp-easing);
 }
 
 .metro-layout__back svg {
-  width: 24px;
-  height: 24px;
-  fill: none;
+  width: 25px;
+  height: 25px;
+  fill: currentColor;
+}
+
+.metro-layout__back:hover {
+  background: var(--wp-foreground-20);
 }
 
 .metro-layout__back:active {
-  opacity: 0.6;
+  background: var(--wp-foreground);
+  color: var(--wp-background);
 }
 
 /* Optional subtitle — smaller, subtle, with a bottom margin. */
