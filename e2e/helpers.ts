@@ -30,10 +30,12 @@ export async function gotoPage(page: Page, pageName: string) {
   // regardless of visibility, so no scrolling is needed.
   await item.dispatchEvent('click');
   // The FlipTransition animates the page in; wait for the page to appear.
-  // Fullscreen pages (e.g. SPA Demo) have no title panel, so fall back to
-  // waiting for the fullscreen container.
+  // The home page stays mounted (hidden) in `.showcase__home`, so scope the
+  // wait to the demo page — which is a sibling of `.showcase__home`, NOT
+  // inside it. Fullscreen pages (e.g. SPA Demo) have no title panel, so fall
+  // back to waiting for the fullscreen container.
   await expect(
-    page.locator('.showcase__pagetitle, .showcase__page--fullscreen').first(),
+    page.locator('.showcase__home ~ * .showcase__pagetitle, .showcase__home ~ * .showcase__page--fullscreen').first(),
   ).toBeVisible({ timeout: 5000 });
 }
 
@@ -45,11 +47,15 @@ function escapeRegex(s: string): string {
 /** Assert the page rendered without crashing (no error text, page content present). */
 export async function expectPageRendered(page: Page) {
   await expect(
-    page.locator('.showcase__page-content, .showcase__page--fullscreen').first(),
+    page.locator('.showcase__home ~ * .showcase__page-content, .showcase__home ~ * .showcase__page--fullscreen').first(),
   ).toBeVisible();
 }
 
 /** Assert a component root with the given class is present on the page. */
 export async function expectComponent(page: Page, className: string) {
-  await expect(page.locator(className).first()).toBeVisible();
+  // The home page stays mounted (hidden) in `.showcase__home`, so scope to
+  // the demo page — a sibling of `.showcase__home`.
+  await expect(
+    page.locator(`.showcase__home ~ * ${className}`).first(),
+  ).toBeVisible();
 }

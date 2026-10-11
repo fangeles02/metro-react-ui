@@ -9,6 +9,15 @@
   z-index: 1;
 }
 
+/* The home page stays mounted (hidden while a demo is active) so its panorama
+   position + scroll survive back-navigation. `visibility: hidden` (not
+   `display: none`) keeps its layout, which is what preserves scroll. When
+   hidden it's absolutely positioned so it doesn't affect the demo page's
+   layout, and `visibility: hidden` already blocks pointer events. */
+.showcase__home {
+  width: 100%;
+}
+
 /* Outgoing page overlay during the flip exit animation */
 .showcase__outgoing {
   position: fixed;

@@ -37,21 +37,45 @@ export default function App() {
     setCurrent({ pageId: 'home', direction: 'backward' });
   };
 
+  const isHome = current.pageId === 'home';
+
   return (
     <div className="showcase">
-      {/* Incoming page (the one being navigated to) */}
-      <FlipTransition
-        direction={current.direction}
-        phase="in"
-        animationKey={current.pageId}
-        mode='turnstile'
+      {/* The home page stays mounted (hidden while a demo is active) so its
+          panorama position + scroll survive back-navigation. `visibility:
+          hidden` (not `display:none`) keeps its layout, preserving scroll.
+          The FlipTransition `animationKey` stays constant so the home is
+          NEVER remounted (a changing key would reset its state). */}
+      <div
+        className="showcase__home"
+        style={{
+          visibility: isHome ? 'visible' : 'hidden',
+          position: isHome ? 'static' : 'absolute',
+          inset: 0,
+          zIndex: isHome ? 1 : 0,
+        }}
       >
-        {current.pageId === 'home' ? (
+        <FlipTransition
+          direction={current.direction}
+          phase="in"
+          animationKey="home"
+          mode="turnstile"
+        >
           <HomePage onNavigate={navigate} />
-        ) : (
+        </FlipTransition>
+      </div>
+
+      {/* The active demo page (only rendered when not on home). */}
+      {!isHome && (
+        <FlipTransition
+          direction={current.direction}
+          phase="in"
+          animationKey={current.pageId}
+          mode="turnstile"
+        >
           <PageView page={active!} onBack={goBack} />
-        )}
-      </FlipTransition>
+        </FlipTransition>
+      )}
     </div>
   );
 }

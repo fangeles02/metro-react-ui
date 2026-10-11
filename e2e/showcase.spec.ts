@@ -190,8 +190,9 @@ test('AppBar: wide-screen show/hide toggles on right-click', async ({ page }) =>
 test('MetroLayout: fixed mode scrolls body internally', async ({ page }) => {
   await gotoPage(page, 'MetroLayout');
   await expectPageRendered(page);
-  // The first demo is the fixed layout (title "settings").
-  const layout = page.locator('.metro-layout--fixed').first();
+  // The first demo is the fixed layout (title "settings"). Scope to the demo
+  // page (sibling of the hidden home page).
+  const layout = page.locator('.showcase__home ~ * .metro-layout--fixed').first();
   await expect(layout).toBeVisible();
   await expect(layout.locator('.metro-layout__title')).toHaveText('settings');
   // The content region (body + footer) is the internal scroll container.
