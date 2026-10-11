@@ -1,4 +1,4 @@
-import { MetroLayout, AppBar, AppBarButton } from '@metro-react-ui/core';
+import { MetroLayout, MetroLayoutBody, AppBar, AppBarButton } from '@metro-react-ui/core';
 import { CodeBlock } from './CodeBlock';
 
 /* Simple inline SVG glyphs (stroke-based, inherit currentColor). */
@@ -137,6 +137,20 @@ export function MetroLayoutDemo() {
       </div>
 
       <div className="showcase__demo">
+        <span className="showcase__demo-label">MetroLayoutBody — padded body container</span>
+        <div className="showcase__demo-frame" style={{ maxHeight: 'none', overflow: 'hidden' }}>
+          <MetroLayout title="padded body">
+            <MetroLayoutBody>
+              <p style={{ color: 'var(--wp-subtle)' }}>
+                This content is wrapped in <code>MetroLayoutBody</code>, so it has left/right
+                padding that aligns with the header.
+              </p>
+            </MetroLayoutBody>
+          </MetroLayout>
+        </div>
+      </div>
+
+      <div className="showcase__demo">
         <span className="showcase__demo-label">How it works</span>
         <CodeBlock
           code={`<MetroLayout
@@ -153,6 +167,13 @@ export function MetroLayoutDemo() {
   }
 >
   {/* body content */}
+</MetroLayout>
+
+// Padded body — aligns left/right padding with the header.
+<MetroLayout title="padded body">
+  <MetroLayoutBody>
+    <p>Content with header-aligned padding.</p>
+  </MetroLayoutBody>
 </MetroLayout>
 
 // Image title — any React node fills the title's height.

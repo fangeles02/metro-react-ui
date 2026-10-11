@@ -1,0 +1,9 @@
+/* ---- MetroLayoutBody ----
+   A body container for use inside a `MetroLayout`. Adds left/right padding
+   that aligns with the `MetroLayout` header (24px), so content is not flush
+   against the viewport edges. */
+
+.metro-layout-body {
+  flex: none;
+  padding: 0 24px;
+}

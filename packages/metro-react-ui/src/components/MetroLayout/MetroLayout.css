@@ -19,13 +19,17 @@
   background: var(--wp-background);
 }
 
-/* The scroll region (header + content). Which parts scroll depends on mode. */
+/* The scroll region (header + content). Which parts scroll depends on mode.
+   `overflow-x: hidden` keeps the layout at exactly the viewport width — a
+   nowrap title that extends beyond the viewport is clipped, never causing
+   horizontal scrolling. */
 .metro-layout__scroll {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Fixed: the header is pinned; only the content (body + footer) scrolls. */
@@ -58,7 +62,10 @@
 .metro-layout__title {
   margin: 0;
   line-height: 1.05;
-  overflow-wrap: anywhere;
+  /* Keep the title on a single line (no wrapping). The full text stays
+     visible — on narrow screens it extends beyond the viewport (no ellipsis),
+     matching the panorama header title. */
+  white-space: nowrap;
   min-width: 0;
 }
 
