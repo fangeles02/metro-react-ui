@@ -22,6 +22,12 @@ export interface MetroLayoutProps {
   /** When provided, a back button (‹) is rendered in the header and calls
    * this callback on click. */
   onBack?: () => void;
+  /**
+   * When provided, a clickable "previous page" label is rendered ABOVE the
+   * title (small, bold, all-caps — the authentic Metro UI navigation label)
+   * instead of the circular back button. Clicking it calls `onBack`.
+   */
+  previousPageLabel?: ReactNode;
   /** Main body content. Scrolls internally when `scroll="fixed"`. */
   children: ReactNode;
   /** Optional footer content rendered below the body (above the app bar). */
@@ -72,6 +78,7 @@ export function MetroLayout({
   titleSize = 'large',
   subtitle,
   onBack,
+  previousPageLabel,
   children,
   footer,
   scroll = 'fixed',
@@ -129,10 +136,19 @@ export function MetroLayout({
   return (
     <div className={classes}>
       <div className="metro-layout__scroll">
-        {title || subtitle || onBack ? (
+        {title || subtitle || onBack || previousPageLabel ? (
           <header className="metro-layout__header">
+            {previousPageLabel ? (
+              <button
+                type="button"
+                className="metro-layout__previous"
+                onClick={onBack}
+              >
+                {previousPageLabel}
+              </button>
+            ) : null}
             <div className="metro-layout__header-row">
-              {onBack ? (
+              {!previousPageLabel && onBack ? (
                 <button
                   type="button"
                   className="metro-layout__back"

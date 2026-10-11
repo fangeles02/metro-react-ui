@@ -128,6 +128,33 @@
   color: var(--wp-background);
 }
 
+/* Previous-page label — a clickable text label shown ABOVE the title (small,
+   bold, all-caps — the authentic Metro UI navigation label). Replaces the
+   circular back button when `previousPageLabel` is provided. */
+.metro-layout__previous {
+  display: block;
+  margin: 0 0 4px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--wp-font-family);
+  font-size: var(--wp-font-size-small);
+  font-weight: var(--wp-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--wp-subtle);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.metro-layout__previous:hover {
+  color: var(--wp-foreground);
+}
+
+.metro-layout__previous:active {
+  opacity: 0.6;
+}
+
 /* Optional subtitle — smaller, subtle, with a bottom margin. */
 .metro-layout__subtitle {
   margin-top: 4px;

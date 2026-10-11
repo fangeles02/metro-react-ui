@@ -137,6 +137,22 @@ export function MetroLayoutDemo() {
       </div>
 
       <div className="showcase__demo">
+        <span className="showcase__demo-label">Previous page label — replaces the back button</span>
+        <div className="showcase__demo-frame" style={{ maxHeight: 'none', overflow: 'hidden' }}>
+          <MetroLayout
+            title="settings"
+            previousPageLabel="home"
+            onBack={() => console.log('back to home')}
+          >
+            <p style={{ color: 'var(--wp-subtle)' }}>
+              The <code>previousPageLabel</code> renders a clickable label above the title
+              (small, bold, all-caps) instead of the circular back button.
+            </p>
+          </MetroLayout>
+        </div>
+      </div>
+
+      <div className="showcase__demo">
         <span className="showcase__demo-label">MetroLayoutBody — padded body container</span>
         <div className="showcase__demo-frame" style={{ maxHeight: 'none', overflow: 'hidden' }}>
           <MetroLayout title="padded body">
@@ -174,6 +190,12 @@ export function MetroLayoutDemo() {
   <MetroLayoutBody>
     <p>Content with header-aligned padding.</p>
   </MetroLayoutBody>
+</MetroLayout>
+
+// Previous page label — replaces the circular back button with a
+// clickable label above the title (small, bold, all-caps).
+<MetroLayout title="settings" previousPageLabel="home" onBack={() => navigate(-1)}>
+  ...
 </MetroLayout>
 
 // Image title — any React node fills the title's height.
