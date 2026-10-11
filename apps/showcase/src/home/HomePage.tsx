@@ -160,7 +160,7 @@ export function HomePage({ onNavigate }: { onNavigate: (id: string) => void }) {
                   size="medium"
                   title="npm"
                   icon={<NpmIcon />}
-                  message={{ body: 'Latest version\n0.1.3' }}
+                  message={{ body: `Latest version\n${__PACKAGE_VERSION__}` }}
                   bounceFlip={true}
                   onClick={() => window.open('https://www.npmjs.com/package/@metro-react-ui/core', '_blank', 'noopener,noreferrer')}
                 />
