@@ -228,6 +228,9 @@
 }
 
 .showcase__listitem-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: var(--wp-font-size-large);
   font-weight: var(--wp-font-weight-normal);
   text-transform: lowercase;
@@ -237,6 +240,52 @@
   font-size: var(--wp-font-size-normal);
   color: var(--wp-subtle);
   opacity: 0.6;
+}
+
+/* Origin indicator — a faint icon marking whether a sample is a port of the
+   official WP Toolkit or original work. A custom tooltip appears on hover
+   (mouse) / tap (touch). */
+.showcase__origin {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--wp-subtle);
+  opacity: 0.45;
+  cursor: help;
+}
+
+.showcase__origin svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Tooltip — appears above the icon on hover/tap. */
+.showcase__origin-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 6px 10px;
+  background: var(--wp-chrome);
+  color: var(--wp-foreground);
+  border: 1px solid var(--wp-chrome-low);
+  font-size: var(--wp-font-size-small);
+  font-weight: var(--wp-font-weight-normal);
+  text-transform: none;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms var(--wp-easing), transform 150ms var(--wp-easing);
+  z-index: 20;
+}
+
+.showcase__origin:hover .showcase__origin-tooltip,
+.showcase__origin:focus-visible .showcase__origin-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* Build info — small label under the samples list */
@@ -305,6 +354,10 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  /* Match the MetroLayout header's horizontal padding so the demo content
+     aligns with the title/back button. Scoped to the non-fullscreen demo
+     pages (the SPA demo uses its own fullscreen MetroLayout, unaffected). */
+  padding: 0 24px 24px;
 }
 
 /* Footer / navigation */

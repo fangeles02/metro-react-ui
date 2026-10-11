@@ -32,6 +32,7 @@
      Segoe UI is the desktop family; weights carry the "Light/Semibold"
      distinctions even when Segoe is absent (falls back gracefully). */
   --wp-font-family: 'Segoe UI', 'Segoe WP', 'Helvetica Neue', Arial, sans-serif;
+  --wp-font-weight-ultralight: 200;
   --wp-font-weight-light: 300;
   --wp-font-weight-semilight: 350;
   --wp-font-weight-normal: 400;

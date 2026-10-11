@@ -30,6 +30,7 @@ export function PanoramaDemo() {
 <Panorama
   title="My Application"
   background="linear-gradient(135deg, #1ba1e2 0%, #0e6e9c 100%)"
+  snap            // wide mode snaps to whole sections (default true)
 >
   <PanoramaItem header="overview">
     <p>Overview content.</p>
@@ -72,6 +73,7 @@ export function PanoramaDemo() {
             <tr><td><code>loop</code></td><td><code>boolean</code></td><td><code>false</code></td><td>No</td></tr>
             <tr><td><code>breakpoint</code></td><td><code>number</code></td><td><code>768</code></td><td>No</td></tr>
             <tr><td><code>scrollbar</code></td><td><code>'auto' | 'hidden' | 'visible'</code></td><td><code>'auto'</code></td><td>No</td></tr>
+            <tr><td><code>snap</code></td><td><code>boolean</code></td><td><code>true</code></td><td>No</td></tr>
             <tr><td><code>bottomInset</code></td><td><code>number</code></td><td><code>0</code></td><td>No</td></tr>
           </tbody>
         </table>

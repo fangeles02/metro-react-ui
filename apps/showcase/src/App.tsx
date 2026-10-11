@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { FlipTransition } from '@metro-react-ui/core';
-import { Button } from '@metro-react-ui/core';
+import { FlipTransition, MetroLayout } from '@metro-react-ui/core';
 import { showcasePages } from './showcase';
 import { HomePage } from './home/HomePage';
 import './App.css';
@@ -107,26 +106,14 @@ function PageView({
   if (page.fullscreen) {
     return (
       <div className="showcase__page showcase__page--fullscreen">
-        <button type="button" className="showcase__fullscreen-back" onClick={onBack}>
-          ← back
-        </button>
-        {page.render()}
+        {page.render({ onBack })}
       </div>
     );
   }
 
   return (
-    <div className="showcase__page">
-      <div className="showcase__titlepanel">
-        <div className="showcase__apptitle">WINDOWS PHONE TOOLKIT</div>
-        <div className="showcase__pagetitle">{page.name}</div>
-      </div>
-      <div className="showcase__page-content">{page.render()}</div>
-      <div className="showcase__footer">
-        <Button type="button"  onClick={onBack}>
-          Back
-        </Button>
-      </div>
-    </div>
+    <MetroLayout title={page.name} onBack={onBack} previousPageLabel="< Back" scroll="scrollable">
+      <div className="showcase__page-content">{page.render({ onBack })}</div>
+    </MetroLayout>
   );
 }

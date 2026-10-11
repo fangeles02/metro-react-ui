@@ -124,6 +124,12 @@ export interface PanoramaProps {
    */
   scrollbar?: 'auto' | 'hidden' | 'visible';
   /**
+   * When `true` (default), wide mode snaps the scroll to whole sections as
+   * you scroll (like mobile mode), using CSS scroll-snap. Set to `false` for
+   * completely free scrolling.
+   */
+  snap?: boolean;
+  /**
    * Space (px) reserved at the bottom of the panorama for an overlaid element
    * (e.g. a fixed AppBar). The scrollbar is positioned above this inset so it
    * isn't hidden behind the overlay. Defaults to 0.
@@ -183,6 +189,7 @@ export function Panorama({
   scrollbar = 'auto',
   bottomInset = 0,
   fullscreen = false,
+  snap = true,
 }: PanoramaProps) {
   // Wide mode = free native scrolling (no snap/lock). Mobile mode = the
   // classic WP7 snap-to-section with a wheel lock.
@@ -255,6 +262,11 @@ export function Panorama({
   // flick still advances exactly one section.
   const wheelLocked = useRef(false);
   const wheelTimer = useRef<number | null>(null);
+  // Debounced snap timer for wide mode: after scrolling stops, snap the native
+  // scroll position to the nearest section. This gives smooth free scrolling
+  // during the gesture (no CSS scroll-snap fighting each wheel delta) and a
+  // clean settle when the user stops.
+  const snapTimer = useRef<number | null>(null);
 
   const maxOffset = Math.max(0, (n - 1) * resolvedWidth);
 
@@ -262,6 +274,7 @@ export function Panorama({
   useEffect(() => {
     return () => {
       if (wheelTimer.current != null) window.clearTimeout(wheelTimer.current);
+      if (snapTimer.current != null) window.clearTimeout(snapTimer.current);
     };
   }, []);
 
@@ -390,6 +403,16 @@ export function Panorama({
     if (headerRef.current) {
       headerRef.current.style.transform = `translateX(${-el.scrollLeft * headerRatio}px)`;
     }
+    // Debounced snap: when scrolling stops, settle on the nearest section.
+    // Only in snap mode. This replaces CSS scroll-snap (which fought the
+    // manual `scrollLeft += dx` wheel handling and caused jitter).
+    if (!snap) return;
+    if (snapTimer.current != null) window.clearTimeout(snapTimer.current);
+    snapTimer.current = window.setTimeout(() => {
+      const target = Math.round(el.scrollLeft / resolvedWidth) * resolvedWidth;
+      const clamped = Math.max(0, Math.min(maxOffset, target));
+      el.scrollTo({ left: clamped, behavior: 'smooth' });
+    }, 120);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -417,10 +440,6 @@ export function Panorama({
   const headerStyle: CSSProperties = {
     transform: `translateX(${-targetOffset * headerRatio}px)`,
   };
-  // Trailing spacer so the last page aligns to the left edge when the page
-  // width is less than the viewport (e.g. sectionWidth="80%"). Without it, the
-  // last page would sit at the far right with a gap on the left.
-  const trailingSpacer = Math.max(0, viewportWidth - resolvedWidth);
   // The background must cover the viewport even at maximum scroll. Because
   // parallax moves it slower than the content, it lags behind by
   // `(n-1) * resolvedWidth * parallaxRatio` at the last section, so it needs
@@ -436,6 +455,7 @@ export function Panorama({
     'metro-panorama',
     isWide ? 'metro-panorama--wide' : 'metro-panorama--mobile',
     `metro-panorama--scrollbar-${scrollbar}`,
+    isWide && snap ? 'metro-panorama--snap' : '',
     fullscreen ? 'metro-panorama--fullscreen' : '',
   ].join(' ');
 
@@ -539,22 +559,25 @@ export function Panorama({
         onScroll={handleScroll}
       >
         <div className="metro-panorama__track" ref={trackRef} style={trackStyle}>
-          {sections.map((section, i) => (
-            <section
-              key={i}
-              className="metro-panorama__section"
-              style={{ width: sectionWidth }}
-              aria-label={typeof section.header === 'string' ? section.header : undefined}
-            >
-              <h2 className="metro-panorama__header">{section.header}</h2>
-              <div className="metro-panorama__content">{section.children}</div>
-            </section>
-          ))}
-          {/* Spacer so the last page aligns left when pages are narrower than
-              the viewport. */}
-          {trailingSpacer > 0 ? (
-            <div className="metro-panorama__spacer" style={{ width: trailingSpacer }} />
-          ) : null}
+          {sections.map((section, i) => {
+            // The last section fills the full viewport width so it never looks
+            // "cut off" (a sub-100% `sectionWidth` would otherwise leave a gap
+            // on the right). Falls back to `sectionWidth` until the viewport is
+            // measured.
+            const isLast = i === n - 1;
+            const width = isLast ? viewportWidth || sectionWidth : sectionWidth;
+            return (
+              <section
+                key={i}
+                className="metro-panorama__section"
+                style={{ width }}
+                aria-label={typeof section.header === 'string' ? section.header : undefined}
+              >
+                <h2 className="metro-panorama__header">{section.header}</h2>
+                <div className="metro-panorama__content">{section.children}</div>
+              </section>
+            );
+          })}
         </div>
       </div>
     </div>

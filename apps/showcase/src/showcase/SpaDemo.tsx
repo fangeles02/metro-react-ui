@@ -80,10 +80,11 @@ export function SpaAppBar() {
  * so the layout is uniform with the rest of the app. The body holds a
  * full-screen Panorama workspace.
  */
-export function SpaDemo() {
+export function SpaDemo({ onBack }: { onBack: () => void }) {
   return (
     <MetroLayout
-
+      title="SPA Demo"
+      onBack={onBack}
       appBar={<SpaAppBar />}
     >
       <Panorama

@@ -21,10 +21,9 @@ export const HOME_LIST_ITEMS = '.showcase__listitem';
  */
 export async function gotoPage(page: Page, pageName: string) {
   await page.goto('/');
-  // Match the exact page name (the list item's first span is the name).
-  const item = page
-    .locator(HOME_LIST_ITEMS)
-    .filter({ has: page.locator('.showcase__listitem-header', { hasText: new RegExp(`^${escapeRegex(pageName)}$`) }) });
+  // Match the exact page name. The list item button has `aria-label={name}`
+  // (the origin indicator is aria-hidden, so the label is clean).
+  const item = page.locator(`${HOME_LIST_ITEMS}[aria-label="${pageName}"]`);
   // The Controls list lives inside the home panorama (horizontally scrolled),
   // so the item may be off-screen. `dispatchEvent` fires the click handler
   // regardless of visibility, so no scrolling is needed.
@@ -32,22 +31,17 @@ export async function gotoPage(page: Page, pageName: string) {
   // The FlipTransition animates the page in; wait for the page to appear.
   // The home page stays mounted (hidden) in `.showcase__home`, so scope the
   // wait to the demo page — which is a sibling of `.showcase__home`, NOT
-  // inside it. Fullscreen pages (e.g. SPA Demo) have no title panel, so fall
-  // back to waiting for the fullscreen container.
+  // inside it. Demo pages are wrapped in a MetroLayout (title + back button);
+  // fullscreen pages (e.g. SPA Demo) fall back to the fullscreen container.
   await expect(
-    page.locator('.showcase__home ~ * .showcase__pagetitle, .showcase__home ~ * .showcase__page--fullscreen').first(),
+    page.locator('.showcase__home ~ * .metro-layout__title, .showcase__home ~ * .showcase__page--fullscreen').first(),
   ).toBeVisible({ timeout: 5000 });
-}
-
-/** Escape regex special characters in a literal string. */
-function escapeRegex(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /** Assert the page rendered without crashing (no error text, page content present). */
 export async function expectPageRendered(page: Page) {
   await expect(
-    page.locator('.showcase__home ~ * .showcase__page-content, .showcase__home ~ * .showcase__page--fullscreen').first(),
+    page.locator('.showcase__home ~ * .metro-layout, .showcase__home ~ * .showcase__page--fullscreen').first(),
   ).toBeVisible();
 }
 

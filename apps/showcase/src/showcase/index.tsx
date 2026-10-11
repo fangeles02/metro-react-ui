@@ -37,39 +37,49 @@ export interface ShowcasePage {
   name: string;
   description: string;
   icon: string;
+  /** Which home-panorama category this page belongs to. */
+  category: 'controls' | 'components' | 'layout' | 'demos';
+  /**
+   * Whether this control is a port of the official Windows Phone Toolkit
+   * (`ported`) or original work (`original`). Shown as an indicator icon on
+   * the home page list.
+   */
+  origin: 'ported' | 'original';
   /** Render the page full-bleed (no title panel / footer chrome). */
   fullscreen?: boolean;
-  render: () => ReactNode;
+  /** Render the page content. Receives the back handler (for fullscreen pages
+   * that render their own MetroLayout). */
+  render: (ctx: { onBack: () => void }) => ReactNode;
 }
 
 export const showcasePages: ShowcasePage[] = [
-  { id: 'button', name: 'Button', description: 'Metro button (3 styles)', icon: '▣', render: () => <ButtonDemo /> },
-  { id: 'toggleswitch', name: 'ToggleSwitch', description: 'Metro toggle switch', icon: '⇄', render: () => <ToggleSwitchDemo /> },
-  { id: 'rating', name: 'RatingControl', description: 'Star rating control', icon: '★', render: () => <RatingControlDemo /> },
-  { id: 'textbox', name: 'PhoneTextBox', description: 'Text input with watermark', icon: '✎', render: () => <PhoneTextBoxDemo /> },
-  { id: 'wrappanel', name: 'WrapPanel', description: 'Wrapping layout panel', icon: '▦', render: () => <WrapPanelDemo /> },
-  { id: 'listpicker', name: 'ListPicker', description: 'Inline dropdown + expanded list', icon: '▾', render: () => <ListPickerDemo /> },
-  { id: 'autocomplete', name: 'AutoCompleteBox', description: 'Text autocomplete', icon: '⌕', render: () => <AutoCompleteBoxDemo /> },
-  { id: 'expander', name: 'ExpanderView', description: 'Expandable content', icon: '▸', render: () => <ExpanderViewDemo /> },
-  { id: 'messagebox', name: 'CustomMessageBox', description: 'Modal dialog', icon: '▣', render: () => <CustomMessageBoxDemo /> },
-  { id: 'contextmenu', name: 'ContextMenu', description: 'Tap-and-hold menu', icon: '☰', render: () => <ContextMenuDemo /> },
-  { id: 'datetime', name: 'DateTimePickers (todo)', description: 'Date & time pickers', icon: '◷', render: () => <DateTimePickerDemo /> },
-  { id: 'multiselect', name: 'MultiselectList', description: 'Multi-select list', icon: '☑', render: () => <MultiselectListDemo /> },
-  { id: 'longlist', name: 'LongListMultiSelector (todo)', description: 'Grouped multi-select', icon: '☰', render: () => <LongListMultiSelectorDemo /> },
-  { id: 'hubtile', name: 'HubTile', description: 'Animated tile', icon: '▣', render: () => <HubTileDemo /> },
-  { id: 'progressring', name: 'ProgressRing', description: 'Indeterminate progress ring', icon: '◌', render: () => <ProgressRingDemo /> },
-  { id: 'tile', name: 'Tile', description: 'WP 8.1 start tile', icon: '▣', render: () => <TileDemo /> },
-  { id: 'pivot', name: 'Pivot', description: 'Swipeable tabs', icon: '⇋', render: () => <PivotDemo /> },
-  { id: 'panorama', name: 'Panorama', description: 'Pannable parallax sections', icon: '⇄', render: () => <PanoramaDemo /> },
-  { id: 'effects', name: 'Effects', description: 'Tilt & slide-in', icon: '✦', render: () => <EffectsDemo /> },
-  { id: 'appbar', name: 'AppBar', description: 'Circular app bar buttons', icon: '◯', render: () => <AppBarDemo /> },
-  { id: 'metrolayout', name: 'MetroLayout', description: 'Uniform page layout container', icon: '▤', render: () => <MetroLayoutDemo /> },
-  { id: 'icons', name: 'Icons', description: 'Fluent UI System Icons gallery', icon: '✦', render: () => <Suspense fallback={<IconDemoFallback />}><IconDemo /></Suspense> },
-  { id: 'transition', name: 'PageTransition', description: 'Flip page transition', icon: '⇄', render: () => <FlipTransitionDemo /> },
-  { id: 'chatbubble', name: 'ChatBubble', description: 'WP 8.1 chat message bubble', icon: '💬', render: () => <ChatBubbleDemo /> },
-  { id: 'spa', name: 'SPA Demo', description: 'App bar fixed to bottom', icon: '◧', fullscreen: true, render: () => <SpaDemo /> },
-  { id: 'mpa', name: 'MPA Demo', description: 'Multi-page messaging sample', icon: '⇄', render: () => <MpaDemo /> },
-  { id: 'settings', name: 'Settings', description: 'Theme: light/dark + accent color', icon: '⚙', render: () => <SettingsPage /> },
+  { id: 'button', name: 'Button', description: 'Metro button (3 styles)', icon: '▣', category: 'controls', origin: 'ported', render: () => <ButtonDemo /> },
+  { id: 'toggleswitch', name: 'ToggleSwitch', description: 'Metro toggle switch', icon: '⇄', category: 'controls', origin: 'ported', render: () => <ToggleSwitchDemo /> },
+  { id: 'rating', name: 'RatingControl', description: 'Star rating control', icon: '★', category: 'controls', origin: 'ported', render: () => <RatingControlDemo /> },
+  { id: 'textbox', name: 'PhoneTextBox', description: 'Text input with watermark', icon: '✎', category: 'controls', origin: 'ported', render: () => <PhoneTextBoxDemo /> },
+  { id: 'wrappanel', name: 'WrapPanel', description: 'Wrapping layout panel', icon: '▦', category: 'layout', origin: 'ported', render: () => <WrapPanelDemo /> },
+  { id: 'listpicker', name: 'ListPicker', description: 'Inline dropdown + expanded list', icon: '▾', category: 'controls', origin: 'ported', render: () => <ListPickerDemo /> },
+  { id: 'autocomplete', name: 'AutoCompleteBox', description: 'Text autocomplete', icon: '⌕', category: 'controls', origin: 'ported', render: () => <AutoCompleteBoxDemo /> },
+  { id: 'expander', name: 'ExpanderView', description: 'Expandable content', icon: '▸', category: 'controls', origin: 'ported', render: () => <ExpanderViewDemo /> },
+  { id: 'messagebox', name: 'CustomMessageBox', description: 'Modal dialog', icon: '▣', category: 'components', origin: 'original', render: () => <CustomMessageBoxDemo /> },
+  { id: 'contextmenu', name: 'ContextMenu', description: 'Tap-and-hold menu', icon: '☰', category: 'components', origin: 'ported', render: () => <ContextMenuDemo /> },
+  { id: 'datetime', name: 'DateTimePickers (todo)', description: 'Date & time pickers', icon: '◷', category: 'controls', origin: 'ported', render: () => <DateTimePickerDemo /> },
+  { id: 'multiselect', name: 'MultiselectList', description: 'Multi-select list', icon: '☑', category: 'controls', origin: 'ported', render: () => <MultiselectListDemo /> },
+  { id: 'longlist', name: 'LongListMultiSelector (todo)', description: 'Grouped multi-select', icon: '☰', category: 'controls', origin: 'ported', render: () => <LongListMultiSelectorDemo /> },
+  { id: 'hubtile', name: 'HubTile', description: 'Animated tile', icon: '▣', category: 'controls', origin: 'ported', render: () => <HubTileDemo /> },
+  { id: 'progressring', name: 'ProgressRing', description: 'Indeterminate progress ring', icon: '◌', category: 'components', origin: 'original', render: () => <ProgressRingDemo /> },
+  { id: 'tile', name: 'Tile', description: 'WP 8.1 start tile', icon: '▣', category: 'controls', origin: 'original', render: () => <TileDemo /> },
+  { id: 'pivot', name: 'Pivot', description: 'Swipeable tabs', icon: '⇋', category: 'layout', origin: 'ported', render: () => <PivotDemo /> },
+  { id: 'panorama', name: 'Panorama', description: 'Pannable parallax sections', icon: '⇄', category: 'layout', origin: 'original', render: () => <PanoramaDemo /> },
+  { id: 'effects', name: 'Effects', description: 'Tilt & slide-in', icon: '✦', category: 'components', origin: 'ported', render: () => <EffectsDemo /> },
+  { id: 'appbar', name: 'AppBar', description: 'Circular app bar buttons', icon: '◯', category: 'components', origin: 'original', render: () => <AppBarDemo /> },
+  { id: 'metrolayout', name: 'MetroLayout', description: 'Uniform page layout container', icon: '▤', category: 'layout', origin: 'original', render: () => <MetroLayoutDemo /> },
+  { id: 'icons', name: 'Icons', description: 'Fluent UI System Icons gallery', icon: '✦', category: 'components', origin: 'original', render: () => <Suspense fallback={<IconDemoFallback />}><IconDemo /></Suspense> },
+  { id: 'transition', name: 'PageTransition', description: 'Flip page transition', icon: '⇄', category: 'components', origin: 'original', render: () => <FlipTransitionDemo /> },
+  { id: 'chatbubble', name: 'ChatBubble', description: 'WP 8.1 chat message bubble', icon: '💬', category: 'controls', origin: 'original', render: () => <ChatBubbleDemo /> },
+  { id: 'spa', name: 'SPA Demo', description: 'App bar fixed to bottom', icon: '◧', category: 'demos', origin: 'original', fullscreen: true, render: ({ onBack }) => <SpaDemo onBack={onBack} /> },
+  { id: 'mpa', name: 'MPA Demo', description: 'Multi-page messaging sample', icon: '⇄', category: 'demos', origin: 'original', render: () => <MpaDemo /> },
+  { id: 'settings', name: 'Settings', description: 'Theme: light/dark + accent color', icon: '⚙', category: 'controls', origin: 'original', render: () => <SettingsPage /> },
 ];
 
 /** Shown briefly while the lazy icon browser chunk loads. */

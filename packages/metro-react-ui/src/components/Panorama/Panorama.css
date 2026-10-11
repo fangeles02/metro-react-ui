@@ -121,7 +121,7 @@
 
 .metro-panorama__headerbar-title--large {
   font-size: var(--wp-font-size-gigantic);
-  font-weight: var(--wp-font-weight-light);
+  font-weight: var(--wp-font-weight-ultralight);
   text-transform: lowercase;
 }
 
